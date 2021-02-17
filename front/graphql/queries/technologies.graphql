@@ -1,0 +1,9 @@
+query Technologies {
+  technologies {
+    id
+    title
+    usedIn {
+      id
+    }
+  }
+}

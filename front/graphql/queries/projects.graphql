@@ -1,0 +1,12 @@
+query Projects {
+  projects {
+    id
+    title
+    startDate
+    endDate
+    description
+    technologiesUsed {
+      title
+    }
+  }
+}
