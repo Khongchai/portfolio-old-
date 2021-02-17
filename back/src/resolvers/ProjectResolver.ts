@@ -12,6 +12,7 @@ import {
 } from "type-graphql";
 import { ProjectEntity } from "../entities/ProjectEntity";
 import { getManager } from "typeorm";
+import getTechnologiesByTitle from "../utils/getTechnologiesByTitle";
 
 //for project creation input, create a separate inputtype
 @InputType()
@@ -28,8 +29,20 @@ class ProjectCreationInput {
   @Field()
   description!: string;
 
-  @Field(() => [String])
-  technologiesNames: string[];
+  @Field(() => [String], { nullable: true })
+  frontEndNames: string[];
+
+  @Field(() => [String], { nullable: true })
+  backEndNames: string[];
+
+  @Field(() => [String], { nullable: true })
+  languagesNames: string[];
+
+  @Field(() => [String], { nullable: true })
+  hostingServiceNames: string[];
+
+  @Field(() => Boolean, { nullable: true })
+  isHighlight: boolean | undefined;
 }
 
 @InputType()
@@ -61,7 +74,14 @@ export class ProjectsResolver {
   @Query(() => [ProjectEntity])
   async projects(): Promise<ProjectEntity[]> {
     //include relations if you want the ORM to include the join table
-    return await ProjectEntity.find({ relations: ["technologiesUsed"] });
+    return await ProjectEntity.find({
+      relations: [
+        "frontEndTechnologies",
+        "backEndTechnologies",
+        "languages",
+        "hostingServices",
+      ],
+    });
   }
 
   @Mutation(() => ProjectEntity, { nullable: true })
@@ -74,21 +94,30 @@ export class ProjectsResolver {
       endDate,
       startDate,
       title,
-      technologiesNames,
+      frontEndNames,
+      backEndNames,
+      languagesNames,
+      hostingServiceNames,
+      isHighlight,
     } = projectData;
 
-    const technologies = await getManager()
-      .createQueryBuilder(TechnologyEntity, "tech")
-      .where("tech.title IN (:...titles)", { titles: technologiesNames })
-      .orderBy("tech.title")
-      .getMany();
+    const frontEnd = await getTechnologiesByTitle(frontEndNames);
+    const backEnd = await getTechnologiesByTitle(backEndNames);
+    const languages = await getTechnologiesByTitle(languagesNames);
+    const hostingServices = await getTechnologiesByTitle(hostingServiceNames);
+
+    console.log(frontEnd, backEnd, languages, hostingServices);
 
     const newProj = await ProjectEntity.create({
       description,
       endDate,
       title,
       startDate,
-      technologiesUsed: technologies,
+      frontEndTechnologies: frontEnd,
+      backEndTechnologies: backEnd,
+      hostingServices: hostingServices,
+      languages,
+      isHighlight: isHighlight || false,
     }).save();
 
     return newProj;

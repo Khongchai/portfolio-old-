@@ -27,12 +27,36 @@ __decorate([
 ], TechnologyEntity.prototype, "title", void 0);
 __decorate([
     type_graphql_1.Field(() => [ProjectEntity_1.ProjectEntity], { nullable: true }),
-    typeorm_1.ManyToMany(() => ProjectEntity_1.ProjectEntity, (proj) => proj.technologiesUsed, {
+    typeorm_1.ManyToMany(() => ProjectEntity_1.ProjectEntity, (proj) => proj.frontEndTechnologies, {
         cascade: true,
     }),
     typeorm_1.JoinTable(),
     __metadata("design:type", Array)
-], TechnologyEntity.prototype, "usedIn", void 0);
+], TechnologyEntity.prototype, "frontEndIn", void 0);
+__decorate([
+    type_graphql_1.Field(() => [ProjectEntity_1.ProjectEntity], { nullable: true }),
+    typeorm_1.ManyToMany(() => ProjectEntity_1.ProjectEntity, (proj) => proj.backEndTechnologies, {
+        cascade: true,
+    }),
+    typeorm_1.JoinTable(),
+    __metadata("design:type", Array)
+], TechnologyEntity.prototype, "backEndIn", void 0);
+__decorate([
+    type_graphql_1.Field(() => [ProjectEntity_1.ProjectEntity], { nullable: true }),
+    typeorm_1.ManyToMany(() => ProjectEntity_1.ProjectEntity, (proj) => proj.languages, {
+        cascade: true,
+    }),
+    typeorm_1.JoinTable(),
+    __metadata("design:type", Array)
+], TechnologyEntity.prototype, "languageOf", void 0);
+__decorate([
+    type_graphql_1.Field(() => [ProjectEntity_1.ProjectEntity], { nullable: true }),
+    typeorm_1.ManyToMany(() => ProjectEntity_1.ProjectEntity, (proj) => proj.hostingServices, {
+        cascade: true,
+    }),
+    typeorm_1.JoinTable(),
+    __metadata("design:type", Array)
+], TechnologyEntity.prototype, "hosting", void 0);
 TechnologyEntity = __decorate([
     type_graphql_1.ObjectType(),
     typeorm_1.Entity()

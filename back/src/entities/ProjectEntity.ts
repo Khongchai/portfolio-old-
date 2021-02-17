@@ -24,8 +24,20 @@ export class ProjectEntity extends BaseEntity {
   description!: string;
 
   @Field(() => [TechnologyEntity], { nullable: true })
-  @ManyToMany(() => TechnologyEntity, (tech) => tech.usedIn)
-  technologiesUsed: TechnologyEntity[];
+  @ManyToMany(() => TechnologyEntity, (tech) => tech.frontEndIn)
+  frontEndTechnologies: TechnologyEntity[];
+
+  @Field(() => [TechnologyEntity], { nullable: true })
+  @ManyToMany(() => TechnologyEntity, (tech) => tech.backEndIn)
+  backEndTechnologies: TechnologyEntity[];
+
+  @Field(() => [TechnologyEntity], { nullable: true })
+  @ManyToMany(() => TechnologyEntity, (tech) => tech.languageOf)
+  languages: TechnologyEntity[];
+
+  @Field(() => [TechnologyEntity], { nullable: true })
+  @ManyToMany(() => TechnologyEntity, (tech) => tech.hosting)
+  hostingServices: TechnologyEntity[];
 
   //format: YYYY-MM-DD
   @Field()
@@ -35,4 +47,8 @@ export class ProjectEntity extends BaseEntity {
   @Field()
   @Column()
   endDate!: string;
+
+  @Field(() => Boolean, { nullable: true })
+  @Column({ nullable: true })
+  isHighlight: Boolean;
 }

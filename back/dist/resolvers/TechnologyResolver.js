@@ -39,15 +39,19 @@ ErrorField = __decorate([
 ], ErrorField);
 exports.ErrorField = ErrorField;
 let TechnologyResolver = class TechnologyResolver {
-    technologies({}) {
+    technologies() {
         return __awaiter(this, void 0, void 0, function* () {
-            const technologies = yield TechnologyEntity_1.TechnologyEntity.find({ relations: ["usedIn"] });
+            const technologies = yield TechnologyEntity_1.TechnologyEntity.find({
+                relations: ["frontEndIn", "backEndIn", "languageOf", "hosting"],
+            });
             return technologies;
         });
     }
     createTechnology(title, projName) {
         return __awaiter(this, void 0, void 0, function* () {
-            const tech = yield TechnologyEntity_1.TechnologyEntity.create({ title }).save();
+            const tech = yield TechnologyEntity_1.TechnologyEntity.create({
+                title: title,
+            }).save();
             return tech;
         });
     }
@@ -63,12 +67,25 @@ let TechnologyResolver = class TechnologyResolver {
             }
         });
     }
+    deleteTechnolgy(title) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const techToBeDeleted = yield TechnologyEntity_1.TechnologyEntity.findOne({
+                where: { title },
+            });
+            if (!techToBeDeleted) {
+                return `Technology ${title} does not exist.`;
+            }
+            else {
+                yield TechnologyEntity_1.TechnologyEntity.remove(techToBeDeleted);
+                return "Technology deleted successfully.";
+            }
+        });
+    }
 };
 __decorate([
     type_graphql_1.Query(() => [TechnologyEntity_1.TechnologyEntity]),
-    __param(0, type_graphql_1.Ctx()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], TechnologyResolver.prototype, "technologies", null);
 __decorate([
@@ -86,6 +103,13 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], TechnologyResolver.prototype, "deleteAllTechnologies", null);
+__decorate([
+    type_graphql_1.Mutation(() => String),
+    __param(0, type_graphql_1.Arg("title")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], TechnologyResolver.prototype, "deleteTechnolgy", null);
 TechnologyResolver = __decorate([
     type_graphql_1.Resolver()
 ], TechnologyResolver);

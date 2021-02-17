@@ -20,12 +20,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProjectsResolver = void 0;
 const TechnologyEntity_1 = require("../entities/TechnologyEntity");
 const type_graphql_1 = require("type-graphql");
 const ProjectEntity_1 = require("../entities/ProjectEntity");
 const typeorm_1 = require("typeorm");
+const getTechnologiesByTitle_1 = __importDefault(require("../utils/getTechnologiesByTitle"));
 let ProjectCreationInput = class ProjectCreationInput {
 };
 __decorate([
@@ -45,9 +49,25 @@ __decorate([
     __metadata("design:type", String)
 ], ProjectCreationInput.prototype, "description", void 0);
 __decorate([
-    type_graphql_1.Field(() => [String]),
+    type_graphql_1.Field(() => [String], { nullable: true }),
     __metadata("design:type", Array)
-], ProjectCreationInput.prototype, "technologiesNames", void 0);
+], ProjectCreationInput.prototype, "frontEndNames", void 0);
+__decorate([
+    type_graphql_1.Field(() => [String], { nullable: true }),
+    __metadata("design:type", Array)
+], ProjectCreationInput.prototype, "backEndNames", void 0);
+__decorate([
+    type_graphql_1.Field(() => [String], { nullable: true }),
+    __metadata("design:type", Array)
+], ProjectCreationInput.prototype, "languagesNames", void 0);
+__decorate([
+    type_graphql_1.Field(() => [String], { nullable: true }),
+    __metadata("design:type", Array)
+], ProjectCreationInput.prototype, "hostingServiceNames", void 0);
+__decorate([
+    type_graphql_1.Field(() => Boolean, { nullable: true }),
+    __metadata("design:type", Object)
+], ProjectCreationInput.prototype, "isHighlight", void 0);
 ProjectCreationInput = __decorate([
     type_graphql_1.InputType()
 ], ProjectCreationInput);
@@ -89,23 +109,34 @@ ProjResponse = __decorate([
 let ProjectsResolver = class ProjectsResolver {
     projects() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield ProjectEntity_1.ProjectEntity.find({ relations: ["technologiesUsed"] });
+            return yield ProjectEntity_1.ProjectEntity.find({
+                relations: [
+                    "frontEndTechnologies",
+                    "backEndTechnologies",
+                    "languages",
+                    "hostingServices",
+                ],
+            });
         });
     }
     createProject(projectData, {}) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { description, endDate, startDate, title, technologiesNames, } = projectData;
-            const technologies = yield typeorm_1.getManager()
-                .createQueryBuilder(TechnologyEntity_1.TechnologyEntity, "tech")
-                .where("tech.title IN (:...titles)", { titles: technologiesNames })
-                .orderBy("tech.title")
-                .getMany();
+            const { description, endDate, startDate, title, frontEndNames, backEndNames, languagesNames, hostingServiceNames, isHighlight, } = projectData;
+            const frontEnd = yield getTechnologiesByTitle_1.default(frontEndNames);
+            const backEnd = yield getTechnologiesByTitle_1.default(backEndNames);
+            const languages = yield getTechnologiesByTitle_1.default(languagesNames);
+            const hostingServices = yield getTechnologiesByTitle_1.default(hostingServiceNames);
+            console.log(frontEnd, backEnd, languages, hostingServices);
             const newProj = yield ProjectEntity_1.ProjectEntity.create({
                 description,
                 endDate,
                 title,
                 startDate,
-                technologiesUsed: technologies,
+                frontEndTechnologies: frontEnd,
+                backEndTechnologies: backEnd,
+                hostingServices: hostingServices,
+                languages,
+                isHighlight: isHighlight || false,
             }).save();
             return newProj;
         });

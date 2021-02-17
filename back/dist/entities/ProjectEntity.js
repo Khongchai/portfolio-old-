@@ -32,9 +32,24 @@ __decorate([
 ], ProjectEntity.prototype, "description", void 0);
 __decorate([
     type_graphql_1.Field(() => [TechnologyEntity_1.TechnologyEntity], { nullable: true }),
-    typeorm_1.ManyToMany(() => TechnologyEntity_1.TechnologyEntity, (tech) => tech.usedIn),
+    typeorm_1.ManyToMany(() => TechnologyEntity_1.TechnologyEntity, (tech) => tech.frontEndIn),
     __metadata("design:type", Array)
-], ProjectEntity.prototype, "technologiesUsed", void 0);
+], ProjectEntity.prototype, "frontEndTechnologies", void 0);
+__decorate([
+    type_graphql_1.Field(() => [TechnologyEntity_1.TechnologyEntity], { nullable: true }),
+    typeorm_1.ManyToMany(() => TechnologyEntity_1.TechnologyEntity, (tech) => tech.backEndIn),
+    __metadata("design:type", Array)
+], ProjectEntity.prototype, "backEndTechnologies", void 0);
+__decorate([
+    type_graphql_1.Field(() => [TechnologyEntity_1.TechnologyEntity], { nullable: true }),
+    typeorm_1.ManyToMany(() => TechnologyEntity_1.TechnologyEntity, (tech) => tech.languageOf),
+    __metadata("design:type", Array)
+], ProjectEntity.prototype, "languages", void 0);
+__decorate([
+    type_graphql_1.Field(() => [TechnologyEntity_1.TechnologyEntity], { nullable: true }),
+    typeorm_1.ManyToMany(() => TechnologyEntity_1.TechnologyEntity, (tech) => tech.hosting),
+    __metadata("design:type", Array)
+], ProjectEntity.prototype, "hostingServices", void 0);
 __decorate([
     type_graphql_1.Field(),
     typeorm_1.Column(),
@@ -45,6 +60,11 @@ __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
 ], ProjectEntity.prototype, "endDate", void 0);
+__decorate([
+    type_graphql_1.Field(() => Boolean, { nullable: true }),
+    typeorm_1.Column({ nullable: true }),
+    __metadata("design:type", Boolean)
+], ProjectEntity.prototype, "isHighlight", void 0);
 ProjectEntity = __decorate([
     type_graphql_1.ObjectType(),
     typeorm_1.Entity()

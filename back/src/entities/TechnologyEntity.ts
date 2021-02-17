@@ -21,9 +21,30 @@ export class TechnologyEntity extends BaseEntity {
   title!: string;
 
   @Field(() => [ProjectEntity], { nullable: true })
-  @ManyToMany(() => ProjectEntity, (proj) => proj.technologiesUsed, {
+  @ManyToMany(() => ProjectEntity, (proj) => proj.frontEndTechnologies, {
     cascade: true,
   })
   @JoinTable()
-  usedIn: ProjectEntity[];
+  frontEndIn: ProjectEntity[];
+
+  @Field(() => [ProjectEntity], { nullable: true })
+  @ManyToMany(() => ProjectEntity, (proj) => proj.backEndTechnologies, {
+    cascade: true,
+  })
+  @JoinTable()
+  backEndIn: ProjectEntity[];
+
+  @Field(() => [ProjectEntity], { nullable: true })
+  @ManyToMany(() => ProjectEntity, (proj) => proj.languages, {
+    cascade: true,
+  })
+  @JoinTable()
+  languageOf: ProjectEntity[];
+
+  @Field(() => [ProjectEntity], { nullable: true })
+  @ManyToMany(() => ProjectEntity, (proj) => proj.hostingServices, {
+    cascade: true,
+  })
+  @JoinTable()
+  hosting: ProjectEntity[];
 }

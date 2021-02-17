@@ -22,16 +22,21 @@ export class ErrorField {
 @Resolver()
 export class TechnologyResolver {
   @Query(() => [TechnologyEntity])
-  async technologies(@Ctx() {}: Context): Promise<TechnologyEntity[]> {
-    const technologies = await TechnologyEntity.find({ relations: ["usedIn"] });
+  async technologies(): Promise<TechnologyEntity[]> {
+    const technologies = await TechnologyEntity.find({
+      relations: ["frontEndIn", "backEndIn", "languageOf", "hosting"],
+    });
     return technologies;
   }
+
   @Mutation(() => TechnologyEntity, { nullable: true })
   async createTechnology(
     @Arg("title") title: string,
     @Arg("projectName", () => [String], { nullable: true }) projName?: string[]
   ): Promise<TechnologyEntity | null> {
-    const tech = await TechnologyEntity.create({ title }).save();
+    const tech = await TechnologyEntity.create({
+      title: title,
+    }).save();
 
     //TODO check if proj exists, if not, returns error, else add to the new technology.
     //Should be achieved with a query builder
@@ -48,4 +53,20 @@ export class TechnologyResolver {
       return "All technologies deleted successfully.";
     }
   }
+
+  @Mutation(() => String)
+  async deleteTechnolgy(@Arg("title") title: string): Promise<string> {
+    const techToBeDeleted = await TechnologyEntity.findOne({
+      where: { title },
+    });
+    if (!techToBeDeleted) {
+      return `Technology ${title} does not exist.`;
+    } else {
+      await TechnologyEntity.remove(techToBeDeleted);
+      return "Technology deleted successfully.";
+    }
+  }
+
+  //TODO: make technology hightlight
+  //TODO: remove technolgy from highlight
 }
