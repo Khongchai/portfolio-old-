@@ -12,62 +12,12 @@ import {
 } from "type-graphql";
 import { ProjectEntity } from "../entities/ProjectEntity";
 import { getManager } from "typeorm";
-import getTechnologiesByTitle from "../utils/getTechnologiesByTitle";
-
-//for project creation input, create a separate inputtype
-@InputType()
-class ProjectCreationInput {
-  @Field()
-  startDate!: string;
-
-  @Field()
-  endDate!: string;
-
-  @Field()
-  title!: string;
-
-  @Field()
-  description!: string;
-
-  @Field(() => [String], { nullable: true })
-  frontEndNames: string[];
-
-  @Field(() => [String], { nullable: true })
-  backEndNames: string[];
-
-  @Field(() => [String], { nullable: true })
-  languagesNames: string[];
-
-  @Field(() => [String], { nullable: true })
-  hostingServiceNames: string[];
-
-  @Field(() => Boolean, { nullable: true })
-  isHighlight: boolean | undefined;
-}
-
-@InputType()
-class AddTechInput {
-  @Field()
-  projName!: string;
-
-  @Field(() => [String])
-  technologiesNames!: string[];
-}
-
-@ObjectType()
-class ErrorField {
-  @Field()
-  message: string;
-}
-
-@ObjectType()
-class ProjResponse {
-  @Field(() => [ErrorField], { nullable: true })
-  errors?: ErrorField[];
-
-  @Field(() => ProjectEntity, { nullable: true })
-  proj?: ProjectEntity;
-}
+import { getTechListForEachProp } from "../utils/getTechnologiesByTitle";
+import {
+  AddTechInput,
+  ProjectCreationInput,
+  ProjResponse,
+} from "../inputAndObjectTypes/ProjectResolver";
 
 @Resolver()
 export class ProjectsResolver {
@@ -89,24 +39,25 @@ export class ProjectsResolver {
     @Arg("projectData") projectData: ProjectCreationInput,
     @Ctx() {}: Context
   ): Promise<ProjectEntity | null | boolean> {
+    const { description, endDate, startDate, title, isHighlight } = projectData;
     const {
-      description,
-      endDate,
-      startDate,
-      title,
       frontEndNames,
       backEndNames,
       languagesNames,
       hostingServiceNames,
-      isHighlight,
-    } = projectData;
+    } = projectData.techProps;
 
-    const frontEnd = await getTechnologiesByTitle(frontEndNames);
-    const backEnd = await getTechnologiesByTitle(backEndNames);
-    const languages = await getTechnologiesByTitle(languagesNames);
-    const hostingServices = await getTechnologiesByTitle(hostingServiceNames);
-
-    console.log(frontEnd, backEnd, languages, hostingServices);
+    const {
+      backEnd,
+      frontEnd,
+      languages,
+      hostingServices,
+    } = await getTechListForEachProp(
+      frontEndNames,
+      backEndNames,
+      languagesNames,
+      hostingServiceNames
+    );
 
     const newProj = await ProjectEntity.create({
       description,
@@ -127,12 +78,23 @@ export class ProjectsResolver {
   async addTechnologies(
     @Arg("projectData") input: AddTechInput
   ): Promise<ProjResponse> {
-    const { projName, technologiesNames } = input;
+    const { projName } = input;
+    const {
+      backEndNames,
+      frontEndNames,
+      hostingServiceNames,
+      languagesNames,
+    } = input.techProps;
+
     const proj = await ProjectEntity.findOne({
       where: { title: projName },
-      relations: ["technologiesUsed"],
+      relations: [
+        "frontEndTechnologies",
+        "backEndTechnologies",
+        "languages",
+        "hostingServices",
+      ],
     });
-
     if (!proj) {
       return {
         errors: [
@@ -143,29 +105,30 @@ export class ProjectsResolver {
       };
     }
 
-    const technologies = await getManager()
-      .createQueryBuilder(TechnologyEntity, "tech")
-      .where("tech.title IN (:...titles)", { titles: technologiesNames })
-      .orderBy("tech.title")
-      .getMany();
+    const {
+      backEnd,
+      frontEnd,
+      languages,
+      hostingServices,
+      error,
+    } = await getTechListForEachProp(
+      frontEndNames,
+      backEndNames,
+      languagesNames,
+      hostingServiceNames
+    );
+    if (error)
+      return {
+        errors: [
+          {
+            message: error,
+          },
+        ],
+      };
 
-    const length = technologiesNames.length;
-
-    for (let i = 0; i < length; i++) {
-      //check if any technology with the name of technologiesNames exists
-      if (!technologiesNames.includes(technologies[i]?.title)) {
-        return {
-          errors: [
-            {
-              message: `Technology ${technologiesNames[i]} does not exist`,
-            },
-          ],
-        };
-      }
-    }
-    proj.technologiesUsed = [...proj.technologiesUsed, ...technologies];
-    await proj.save();
-
+    //TODO::: persist and save
+    //proj. = [...proj.technologiesUsed, ...technologies];
+    //await proj.save();
     return { proj };
   }
 
