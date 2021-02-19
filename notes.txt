@@ -5,3 +5,7 @@ backend => add auth system so that only superuser can edit page // technologies 
 frontend => add more data to backend so that you can begin implementing the relay pagination.
 
 About to implement pagination//scroll to load more
+
+Change resolvers to work with the new datashape
+
+CRUD for both project and technology resolvers.

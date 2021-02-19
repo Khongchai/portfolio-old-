@@ -22,11 +22,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProjectsResolver = void 0;
-const TechnologyEntity_1 = require("../entities/TechnologyEntity");
 const type_graphql_1 = require("type-graphql");
 const ProjectEntity_1 = require("../entities/ProjectEntity");
-const getTechnologiesByTitle_1 = require("../utils/getTechnologiesByTitle");
 const ProjectResolver_1 = require("../inputAndObjectTypes/ProjectResolver");
+const getTechnologiesByTitle_1 = require("../utils/getTechnologiesByTitle");
 let ProjectsResolver = class ProjectsResolver {
     projects() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -59,7 +58,7 @@ let ProjectsResolver = class ProjectsResolver {
             return newProj;
         });
     }
-    addTechnologies(input) {
+    addOrRemoveTechnologies(input, operation) {
         return __awaiter(this, void 0, void 0, function* () {
             const { projName } = input;
             const { backEndNames, frontEndNames, hostingServiceNames, languagesNames, } = input.techProps;
@@ -90,19 +89,39 @@ let ProjectsResolver = class ProjectsResolver {
                         },
                     ],
                 };
+            if (operation) {
+                proj.backEndTechnologies = [
+                    ...proj.backEndTechnologies,
+                    ...backEnd,
+                ];
+                proj.frontEndTechnologies = [
+                    ...proj.frontEndTechnologies,
+                    ...frontEnd,
+                ];
+                proj.languages = [
+                    ...proj.languages,
+                    ...languages,
+                ];
+                proj.hostingServices = [
+                    ...proj.hostingServices,
+                    ...hostingServices,
+                ];
+            }
+            else {
+            }
+            yield proj.save();
             return { proj };
         });
     }
-    deleteProject(id) {
+    setProjectHighlight(title, operation) {
         return __awaiter(this, void 0, void 0, function* () {
-            const projectToBeDeleted = yield ProjectEntity_1.ProjectEntity.findOne({ id });
-            if (!projectToBeDeleted) {
-                return false;
+            const project = yield ProjectEntity_1.ProjectEntity.findOne({ where: { title } });
+            if (project) {
+                project.isHighlight = operation;
+                yield project.save();
+                return { proj: project };
             }
-            else {
-                yield projectToBeDeleted.remove();
-                return true;
-            }
+            return { errors: [{ message: "Project not found" }] };
         });
     }
     deleteAllProjects() {
@@ -117,22 +136,16 @@ let ProjectsResolver = class ProjectsResolver {
             }
         });
     }
-    addRandomTechToAllProjects() {
+    deleteProject(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const allProjects = yield ProjectEntity_1.ProjectEntity.find({
-                relations: ["technologiesUsed"],
-            });
-            const allTechnologies = yield TechnologyEntity_1.TechnologyEntity.find({});
-            const length = allProjects.length;
-            for (let i = 0; i < length; i++) {
-                const ranNum = Math.floor(Math.random() * allTechnologies.length);
-                allProjects[i].technologiesUsed = [
-                    ...allProjects[i].technologiesUsed,
-                    allTechnologies[ranNum],
-                ];
-                yield allProjects[i].save();
+            const projectToBeDeleted = yield ProjectEntity_1.ProjectEntity.findOne({ id });
+            if (!projectToBeDeleted) {
+                return false;
             }
-            return allProjects;
+            else {
+                yield projectToBeDeleted.remove();
+                return true;
+            }
         });
     }
 };
@@ -153,17 +166,19 @@ __decorate([
 __decorate([
     type_graphql_1.Mutation(() => ProjectResolver_1.ProjResponse, { nullable: true }),
     __param(0, type_graphql_1.Arg("projectData")),
+    __param(1, type_graphql_1.Arg("operation")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [ProjectResolver_1.AddTechInput]),
+    __metadata("design:paramtypes", [ProjectResolver_1.AddTechInput, Boolean]),
     __metadata("design:returntype", Promise)
-], ProjectsResolver.prototype, "addTechnologies", null);
+], ProjectsResolver.prototype, "addOrRemoveTechnologies", null);
 __decorate([
-    type_graphql_1.Mutation(() => Boolean),
-    __param(0, type_graphql_1.Arg("id")),
+    type_graphql_1.Mutation(() => ProjectResolver_1.ProjResponse),
+    __param(0, type_graphql_1.Arg("title")),
+    __param(1, type_graphql_1.Arg("operation")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
+    __metadata("design:paramtypes", [String, Boolean]),
     __metadata("design:returntype", Promise)
-], ProjectsResolver.prototype, "deleteProject", null);
+], ProjectsResolver.prototype, "setProjectHighlight", null);
 __decorate([
     type_graphql_1.Mutation(() => String),
     __metadata("design:type", Function),
@@ -171,11 +186,12 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ProjectsResolver.prototype, "deleteAllProjects", null);
 __decorate([
-    type_graphql_1.Mutation(() => [ProjectEntity_1.ProjectEntity]),
+    type_graphql_1.Mutation(() => Boolean),
+    __param(0, type_graphql_1.Arg("id")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
-], ProjectsResolver.prototype, "addRandomTechToAllProjects", null);
+], ProjectsResolver.prototype, "deleteProject", null);
 ProjectsResolver = __decorate([
     type_graphql_1.Resolver()
 ], ProjectsResolver);
