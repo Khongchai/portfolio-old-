@@ -21,8 +21,6 @@ const main = async () => {
     entities: [ProjectEntity, TechnologyEntity],
   });
 
-  await conn.runMigrations();
-
   const app = express();
   app.use(
     cors({

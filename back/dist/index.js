@@ -33,7 +33,6 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         synchronize: true,
         entities: [ProjectEntity_1.ProjectEntity, TechnologyEntity_1.TechnologyEntity],
     });
-    yield conn.runMigrations();
     const app = express_1.default();
     app.use(cors_1.default({
         origin: "http://localhost:3000",

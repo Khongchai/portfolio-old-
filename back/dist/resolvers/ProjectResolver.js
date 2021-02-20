@@ -41,7 +41,7 @@ let ProjectsResolver = class ProjectsResolver {
     }
     createProject(projectData, {}) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { description, endDate, startDate, title, isHighlight } = projectData;
+            const { description, endDate, startDate, title, isHighlight, shortDescription, githubLink, websiteLink, } = projectData;
             const { frontEndNames, backEndNames, languagesNames, hostingServiceNames, } = projectData.techProps;
             const { backEnd, frontEnd, languages, hostingServices, } = yield getTechnologiesByTitle_1.getTechListForEachProp(frontEndNames, backEndNames, languagesNames, hostingServiceNames);
             const newProj = yield ProjectEntity_1.ProjectEntity.create({
@@ -54,6 +54,9 @@ let ProjectsResolver = class ProjectsResolver {
                 hostingServices: hostingServices,
                 languages,
                 isHighlight: isHighlight || false,
+                shortDescription,
+                githubLink,
+                websiteLink,
             }).save();
             return newProj;
         });

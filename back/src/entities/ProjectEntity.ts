@@ -1,3 +1,5 @@
+import { CONNREFUSED } from "dns";
+import { cpuUsage } from "process";
 import { Field, ObjectType } from "type-graphql";
 import {
   Entity,
@@ -22,6 +24,18 @@ export class ProjectEntity extends BaseEntity {
   @Field()
   @Column()
   description!: string;
+
+  @Field()
+  @Column()
+  shortDescription!: string;
+
+  @Field()
+  @Column()
+  githubLink!: string;
+
+  @Field()
+  @Column({ nullable: true })
+  websiteLink: string;
 
   @Field(() => [TechnologyEntity], { nullable: true })
   @ManyToMany(() => TechnologyEntity, (tech) => tech.frontEndIn)

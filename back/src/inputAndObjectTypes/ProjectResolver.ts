@@ -32,6 +32,15 @@ export class ProjectCreationInput {
   @Field()
   description!: string;
 
+  @Field()
+  shortDescription!: string;
+
+  @Field()
+  githubLink!: string;
+
+  @Field({ nullable: true })
+  websiteLink: string;
+
   @Field(() => TechnologyProperties, { nullable: true })
   techProps: TechnologyProperties;
 

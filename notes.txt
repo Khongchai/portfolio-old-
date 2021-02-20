@@ -9,3 +9,6 @@ About to implement pagination//scroll to load more
 Change resolvers to work with the new datashape
 
 CRUD for both project and technology resolvers.
+
+
+Try adding projects, see if it works, then add website link then work on the look of the filter page;

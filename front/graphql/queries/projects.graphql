@@ -1,12 +1,26 @@
 query Projects {
   projects {
-    id
     title
-    startDate
-    endDate
-    description
-    technologiesUsed {
+    frontEndTechnologies {
       title
+      id
     }
+    backEndTechnologies {
+      title
+      id
+    }
+    languages {
+      title
+      id
+    }
+    hostingServices {
+      title
+      id
+    }
+    isHighlight
+    endDate
+    startDate
+    description
+    id
   }
 }

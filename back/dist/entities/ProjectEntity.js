@@ -31,6 +31,21 @@ __decorate([
     __metadata("design:type", String)
 ], ProjectEntity.prototype, "description", void 0);
 __decorate([
+    type_graphql_1.Field(),
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], ProjectEntity.prototype, "shortDescription", void 0);
+__decorate([
+    type_graphql_1.Field(),
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], ProjectEntity.prototype, "githubLink", void 0);
+__decorate([
+    type_graphql_1.Field(),
+    typeorm_1.Column({ nullable: true }),
+    __metadata("design:type", String)
+], ProjectEntity.prototype, "websiteLink", void 0);
+__decorate([
     type_graphql_1.Field(() => [TechnologyEntity_1.TechnologyEntity], { nullable: true }),
     typeorm_1.ManyToMany(() => TechnologyEntity_1.TechnologyEntity, (tech) => tech.frontEndIn),
     __metadata("design:type", Array)

@@ -23,28 +23,37 @@ export type Query = {
 export type ProjectEntity = {
   __typename?: 'ProjectEntity';
   id: Scalars['Float'];
-  startDate: Scalars['Float'];
-  endDate: Scalars['Float'];
   title: Scalars['String'];
   description: Scalars['String'];
-  technologiesUsed?: Maybe<Array<TechnologyEntity>>;
+  frontEndTechnologies?: Maybe<Array<TechnologyEntity>>;
+  backEndTechnologies?: Maybe<Array<TechnologyEntity>>;
+  languages?: Maybe<Array<TechnologyEntity>>;
+  hostingServices?: Maybe<Array<TechnologyEntity>>;
+  startDate: Scalars['String'];
+  endDate: Scalars['String'];
+  isHighlight?: Maybe<Scalars['Boolean']>;
 };
 
 export type TechnologyEntity = {
   __typename?: 'TechnologyEntity';
   id: Scalars['Float'];
   title: Scalars['String'];
-  usedIn?: Maybe<Array<ProjectEntity>>;
+  frontEndIn?: Maybe<Array<ProjectEntity>>;
+  backEndIn?: Maybe<Array<ProjectEntity>>;
+  languageOf?: Maybe<Array<ProjectEntity>>;
+  hosting?: Maybe<Array<ProjectEntity>>;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
   createProject?: Maybe<ProjectEntity>;
-  addTechnologies?: Maybe<ProjResponse>;
-  deleteProject: Scalars['Boolean'];
+  addOrRemoveTechnologies?: Maybe<ProjResponse>;
+  setProjectHighlight: ProjResponse;
   deleteAllProjects: Scalars['String'];
+  deleteProject: Scalars['Boolean'];
   createTechnology?: Maybe<TechnologyEntity>;
   deleteAllTechnologies: Scalars['String'];
+  deleteTechnolgy: Scalars['String'];
 };
 
 
@@ -53,8 +62,15 @@ export type MutationCreateProjectArgs = {
 };
 
 
-export type MutationAddTechnologiesArgs = {
+export type MutationAddOrRemoveTechnologiesArgs = {
+  operation: Scalars['Boolean'];
   projectData: AddTechInput;
+};
+
+
+export type MutationSetProjectHighlightArgs = {
+  operation: Scalars['Boolean'];
+  title: Scalars['String'];
 };
 
 
@@ -68,12 +84,25 @@ export type MutationCreateTechnologyArgs = {
   title: Scalars['String'];
 };
 
+
+export type MutationDeleteTechnolgyArgs = {
+  title: Scalars['String'];
+};
+
 export type ProjectCreationInput = {
-  startDate: Scalars['Float'];
-  endDate: Scalars['Float'];
+  startDate: Scalars['String'];
+  endDate: Scalars['String'];
   title: Scalars['String'];
   description: Scalars['String'];
-  technologiesNames: Array<Scalars['String']>;
+  techProps?: Maybe<TechnologyProperties>;
+  isHighlight?: Maybe<Scalars['Boolean']>;
+};
+
+export type TechnologyProperties = {
+  frontEndNames?: Maybe<Array<Scalars['String']>>;
+  backEndNames?: Maybe<Array<Scalars['String']>>;
+  languagesNames?: Maybe<Array<Scalars['String']>>;
+  hostingServiceNames?: Maybe<Array<Scalars['String']>>;
 };
 
 export type ProjResponse = {
@@ -89,7 +118,7 @@ export type ErrorField = {
 
 export type AddTechInput = {
   projName: Scalars['String'];
-  technologiesNames: Array<Scalars['String']>;
+  techProps?: Maybe<TechnologyProperties>;
 };
 
 export type ProjectsQueryVariables = Exact<{ [key: string]: never; }>;
@@ -99,10 +128,19 @@ export type ProjectsQuery = (
   { __typename?: 'Query' }
   & { projects: Array<(
     { __typename?: 'ProjectEntity' }
-    & Pick<ProjectEntity, 'id' | 'title' | 'startDate' | 'endDate' | 'description'>
-    & { technologiesUsed?: Maybe<Array<(
+    & Pick<ProjectEntity, 'title' | 'isHighlight' | 'endDate' | 'startDate' | 'description' | 'id'>
+    & { frontEndTechnologies?: Maybe<Array<(
       { __typename?: 'TechnologyEntity' }
-      & Pick<TechnologyEntity, 'title'>
+      & Pick<TechnologyEntity, 'title' | 'id'>
+    )>>, backEndTechnologies?: Maybe<Array<(
+      { __typename?: 'TechnologyEntity' }
+      & Pick<TechnologyEntity, 'title' | 'id'>
+    )>>, languages?: Maybe<Array<(
+      { __typename?: 'TechnologyEntity' }
+      & Pick<TechnologyEntity, 'title' | 'id'>
+    )>>, hostingServices?: Maybe<Array<(
+      { __typename?: 'TechnologyEntity' }
+      & Pick<TechnologyEntity, 'title' | 'id'>
     )>> }
   )> }
 );
@@ -115,9 +153,18 @@ export type TechnologiesQuery = (
   & { technologies: Array<(
     { __typename?: 'TechnologyEntity' }
     & Pick<TechnologyEntity, 'id' | 'title'>
-    & { usedIn?: Maybe<Array<(
+    & { frontEndIn?: Maybe<Array<(
       { __typename?: 'ProjectEntity' }
-      & Pick<ProjectEntity, 'id'>
+      & Pick<ProjectEntity, 'title' | 'id'>
+    )>>, backEndIn?: Maybe<Array<(
+      { __typename?: 'ProjectEntity' }
+      & Pick<ProjectEntity, 'title' | 'id'>
+    )>>, languageOf?: Maybe<Array<(
+      { __typename?: 'ProjectEntity' }
+      & Pick<ProjectEntity, 'title' | 'id'>
+    )>>, hosting?: Maybe<Array<(
+      { __typename?: 'ProjectEntity' }
+      & Pick<ProjectEntity, 'title' | 'id'>
     )>> }
   )> }
 );
@@ -126,14 +173,28 @@ export type TechnologiesQuery = (
 export const ProjectsDocument = gql`
     query Projects {
   projects {
-    id
     title
-    startDate
-    endDate
-    description
-    technologiesUsed {
+    frontEndTechnologies {
       title
+      id
     }
+    backEndTechnologies {
+      title
+      id
+    }
+    languages {
+      title
+      id
+    }
+    hostingServices {
+      title
+      id
+    }
+    isHighlight
+    endDate
+    startDate
+    description
+    id
   }
 }
     `;
@@ -146,7 +207,20 @@ export const TechnologiesDocument = gql`
   technologies {
     id
     title
-    usedIn {
+    frontEndIn {
+      title
+      id
+    }
+    backEndIn {
+      title
+      id
+    }
+    languageOf {
+      title
+      id
+    }
+    hosting {
+      title
       id
     }
   }

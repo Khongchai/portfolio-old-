@@ -40,7 +40,7 @@ export const InfoDisplay: React.FC<{
   setDetails: React.Dispatch<React.SetStateAction<ProjectEntity | undefined>>;
 }> = ({ data, setDetails }) => {
   return (
-    <Stack spacing={"1.5em"} flex="0.7">
+    <Stack spacing={"1.5em"} flex="1">
       <Box overflowX="scroll">
         {data?.projects.map((proj) => (
           <div

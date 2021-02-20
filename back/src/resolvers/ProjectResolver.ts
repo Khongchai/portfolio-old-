@@ -29,7 +29,16 @@ export class ProjectsResolver {
     @Arg("projectData") projectData: ProjectCreationInput,
     @Ctx() {}: Context
   ): Promise<ProjectEntity | null | boolean> {
-    const { description, endDate, startDate, title, isHighlight } = projectData;
+    const {
+      description,
+      endDate,
+      startDate,
+      title,
+      isHighlight,
+      shortDescription,
+      githubLink,
+      websiteLink,
+    } = projectData;
     const {
       frontEndNames,
       backEndNames,
@@ -59,6 +68,9 @@ export class ProjectsResolver {
       hostingServices: hostingServices,
       languages,
       isHighlight: isHighlight || false,
+      shortDescription,
+      githubLink,
+      websiteLink,
     }).save();
 
     return newProj;
