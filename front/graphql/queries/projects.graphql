@@ -22,5 +22,8 @@ query Projects {
     startDate
     description
     id
+    githubLink
+    websiteLink
+    shortDescription
   }
 }

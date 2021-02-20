@@ -1,6 +1,6 @@
 import { Flex } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { InfoDisplay, List } from "../../components/filterComponents";
+import { InfoDisplay, List } from "../../components/filterComponents/index";
 import { ProjectEntity, useProjectsQuery } from "../../generated/graphql";
 
 export default function Filter() {
@@ -21,8 +21,8 @@ export default function Filter() {
       w={"100%"}
       h={["auto", null, "100vh"]}
     >
-      <List details={details} />
-      <InfoDisplay data={data} setDetails={setDetails} />
+      <InfoDisplay details={details} />
+      <List data={data} setDetails={setDetails} />
     </Flex>
   );
 }

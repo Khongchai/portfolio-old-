@@ -25,6 +25,9 @@ export type ProjectEntity = {
   id: Scalars['Float'];
   title: Scalars['String'];
   description: Scalars['String'];
+  shortDescription: Scalars['String'];
+  githubLink: Scalars['String'];
+  websiteLink: Scalars['String'];
   frontEndTechnologies?: Maybe<Array<TechnologyEntity>>;
   backEndTechnologies?: Maybe<Array<TechnologyEntity>>;
   languages?: Maybe<Array<TechnologyEntity>>;
@@ -46,7 +49,7 @@ export type TechnologyEntity = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createProject?: Maybe<ProjectEntity>;
+  createProject?: Maybe<ProjResponse>;
   addOrRemoveTechnologies?: Maybe<ProjResponse>;
   setProjectHighlight: ProjResponse;
   deleteAllProjects: Scalars['String'];
@@ -89,22 +92,6 @@ export type MutationDeleteTechnolgyArgs = {
   title: Scalars['String'];
 };
 
-export type ProjectCreationInput = {
-  startDate: Scalars['String'];
-  endDate: Scalars['String'];
-  title: Scalars['String'];
-  description: Scalars['String'];
-  techProps?: Maybe<TechnologyProperties>;
-  isHighlight?: Maybe<Scalars['Boolean']>;
-};
-
-export type TechnologyProperties = {
-  frontEndNames?: Maybe<Array<Scalars['String']>>;
-  backEndNames?: Maybe<Array<Scalars['String']>>;
-  languagesNames?: Maybe<Array<Scalars['String']>>;
-  hostingServiceNames?: Maybe<Array<Scalars['String']>>;
-};
-
 export type ProjResponse = {
   __typename?: 'ProjResponse';
   errors?: Maybe<Array<ErrorField>>;
@@ -114,6 +101,25 @@ export type ProjResponse = {
 export type ErrorField = {
   __typename?: 'ErrorField';
   message: Scalars['String'];
+};
+
+export type ProjectCreationInput = {
+  startDate: Scalars['String'];
+  endDate: Scalars['String'];
+  title: Scalars['String'];
+  description: Scalars['String'];
+  shortDescription: Scalars['String'];
+  githubLink: Scalars['String'];
+  websiteLink?: Maybe<Scalars['String']>;
+  techProps?: Maybe<TechnologyProperties>;
+  isHighlight?: Maybe<Scalars['Boolean']>;
+};
+
+export type TechnologyProperties = {
+  frontEndNames?: Maybe<Array<Scalars['String']>>;
+  backEndNames?: Maybe<Array<Scalars['String']>>;
+  languagesNames?: Maybe<Array<Scalars['String']>>;
+  hostingServiceNames?: Maybe<Array<Scalars['String']>>;
 };
 
 export type AddTechInput = {
@@ -128,7 +134,7 @@ export type ProjectsQuery = (
   { __typename?: 'Query' }
   & { projects: Array<(
     { __typename?: 'ProjectEntity' }
-    & Pick<ProjectEntity, 'title' | 'isHighlight' | 'endDate' | 'startDate' | 'description' | 'id'>
+    & Pick<ProjectEntity, 'title' | 'isHighlight' | 'endDate' | 'startDate' | 'description' | 'id' | 'githubLink' | 'websiteLink' | 'shortDescription'>
     & { frontEndTechnologies?: Maybe<Array<(
       { __typename?: 'TechnologyEntity' }
       & Pick<TechnologyEntity, 'title' | 'id'>
@@ -195,6 +201,9 @@ export const ProjectsDocument = gql`
     startDate
     description
     id
+    githubLink
+    websiteLink
+    shortDescription
   }
 }
     `;
