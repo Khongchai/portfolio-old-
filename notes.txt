@@ -17,4 +17,4 @@ Come up with a better error return for project creation//updation error;
 
 Once the filter page is finished, try adding subscriptions to it: https://formidable.com/open-source/urql/docs/advanced/subscriptions/
 
-combine both the info viewer and the list in the filter page together and export both through index field
+change every logo to png/ on hover, show a bigger version, some might be too hard to read what it is.

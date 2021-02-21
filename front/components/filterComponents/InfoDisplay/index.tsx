@@ -10,6 +10,8 @@ const InfoDisplay: React.FC<{ details: ProjectEntity | undefined }> = ({
   return (
     <Grid
       gridTemplateColumns=" 0.5fr [left-padding-end] repeat(4, minmax(auto, 1fr)) [right-padding-end] 0.5fr "
+      gridTemplateRows="1fr 1fr auto"
+      minHeight="100%"
       flex="1"
       pt="8rem"
     >
@@ -18,7 +20,7 @@ const InfoDisplay: React.FC<{ details: ProjectEntity | undefined }> = ({
       ) : (
         <Stack
           gridColumn="left-padding-end / right-padding-end"
-          gridRow="1 / 2"
+          gridRow="1"
           spacing={"2rem"}
           height="100%"
         >

@@ -48,30 +48,36 @@ const ExpandButton: React.FC<TechDetails> = (techDetails) => {
       height="auto"
       gridColumn="left-padding-end / right-padding-end"
       pos="relative"
+      gridRow="2"
       top="0px"
+      d="flex"
+      flexDir="column"
+      justifyContent="flex-end"
       id="tech-container-container"
       transition={`.${GLOBAL_TRANSITION}s`}
       onClick={() => manageExpansion()}
     >
-      <Box
-        bgColor="grey2"
-        w="fit-content"
-        pos="relative"
-        borderRadius="50%"
-        margin="0 auto"
-        transform="translateY( 50%)"
-      >
-        <Img
-          id="arrow"
-          cursor="pointer"
-          src="/graphics/arrow.png"
+      <Box transform="translateY(-100%)" pb="20px">
+        <Box
+          bgColor="grey2"
+          w="fit-content"
           pos="relative"
-          transition={`.${GLOBAL_TRANSITION}s`}
-          transform="translateY(-16%)"
-          zIndex="4"
-        />
+          borderRadius="50%"
+          margin="0 auto"
+          transform="translateY( 50%)"
+        >
+          <Img
+            id="arrow"
+            cursor="pointer"
+            src="/graphics/arrow.png"
+            pos="relative"
+            transition={`.${GLOBAL_TRANSITION}s`}
+            transform="translateY(-16%)"
+            zIndex="4"
+          />
+        </Box>
+        <ExpandArea expansionStat={expansionStat} techDetails={techDetails} />
       </Box>
-      <ExpandArea expansionStat={expansionStat} techDetails={techDetails} />
     </Box>
   );
 };
@@ -90,7 +96,7 @@ const ExpandArea: React.FC<{
       color="mainOrange"
       mb="1rem"
       cursor="pointer"
-      p="0.5rem"
+      p={expansionStat === "expanded" ? "2rem" : "1rem"}
       borderRadius="10px"
       textAlign="center"
       fontWeight="bold"
@@ -99,23 +105,62 @@ const ExpandArea: React.FC<{
       flexDir="column"
       overflow="hidden"
     >
-      {expansionStat === "notExpanded" ? (
-        <Text>Technologies used in this project</Text>
-      ) : (
-        <>
-          <ExpandedContent techDetails={techDetails} />
-        </>
-      )}
+      <ExpandedContent
+        expansionStat={expansionStat}
+        techDetails={techDetails}
+      />
     </Flex>
   );
 };
 
 //Manage component
-const ExpandedContent: React.FC<{ techDetails: TechDetails }> = (
-  props,
-  ..._
-) => {
-  return <Text>Expanded content goes here</Text>;
+const ExpandedContent: React.FC<{
+  techDetails: TechDetails;
+  expansionStat: string;
+}> = ({
+  techDetails: { backEnd, hostingServices, languages, frontEnd },
+  expansionStat,
+}) => {
+  return (
+    <>
+      <Text>Technologies used in this project.</Text>
+      {expansionStat === "expanded" ? (
+        <>
+          <Logo tech={frontEnd} desc="Front" />
+          <Logo tech={backEnd} desc="Back" />
+          <Logo tech={languages} desc="Language" />
+          <Logo tech={hostingServices} desc="Hosting" />
+        </>
+      ) : null}
+    </>
+  );
+};
+
+const Logo: React.FC<{
+  tech: TechnologyEntity[] | null | undefined;
+  desc: string;
+}> = ({ tech, desc }) => {
+  return (
+    <Flex flex="auto" align="center">
+      <Text>{desc}: </Text>
+      <Flex justifyContent="space-evenly" w="100%">
+        {tech?.map((front) => {
+          const name = front.title.toLowerCase();
+          const nameNoSpace = name.replace(/\s+/g, "");
+          const src = `/logos/${nameNoSpace}.png`;
+          return (
+            <Img
+              maxHeight="50px"
+              h="30px"
+              flexWrap="wrap"
+              src={src}
+              alt={nameNoSpace}
+            ></Img>
+          );
+        })}
+      </Flex>
+    </Flex>
+  );
 };
 
 export default ExpandButton;
