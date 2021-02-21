@@ -24,11 +24,11 @@ export class ProjectsResolver {
     });
   }
 
-  @Mutation(() => ProjectEntity, { nullable: true })
+  @Mutation(() => ProjResponse, { nullable: true })
   async createProject(
     @Arg("projectData") projectData: ProjectCreationInput,
     @Ctx() {}: Context
-  ): Promise<ProjectEntity | null | boolean> {
+  ): Promise<ProjResponse | null | boolean> {
     const {
       description,
       endDate,
@@ -51,12 +51,22 @@ export class ProjectsResolver {
       frontEnd,
       languages,
       hostingServices,
+      error,
     } = await getTechListForEachProp(
       frontEndNames,
       backEndNames,
       languagesNames,
       hostingServiceNames
     );
+
+    if (error)
+      return {
+        errors: [
+          {
+            message: error,
+          },
+        ],
+      };
 
     const newProj = await ProjectEntity.create({
       description,
@@ -73,7 +83,7 @@ export class ProjectsResolver {
       websiteLink,
     }).save();
 
-    return newProj;
+    return { proj: newProj };
   }
 
   @Mutation(() => ProjResponse, { nullable: true })
@@ -192,23 +202,4 @@ export class ProjectsResolver {
       return true;
     }
   }
-  /*
-  @Mutation(() => [ProjectEntity])
-  async addRandomTechToAllProjects(): Promise<ProjectEntity[]> {
-    const allProjects = await ProjectEntity.find({
-      relations: ["technologiesUsed"],
-    });
-    const allTechnologies = await TechnologyEntity.find({});
-    const length = allProjects.length;
-    for (let i = 0; i < length; i++) {
-      const ranNum = Math.floor(Math.random() * allTechnologies.length);
-      allProjects[i].technologiesUsed = [
-        ...allProjects[i].technologiesUsed,
-        allTechnologies[ranNum],
-      ];
-      await allProjects[i].save();
-    }
-    return allProjects;
-  }
-  */
 }

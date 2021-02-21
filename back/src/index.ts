@@ -3,7 +3,7 @@ import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { ProjectsResolver } from "./resolvers/ProjectResolver";
 import { TechnologyResolver } from "./resolvers/TechnologyResolver";
-import { ConnectionOptionsReader, createConnection } from "typeorm";
+import { createConnection } from "typeorm";
 import { ProjectEntity } from "./entities/ProjectEntity";
 import { TechnologyEntity } from "./entities/TechnologyEntity";
 import cors from "cors";

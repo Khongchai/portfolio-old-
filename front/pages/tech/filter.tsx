@@ -1,6 +1,7 @@
 import { Flex } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { InfoDisplay, List } from "../../components/filterComponents/index";
+import InfoDisplay from "../../components/filterComponents/InfoDisplay/index";
+import List from "../../components/filterComponents/List/index";
 import { ProjectEntity, useProjectsQuery } from "../../generated/graphql";
 
 export default function Filter() {

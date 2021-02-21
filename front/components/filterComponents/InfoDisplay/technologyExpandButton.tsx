@@ -1,5 +1,5 @@
-import { Box, Button, Img } from "@chakra-ui/react";
-import React, { useState } from "react";
+import { Box, Flex, Img, Text } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
 
 //onclick, the arrow flips to pointing down
 const ExpandButton: React.FC<{}> = ({}) => {
@@ -31,20 +31,33 @@ const ExpandButton: React.FC<{}> = ({}) => {
           zIndex="4"
         />
       </Box>
-      <Box
-        w="100%"
-        bgColor="grey2"
-        color="mainOrange"
-        mb="1rem"
-        cursor="pointer"
-        p="0.5rem"
-        borderRadius="10px"
-        textAlign="center"
-        fontWeight="bold"
-      >
-        Technologies used in this project
-      </Box>
+      <ExpandArea direction={direction} />
     </Box>
+  );
+};
+
+const ExpandArea: React.FC<{ direction: string }> = ({ direction }) => {
+  function manageExpansion(direction: string) {
+    return;
+  }
+  return (
+    <Flex
+      w="100%"
+      bgColor="grey2"
+      color="mainOrange"
+      mb="1rem"
+      cursor="pointer"
+      p="0.5rem"
+      borderRadius="10px"
+      textAlign="center"
+      fontWeight="bold"
+      transition="height.3s"
+      justify="center"
+      flexDir="column"
+      height="fit-content"
+    >
+      <Text>Technologies used in this project</Text>
+    </Flex>
   );
 };
 

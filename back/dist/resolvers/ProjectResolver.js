@@ -43,7 +43,15 @@ let ProjectsResolver = class ProjectsResolver {
         return __awaiter(this, void 0, void 0, function* () {
             const { description, endDate, startDate, title, isHighlight, shortDescription, githubLink, websiteLink, } = projectData;
             const { frontEndNames, backEndNames, languagesNames, hostingServiceNames, } = projectData.techProps;
-            const { backEnd, frontEnd, languages, hostingServices, } = yield getTechnologiesByTitle_1.getTechListForEachProp(frontEndNames, backEndNames, languagesNames, hostingServiceNames);
+            const { backEnd, frontEnd, languages, hostingServices, error, } = yield getTechnologiesByTitle_1.getTechListForEachProp(frontEndNames, backEndNames, languagesNames, hostingServiceNames);
+            if (error)
+                return {
+                    errors: [
+                        {
+                            message: error,
+                        },
+                    ],
+                };
             const newProj = yield ProjectEntity_1.ProjectEntity.create({
                 description,
                 endDate,
@@ -58,7 +66,7 @@ let ProjectsResolver = class ProjectsResolver {
                 githubLink,
                 websiteLink,
             }).save();
-            return newProj;
+            return { proj: newProj };
         });
     }
     addOrRemoveTechnologies(input, operation) {
@@ -159,7 +167,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ProjectsResolver.prototype, "projects", null);
 __decorate([
-    type_graphql_1.Mutation(() => ProjectEntity_1.ProjectEntity, { nullable: true }),
+    type_graphql_1.Mutation(() => ProjectResolver_1.ProjResponse, { nullable: true }),
     __param(0, type_graphql_1.Arg("projectData")),
     __param(1, type_graphql_1.Ctx()),
     __metadata("design:type", Function),

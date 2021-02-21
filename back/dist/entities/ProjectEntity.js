@@ -41,7 +41,7 @@ __decorate([
     __metadata("design:type", String)
 ], ProjectEntity.prototype, "githubLink", void 0);
 __decorate([
-    type_graphql_1.Field(),
+    type_graphql_1.Field({ nullable: true }),
     typeorm_1.Column({ nullable: true }),
     __metadata("design:type", String)
 ], ProjectEntity.prototype, "websiteLink", void 0);

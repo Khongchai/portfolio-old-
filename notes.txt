@@ -1,10 +1,8 @@
 Finish modelling database relationship: add field for link to tech's website, field for logo (link to the logo), and github field for project
 
 TODO: 
-backend => add auth system so that only superuser can edit page // technologies should be able to add projects as well // add fields for github link, website link, and short description
-frontend => add more data to backend so that you can begin implementing the relay pagination.
-
-About to implement pagination//scroll to load more
+add auth system so that only superuser can edit page // technologies should be able to add projects as well // add fields for github link, website link, and short description
+ add more data to backend so that you can begin implementing the relay pagination.
 
 Change resolvers to work with the new datashape
 
@@ -12,3 +10,11 @@ CRUD for both project and technology resolvers.
 
 
 Try adding projects, see if it works, then add website link then work on the look of the filter page;
+
+
+Come up with a better error return for project creation//updation error;
+
+
+Once the filter page is finished, try adding subscriptions to it: https://formidable.com/open-source/urql/docs/advanced/subscriptions/
+
+combine both the info viewer and the list in the filter page together and export both through index field

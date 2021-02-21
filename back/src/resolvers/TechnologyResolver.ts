@@ -66,7 +66,4 @@ export class TechnologyResolver {
       return "Technology deleted successfully.";
     }
   }
-
-  //TODO: make technology hightlight
-  //TODO: remove technolgy from highlight
 }

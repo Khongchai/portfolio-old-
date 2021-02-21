@@ -33,7 +33,7 @@ export class ProjectEntity extends BaseEntity {
   @Column()
   githubLink!: string;
 
-  @Field()
+  @Field({ nullable: true })
   @Column({ nullable: true })
   websiteLink: string;
 
