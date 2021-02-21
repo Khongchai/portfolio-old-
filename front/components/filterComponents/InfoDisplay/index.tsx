@@ -8,11 +8,20 @@ const InfoDisplay: React.FC<{ details: ProjectEntity | undefined }> = ({
   details,
 }) => {
   return (
-    <Flex flexDir="column" flex="1" pt="8rem">
+    <Grid
+      gridTemplateColumns=" 0.5fr [left-padding-end] repeat(4, minmax(auto, 1fr)) [right-padding-end] 0.5fr "
+      flex="1"
+      pt="8rem"
+    >
       {!details ? (
         <Heading>Select a project to view details</Heading>
       ) : (
-        <Stack px="6rem" spacing={"2rem"} height="100%">
+        <Stack
+          gridColumn="left-padding-end / right-padding-end"
+          gridRow="1 / 2"
+          spacing={"2rem"}
+          height="100%"
+        >
           <Heading as="h2">{details.title}</Heading>
           <Text>
             Date: {details?.startDate} to {details?.endDate}
@@ -26,8 +35,13 @@ const InfoDisplay: React.FC<{ details: ProjectEntity | undefined }> = ({
           />
         </Stack>
       )}
-      <ExpandButton />
-    </Flex>
+      <ExpandButton
+        frontEnd={details?.frontEndTechnologies}
+        backEnd={details?.backEndTechnologies}
+        hostingServices={details?.hostingServices}
+        languages={details?.languages}
+      />
+    </Grid>
   );
 };
 export default InfoDisplay;
