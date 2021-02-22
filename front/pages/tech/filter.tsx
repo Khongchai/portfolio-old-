@@ -18,7 +18,7 @@ export default function Filter() {
 
   return (
     <Flex
-      flexDir={["column", "column", "column", "row"]}
+      flexDir={["column", "column", "column", "column", "row", "row"]}
       w={"100%"}
       h={["auto", null, "100vh"]}
     >

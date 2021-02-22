@@ -1,4 +1,4 @@
-import { Box, Flex, Img, Text } from "@chakra-ui/react";
+import { Box, Flex, Img, Stack, Text } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { TechnologyEntity } from "../../../generated/graphql";
 
@@ -24,12 +24,17 @@ const ExpandButton: React.FC<TechDetails> = (techDetails) => {
       expansionStat === "notExpanded" ? "expanded" : "notExpanded";
     setExpansionStat(currDir);
     const techHeightOffsetVal = 60;
+    const projDescSection = document.getElementById(
+      "project-description-section"
+    );
 
     //not expanded
     if (currDir === "notExpanded") {
       arrow!.style.transform = "translateY(-16%)";
       techContainerContainer!.style.top = "0px";
       techContainer!.style.height = "3.3rem";
+      techContainer!.style.background = "#636073";
+      projDescSection!.style.opacity = "1";
     }
     //expanded
     else {
@@ -39,6 +44,10 @@ const ExpandButton: React.FC<TechDetails> = (techDetails) => {
         .getPropertyValue("height");
       techContainerContainer!.style.top = `calc(-${techHeightOffsetVal}vh + ${techcontainerHeight})`;
       techContainer!.style.height = `${techHeightOffsetVal}vh`;
+      console.log(techContainer);
+      techContainer!.style.background =
+        "linear-gradient(102.77deg, #423E55 -2.52%, rgba(76, 72, 95, 0.627352) 62.8%, rgba(92, 88, 113, 0) 100%), #636073";
+      projDescSection!.style.opacity = "0.09";
     }
   }
 
@@ -55,16 +64,14 @@ const ExpandButton: React.FC<TechDetails> = (techDetails) => {
       justifyContent="flex-end"
       id="tech-container-container"
       transition={`.${GLOBAL_TRANSITION}s`}
-      onClick={() => manageExpansion()}
     >
       <Box transform="translateY(-100%)" pb="20px">
         <Box
-          bgColor="grey2"
           w="fit-content"
           pos="relative"
           borderRadius="50%"
           margin="0 auto"
-          transform="translateY( 50%)"
+          transform="translateY( 30%)"
         >
           <Img
             id="arrow"
@@ -76,7 +83,11 @@ const ExpandButton: React.FC<TechDetails> = (techDetails) => {
             zIndex="4"
           />
         </Box>
-        <ExpandArea expansionStat={expansionStat} techDetails={techDetails} />
+        <ExpandArea
+          manageExpansion={manageExpansion}
+          expansionStat={expansionStat}
+          techDetails={techDetails}
+        />
       </Box>
     </Box>
   );
@@ -85,9 +96,11 @@ const ExpandButton: React.FC<TechDetails> = (techDetails) => {
 const ExpandArea: React.FC<{
   techDetails: TechDetails;
   expansionStat: string;
-}> = ({ techDetails, expansionStat }) => {
+  manageExpansion: () => void;
+}> = ({ techDetails, expansionStat, manageExpansion }) => {
   return (
-    <Flex
+    <Stack
+      spacing={"auto"}
       id="tech-container"
       w="100%"
       h="3.3rem"
@@ -99,17 +112,28 @@ const ExpandArea: React.FC<{
       p={expansionStat === "expanded" ? "2rem" : "1rem"}
       borderRadius="10px"
       textAlign="center"
+      overflow="scroll"
       fontWeight="bold"
+      css={{
+        "&::-webkit-scrollbar": {
+          display: "none",
+        },
+
+        "&::-webkit-scrollbar-track": {
+          display: "none",
+        },
+        "&::-webkit-scrollbar-thumb": {
+          display: "none",
+        },
+      }}
       transition={`.${GLOBAL_TRANSITION}s`}
-      justify="center"
-      flexDir="column"
-      overflow="hidden"
+      onClick={() => manageExpansion()}
     >
       <ExpandedContent
         expansionStat={expansionStat}
         techDetails={techDetails}
       />
-    </Flex>
+    </Stack>
   );
 };
 
@@ -123,7 +147,7 @@ const ExpandedContent: React.FC<{
 }) => {
   return (
     <>
-      <Text>Technologies used in this project.</Text>
+      <Text pb={3}>Technologies used in this project.</Text>
       {expansionStat === "expanded" ? (
         <>
           <Logo tech={frontEnd} desc="Front" />
@@ -143,20 +167,41 @@ const Logo: React.FC<{
   return (
     <Flex flex="auto" align="center">
       <Text>{desc}: </Text>
-      <Flex justifyContent="space-evenly" w="100%">
+      <Flex
+        justifyContent="space-evenly"
+        flexWrap="wrap"
+        id="logo-container"
+        w="100%"
+      >
         {tech?.map((front) => {
-          const name = front.title.toLowerCase();
-          const nameNoSpace = name.replace(/\s+/g, "");
-          const src = `/logos/${nameNoSpace}.png`;
-          return (
+          const nameOriginal = front.title;
+          const name = nameOriginal.toLowerCase();
+          const nameNoSpace = name.replace(/[\s\.]+/g, "");
+
+          let src = `/logos/${nameNoSpace}.png`;
+          let img = (
             <Img
-              maxHeight="50px"
-              h="30px"
-              flexWrap="wrap"
+              onMouseOver={(e) => {
+                //show name, somehow
+
+                console.log(e);
+              }}
+              onError={(e: any) => {
+                e.target.src = `/logos/${nameNoSpace}.svg`;
+              }}
+              _hover={{
+                borderRadius: "2px",
+              }}
+              m="1rem"
+              padding={"1px"}
+              key={name}
+              h={["25px", null, "34px"]}
               src={src}
               alt={nameNoSpace}
-            ></Img>
+            />
           );
+
+          return img;
         })}
       </Flex>
     </Flex>

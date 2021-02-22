@@ -10,7 +10,12 @@ const InfoDisplay: React.FC<{ details: ProjectEntity | undefined }> = ({
   return (
     <Grid
       gridTemplateColumns=" 0.5fr [left-padding-end] repeat(4, minmax(auto, 1fr)) [right-padding-end] 0.5fr "
-      gridTemplateRows="1fr 1fr auto"
+      gridTemplateRows={[
+        "1fr 0.2fr  auto",
+        null,
+        "1fr 1fr auto",
+        "1fr 1fr auto",
+      ]}
       minHeight="100%"
       flex="1"
       pt="8rem"
@@ -23,6 +28,8 @@ const InfoDisplay: React.FC<{ details: ProjectEntity | undefined }> = ({
           gridRow="1"
           spacing={"2rem"}
           height="100%"
+          id="project-description-section"
+          transition=".3s"
         >
           <Heading as="h2">{details.title}</Heading>
           <Text>
