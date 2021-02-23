@@ -11,6 +11,7 @@ const List: React.FC<{
       <Box overflowX="scroll">
         {data?.projects.map((proj) => (
           <div
+            id={proj.title}
             key={proj.id}
             onClick={() => {
               const project = proj as ProjectEntity;
