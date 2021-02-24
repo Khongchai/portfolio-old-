@@ -9,7 +9,7 @@ const InfoDisplay: React.FC<{ details: ProjectEntity | undefined }> = ({
 }) => {
   return (
     <Grid
-      gridTemplateColumns=" 0.5fr [left-padding-end] repeat(4, minmax(auto, 1fr)) [right-padding-end] 0.5fr "
+      gridTemplateColumns=" 0.7fr [left-padding-end] repeat(4, minmax(auto, 1fr)) [right-padding-end] 0.7fr "
       gridTemplateRows={[
         "1fr 0.2fr  auto",
         null,
@@ -18,10 +18,11 @@ const InfoDisplay: React.FC<{ details: ProjectEntity | undefined }> = ({
       ]}
       minHeight="100%"
       flex="1"
-      pt="8rem"
     >
       {!details ? (
-        <Heading>Select a project to view details</Heading>
+        <Heading gridColumn="left-padding-end / right-padding-end">
+          Select a project to view details
+        </Heading>
       ) : (
         <Stack
           gridColumn="left-padding-end / right-padding-end"
@@ -44,12 +45,14 @@ const InfoDisplay: React.FC<{ details: ProjectEntity | undefined }> = ({
           />
         </Stack>
       )}
-      <ExpandButton
-        frontEnd={details?.frontEndTechnologies}
-        backEnd={details?.backEndTechnologies}
-        hostingServices={details?.hostingServices}
-        languages={details?.languages}
-      />
+      {details ? (
+        <ExpandButton
+          frontEnd={details?.frontEndTechnologies}
+          backEnd={details?.backEndTechnologies}
+          hostingServices={details?.hostingServices}
+          languages={details?.languages}
+        />
+      ) : null}
     </Grid>
   );
 };

@@ -1,3 +1,8 @@
+import NextLink from "next/link";
 export default function Tech() {
-  return <div>tech page</div>;
+  return (
+    <NextLink href="/tech/filter">
+      <div>tech page</div>
+    </NextLink>
+  );
 }
