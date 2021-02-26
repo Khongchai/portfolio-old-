@@ -1,5 +1,5 @@
 import { Box, Flex, Img, Stack, Text } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { TechnologyEntity } from "../../../generated/graphql";
 
 const GLOBAL_TRANSITION = 3;

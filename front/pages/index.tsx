@@ -10,7 +10,6 @@ export default function Home() {
       h={["auto", null, "100vh"]}
     >
       <ImgContainer href="/music" bgColor="mainGrey" src="/logos/FL.png" />
-
       <ImgContainer href="/tech" bgColor="white" src="/logos/VS.png" />
     </Flex>
   );

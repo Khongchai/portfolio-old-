@@ -15,6 +15,7 @@ export const SearchAndFind: React.FC<{}> = ({}) => {
       width="50%"
       justify="flex-end"
       align="center"
+      visibility={["hidden", null, "visible"]}
       css={{
         "> *": {
           marginLeft: "1em",

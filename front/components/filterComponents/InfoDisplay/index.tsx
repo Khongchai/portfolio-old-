@@ -1,4 +1,4 @@
-import { Flex, Grid, Heading, Stack, Text } from "@chakra-ui/react";
+import { Grid, Heading, Stack, Text } from "@chakra-ui/react";
 import React from "react";
 import { ProjectEntity } from "../../../generated/graphql";
 import Links from "./ExternLinks";

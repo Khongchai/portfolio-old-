@@ -1,4 +1,4 @@
-import { Flex } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import InfoDisplay from "../../components/filterComponents/InfoDisplay/index";
 import List from "../../components/filterComponents/List/index";
@@ -34,6 +34,7 @@ export const Filter: React.FC<{ selection: string | undefined }> = ({
         <>
           <SearchAndFind />
           <InfoDisplay details={details} />
+
           <List
             data={data}
             details={details}
