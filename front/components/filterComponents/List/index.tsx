@@ -42,7 +42,8 @@ const List: React.FC<{
     <Stack spacing={"1.5em"} flex="1">
       <Box overflowX="scroll">
         {data?.projects.map((proj) => (
-          <div
+          <Box
+            cursor="pointer"
             id={proj.title}
             key={proj.id}
             onClick={() => {
@@ -52,7 +53,7 @@ const List: React.FC<{
             }}
           >
             {proj.title}
-          </div>
+          </Box>
         ))}
       </Box>
     </Stack>

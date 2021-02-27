@@ -81,6 +81,7 @@ const ExpandButton: React.FC<TechDetails> = (techDetails) => {
             transition={`.${GLOBAL_TRANSITION}s`}
             transform="translateY(-16%)"
             zIndex="4"
+            onClick={() => manageExpansion()}
           />
         </Box>
         <ExpandArea
@@ -193,9 +194,10 @@ const Logo: React.FC<{
                 borderRadius: "2px",
               }}
               m="1rem"
+              filter="drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))"
               padding={"1px"}
               key={name}
-              h={["25px", null, "34px"]}
+              h={["25px", null, "40px"]}
               src={src}
               alt={nameNoSpace}
             />

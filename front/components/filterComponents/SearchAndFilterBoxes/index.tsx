@@ -22,8 +22,9 @@ export const SearchAndFind: React.FC<{}> = ({}) => {
         },
       }}
     >
-      <Input placeholder="Search" width={"20em"}></Input>
+      <Input placeholder="Search by title" width={"20em"}></Input>
       {/* Determines the order in which the search queries gets returned. */}
+      <Text>Sort</Text>
       <Select color="grey3" w="fit-content">
         <option value="Date">Date</option>
         <option value="Title">Title</option>
@@ -52,8 +53,9 @@ export const SearchAndFindForMobile: React.FC<{}> = ({}) => {
         },
       }}
     >
-      <Input placeholder="Search" width={"100%"}></Input>
+      <Input placeholder="Search by title" width={"100%"}></Input>
       {/* Determines the order in which the search queries gets returned. */}
+      <Text>Sort</Text>
       <Select width={"100%"} color="grey3" w="fit-content">
         <option value="Date">Date</option>
         <option value="Title">Title</option>
