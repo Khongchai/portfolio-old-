@@ -31,6 +31,7 @@ const InfoDisplay: React.FC<{ details: ProjectEntity | undefined }> = ({
           height="100%"
           id="project-description-section"
           transition=".3s"
+          mb={6}
         >
           <Heading as="h2">{details.title}</Heading>
           <Text>
