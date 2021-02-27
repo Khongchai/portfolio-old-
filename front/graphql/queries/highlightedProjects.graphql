@@ -1,0 +1,22 @@
+query GetHighlightedProjects {
+  getHighlightedProjects {
+    title
+    id
+    description
+    shortDescription
+    githubLink
+    websiteLink
+    frontEndTechnologies {
+      title
+    }
+    backEndTechnologies {
+      title
+    }
+    hostingServices {
+      title
+    }
+    languages {
+      title
+    }
+  }
+}

@@ -1,5 +1,5 @@
-query Projects {
-  projects {
+query Projects($skip: Int!, $limit: Int!) {
+  projects(skip: $skip, limit: $limit) {
     title
     frontEndTechnologies {
       title

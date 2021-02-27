@@ -1,10 +1,10 @@
 import { Button, Flex, Img, Link, Stack } from "@chakra-ui/react";
 import React from "react";
 
-const Links: React.FC<{ webLink: string; githubLink: string }> = ({
-  webLink,
-  githubLink,
-}) => {
+const Links: React.FC<{
+  webLink: string | null | undefined;
+  githubLink: string;
+}> = ({ webLink, githubLink }) => {
   return (
     <Stack as={Flex} spacing="1.2rem" StackDir="column" align="center">
       {webLink ? (

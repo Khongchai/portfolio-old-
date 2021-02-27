@@ -27,16 +27,28 @@ const ProjectEntity_1 = require("../entities/ProjectEntity");
 const ProjectResolver_1 = require("../inputAndObjectTypes/ProjectResolver");
 const getTechnologiesByTitle_1 = require("../utils/getTechnologiesByTitle");
 let ProjectsResolver = class ProjectsResolver {
-    projects() {
+    projects(limit, skip) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield ProjectEntity_1.ProjectEntity.find({
+            const realLimit = Math.min(6, limit);
+            const posts = yield ProjectEntity_1.ProjectEntity.find({
                 relations: [
                     "frontEndTechnologies",
                     "backEndTechnologies",
                     "languages",
                     "hostingServices",
                 ],
+                take: realLimit,
+                skip,
             });
+            return posts;
+        });
+    }
+    getHighlightedProjects() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const highlightedProjects = yield ProjectEntity_1.ProjectEntity.find({
+                where: { isHighlight: true },
+            });
+            return highlightedProjects;
         });
     }
     createProject(projectData, {}) {
@@ -162,10 +174,18 @@ let ProjectsResolver = class ProjectsResolver {
 };
 __decorate([
     type_graphql_1.Query(() => [ProjectEntity_1.ProjectEntity]),
+    __param(0, type_graphql_1.Arg("limit", () => type_graphql_1.Int)),
+    __param(1, type_graphql_1.Arg("skip", () => type_graphql_1.Int)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Number]),
+    __metadata("design:returntype", Promise)
+], ProjectsResolver.prototype, "projects", null);
+__decorate([
+    type_graphql_1.Query(() => [ProjectEntity_1.ProjectEntity]),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
-], ProjectsResolver.prototype, "projects", null);
+], ProjectsResolver.prototype, "getHighlightedProjects", null);
 __decorate([
     type_graphql_1.Mutation(() => ProjectResolver_1.ProjResponse, { nullable: true }),
     __param(0, type_graphql_1.Arg("projectData")),

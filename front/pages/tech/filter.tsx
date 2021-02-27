@@ -14,8 +14,13 @@ import { AddExtraElemContext } from "../../globalContexts/extraNavbarElem";
 export const Filter: React.FC<{ selection: string | undefined }> = ({
   selection,
 }) => {
+  //setVariables for pagination
+  const [variables, setVariables] = useState({
+    skip: 0,
+    limit: 5,
+  });
   const updateTopics = useContext(AddExtraElemContext);
-  const [{ data, fetching }] = useProjectsQuery();
+  const [{ data, fetching }] = useProjectsQuery({ variables });
   const [details, setDetails] = useState<ProjectEntity | undefined>(undefined);
 
   useEffect(() => {
@@ -35,7 +40,7 @@ export const Filter: React.FC<{ selection: string | undefined }> = ({
       w={"100%"}
       h={["auto", null, "100vh"]}
     >
-      {fetching ? (
+      {fetching && variables.skip === 0 ? (
         <Box w="100%" textAlign="center">
           Loading...
         </Box>
@@ -55,6 +60,19 @@ export const Filter: React.FC<{ selection: string | undefined }> = ({
     </Flex>
   );
 };
+/*
+pagination
+      <Box
+        onClick={() => {
+          setVariables({
+            limit: variables.limit,
+            skip: variables.skip + variables.limit,
+          });
+        }}
+      >
+        load more
+      </Box>
+*/
 
 export default Filter;
 

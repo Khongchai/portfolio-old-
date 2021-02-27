@@ -17,7 +17,14 @@ export type Scalars = {
 export type Query = {
   __typename?: 'Query';
   projects: Array<ProjectEntity>;
+  getHighlightedProjects: Array<ProjectEntity>;
   technologies: Array<TechnologyEntity>;
+};
+
+
+export type QueryProjectsArgs = {
+  skip: Scalars['Int'];
+  limit: Scalars['Int'];
 };
 
 export type ProjectEntity = {
@@ -27,7 +34,7 @@ export type ProjectEntity = {
   description: Scalars['String'];
   shortDescription: Scalars['String'];
   githubLink: Scalars['String'];
-  websiteLink: Scalars['String'];
+  websiteLink?: Maybe<Scalars['String']>;
   frontEndTechnologies?: Maybe<Array<TechnologyEntity>>;
   backEndTechnologies?: Maybe<Array<TechnologyEntity>>;
   languages?: Maybe<Array<TechnologyEntity>>;
@@ -127,7 +134,34 @@ export type AddTechInput = {
   techProps?: Maybe<TechnologyProperties>;
 };
 
-export type ProjectsQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetHighlightedProjectsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetHighlightedProjectsQuery = (
+  { __typename?: 'Query' }
+  & { getHighlightedProjects: Array<(
+    { __typename?: 'ProjectEntity' }
+    & Pick<ProjectEntity, 'title' | 'id' | 'description' | 'shortDescription' | 'githubLink' | 'websiteLink'>
+    & { frontEndTechnologies?: Maybe<Array<(
+      { __typename?: 'TechnologyEntity' }
+      & Pick<TechnologyEntity, 'title'>
+    )>>, backEndTechnologies?: Maybe<Array<(
+      { __typename?: 'TechnologyEntity' }
+      & Pick<TechnologyEntity, 'title'>
+    )>>, hostingServices?: Maybe<Array<(
+      { __typename?: 'TechnologyEntity' }
+      & Pick<TechnologyEntity, 'title'>
+    )>>, languages?: Maybe<Array<(
+      { __typename?: 'TechnologyEntity' }
+      & Pick<TechnologyEntity, 'title'>
+    )>> }
+  )> }
+);
+
+export type ProjectsQueryVariables = Exact<{
+  skip: Scalars['Int'];
+  limit: Scalars['Int'];
+}>;
 
 
 export type ProjectsQuery = (
@@ -176,9 +210,37 @@ export type TechnologiesQuery = (
 );
 
 
+export const GetHighlightedProjectsDocument = gql`
+    query GetHighlightedProjects {
+  getHighlightedProjects {
+    title
+    id
+    description
+    shortDescription
+    githubLink
+    websiteLink
+    frontEndTechnologies {
+      title
+    }
+    backEndTechnologies {
+      title
+    }
+    hostingServices {
+      title
+    }
+    languages {
+      title
+    }
+  }
+}
+    `;
+
+export function useGetHighlightedProjectsQuery(options: Omit<Urql.UseQueryArgs<GetHighlightedProjectsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GetHighlightedProjectsQuery>({ query: GetHighlightedProjectsDocument, ...options });
+};
 export const ProjectsDocument = gql`
-    query Projects {
-  projects {
+    query Projects($skip: Int!, $limit: Int!) {
+  projects(skip: $skip, limit: $limit) {
     title
     frontEndTechnologies {
       title

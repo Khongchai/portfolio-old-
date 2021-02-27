@@ -1,5 +1,5 @@
 import { TechnologyEntity } from "../entities/TechnologyEntity";
-import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, Ctx, Int, Mutation, Query, Resolver } from "type-graphql";
 import { ProjectEntity } from "../entities/ProjectEntity";
 import {
   AddTechInput,
@@ -12,16 +12,31 @@ import { getTechListForEachProp } from "../utils/getTechnologiesByTitle";
 @Resolver()
 export class ProjectsResolver {
   @Query(() => [ProjectEntity])
-  async projects(): Promise<ProjectEntity[]> {
-    //include relations if you want the ORM to include the join table
-    return await ProjectEntity.find({
+  async projects(
+    @Arg("limit", () => Int) limit: number,
+    @Arg("skip", () => Int) skip: number
+  ): Promise<ProjectEntity[]> {
+    const realLimit = Math.min(6, limit);
+
+    const posts = await ProjectEntity.find({
       relations: [
         "frontEndTechnologies",
         "backEndTechnologies",
         "languages",
         "hostingServices",
       ],
+      take: realLimit,
+      skip,
     });
+    return posts;
+  }
+
+  @Query(() => [ProjectEntity])
+  async getHighlightedProjects(): Promise<ProjectEntity[] | undefined> {
+    const highlightedProjects = await ProjectEntity.find({
+      where: { isHighlight: true },
+    });
+    return highlightedProjects;
   }
 
   @Mutation(() => ProjResponse, { nullable: true })
