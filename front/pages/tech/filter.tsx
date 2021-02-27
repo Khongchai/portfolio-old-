@@ -1,24 +1,31 @@
 import { Box, Flex } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import InfoDisplay from "../../components/filterComponents/InfoDisplay/index";
 import List from "../../components/filterComponents/List/index";
 import { ProjectEntity, useProjectsQuery } from "../../generated/graphql";
 import { GetServerSideProps } from "next";
 import setPadding from "../../utils/seFirstHeightToSecondPadding";
-import SearchAndFind from "../../components/filterComponents/SearchAndFilterBoxes";
+import {
+  SearchAndFind,
+  SearchAndFindForMobile,
+} from "../../components/filterComponents/SearchAndFilterBoxes";
+import { AddExtraElemContext } from "../../globalContexts/extraNavbarElem";
 
 export const Filter: React.FC<{ selection: string | undefined }> = ({
   selection,
 }) => {
+  const updateTopics = useContext(AddExtraElemContext);
   const [{ data, fetching }] = useProjectsQuery();
   const [details, setDetails] = useState<ProjectEntity | undefined>(undefined);
-  //todo, show universal loading screen while loading
+
   useEffect(() => {
     const filterPage = document.getElementById("filter-page");
     const navbar = document.getElementById("navbar");
     if (filterPage && navbar) {
       setPadding(navbar, filterPage, 2);
     }
+    updateTopics(<SearchAndFindForMobile />);
+    return () => updateTopics(null);
   }, []);
 
   return (
@@ -29,7 +36,9 @@ export const Filter: React.FC<{ selection: string | undefined }> = ({
       h={["auto", null, "100vh"]}
     >
       {fetching ? (
-        <div>Loading...</div>
+        <Box w="100%" textAlign="center">
+          Loading...
+        </Box>
       ) : (
         <>
           <SearchAndFind />

@@ -1,4 +1,5 @@
 import {
+  Box,
   Drawer,
   DrawerBody,
   DrawerContent,
@@ -6,14 +7,20 @@ import {
   DrawerOverlay,
   Flex,
   Img,
-  Stack,
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useContext } from "react";
 import NextLink from "next/link";
+import {
+  TopicsContext,
+  navbarTopics,
+} from "../../globalContexts/navbarTopics.js";
+import { ExtraElemContext } from "../../globalContexts/extraNavbarElem";
 
-export const Navbar: React.FC<{}> = ({}) => {
+export const Navbar: React.FC<{}> = () => {
+  const defaultNavbarTopics: typeof navbarTopics = useContext(TopicsContext);
+
   return (
     <Flex
       id="navbar"
@@ -22,9 +29,13 @@ export const Navbar: React.FC<{}> = ({}) => {
       p={["2.3em 3em 1.3em 3em", null, "1.3em 3em 1.3em 3em"]}
       width={["100%", null, "50%"]}
     >
-      <LinkButton url="/tech" pageName="Home" />
-      <LinkButton url="/tech/filter" pageName="Filter" />
-      <LinkButton url="/tech/about" pageName="About" />
+      {Object.values(defaultNavbarTopics).map((topic) => (
+        <LinkButton
+          key={topic.pageName}
+          url={topic.url}
+          pageName={topic.pageName}
+        />
+      ))}
       <HamburgerMenu />
     </Flex>
   );
@@ -66,6 +77,7 @@ const LinkButton: React.FC<{ pageName: string; url: string }> = ({
 
 const HamburgerMenu: React.FC<{}> = ({}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const ExtraNavbarElems: any = useContext(ExtraElemContext);
   return (
     <Flex
       zIndex="100"
@@ -88,12 +100,31 @@ const HamburgerMenu: React.FC<{}> = ({}) => {
             Go to
           </DrawerHeader>
           <DrawerBody css={{ "> *": { marginTop: "1em" } }} color="mainGrey">
-            <p>Some contents...</p>
-            <p>Some contents...</p>
-            <p>Some contents...</p>
+            {Object.values(navbarTopics).map((topic) => (
+              <LinkButtonMobile
+                key={topic.pageName}
+                url={topic.url}
+                pageName={topic.pageName}
+              />
+            ))}
+            <Box borderTop="1px solid" color="mainGrey" mt={10} />
+            {ExtraNavbarElems ? ExtraNavbarElems : null}
           </DrawerBody>
         </DrawerContent>
       </Drawer>
     </Flex>
+  );
+};
+
+const LinkButtonMobile: React.FC<{ pageName: string; url: string }> = ({
+  pageName,
+  url,
+}) => {
+  return (
+    <NextLink href={url}>
+      <Text fontFamily="Selawik Light" cursor="pointer" p="1em" mr="5em">
+        {pageName}
+      </Text>
+    </NextLink>
   );
 };

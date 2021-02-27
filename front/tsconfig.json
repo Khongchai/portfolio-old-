@@ -23,6 +23,12 @@
     "noUnusedParameters": true,
     "jsx": "preserve"
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "components/Navbar/Navbar.tsx",
+    "globalContexts/navbarTopics.js"
+  ],
   "exclude": ["node_modules"]
 }

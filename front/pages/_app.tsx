@@ -7,12 +7,13 @@ import { client } from "../utils/createUrqlClient";
 import { Provider } from "urql";
 import { Navbar } from "../components/Navbar/Navbar";
 import { useRouter } from "next/router";
+import AllContextProvider from "../globalContexts/allContextProvider";
 
 function MyApp({ Component, pageProps }: any) {
   const router = useRouter;
 
   return (
-    <>
+    <AllContextProvider>
       <Provider value={client}>
         <ChakraProvider theme={theme}>
           {router().pathname === "/" ? null : <Navbar />}
@@ -20,7 +21,7 @@ function MyApp({ Component, pageProps }: any) {
           <Component {...pageProps} />
         </ChakraProvider>
       </Provider>
-    </>
+    </AllContextProvider>
   );
 }
 
