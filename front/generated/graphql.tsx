@@ -134,6 +134,24 @@ export type AddTechInput = {
   techProps?: Maybe<TechnologyProperties>;
 };
 
+export type ProjectFieldsFragment = (
+  { __typename?: 'ProjectEntity' }
+  & Pick<ProjectEntity, 'title' | 'isHighlight' | 'endDate' | 'startDate' | 'description' | 'id' | 'githubLink' | 'websiteLink' | 'shortDescription'>
+  & { frontEndTechnologies?: Maybe<Array<(
+    { __typename?: 'TechnologyEntity' }
+    & Pick<TechnologyEntity, 'title' | 'id'>
+  )>>, backEndTechnologies?: Maybe<Array<(
+    { __typename?: 'TechnologyEntity' }
+    & Pick<TechnologyEntity, 'title' | 'id'>
+  )>>, languages?: Maybe<Array<(
+    { __typename?: 'TechnologyEntity' }
+    & Pick<TechnologyEntity, 'title' | 'id'>
+  )>>, hostingServices?: Maybe<Array<(
+    { __typename?: 'TechnologyEntity' }
+    & Pick<TechnologyEntity, 'title' | 'id'>
+  )>> }
+);
+
 export type GetHighlightedProjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -141,20 +159,7 @@ export type GetHighlightedProjectsQuery = (
   { __typename?: 'Query' }
   & { getHighlightedProjects: Array<(
     { __typename?: 'ProjectEntity' }
-    & Pick<ProjectEntity, 'title' | 'id' | 'description' | 'shortDescription' | 'githubLink' | 'websiteLink'>
-    & { frontEndTechnologies?: Maybe<Array<(
-      { __typename?: 'TechnologyEntity' }
-      & Pick<TechnologyEntity, 'title'>
-    )>>, backEndTechnologies?: Maybe<Array<(
-      { __typename?: 'TechnologyEntity' }
-      & Pick<TechnologyEntity, 'title'>
-    )>>, hostingServices?: Maybe<Array<(
-      { __typename?: 'TechnologyEntity' }
-      & Pick<TechnologyEntity, 'title'>
-    )>>, languages?: Maybe<Array<(
-      { __typename?: 'TechnologyEntity' }
-      & Pick<TechnologyEntity, 'title'>
-    )>> }
+    & ProjectFieldsFragment
   )> }
 );
 
@@ -168,20 +173,7 @@ export type ProjectsQuery = (
   { __typename?: 'Query' }
   & { projects: Array<(
     { __typename?: 'ProjectEntity' }
-    & Pick<ProjectEntity, 'title' | 'isHighlight' | 'endDate' | 'startDate' | 'description' | 'id' | 'githubLink' | 'websiteLink' | 'shortDescription'>
-    & { frontEndTechnologies?: Maybe<Array<(
-      { __typename?: 'TechnologyEntity' }
-      & Pick<TechnologyEntity, 'title' | 'id'>
-    )>>, backEndTechnologies?: Maybe<Array<(
-      { __typename?: 'TechnologyEntity' }
-      & Pick<TechnologyEntity, 'title' | 'id'>
-    )>>, languages?: Maybe<Array<(
-      { __typename?: 'TechnologyEntity' }
-      & Pick<TechnologyEntity, 'title' | 'id'>
-    )>>, hostingServices?: Maybe<Array<(
-      { __typename?: 'TechnologyEntity' }
-      & Pick<TechnologyEntity, 'title' | 'id'>
-    )>> }
+    & ProjectFieldsFragment
   )> }
 );
 
@@ -209,31 +201,42 @@ export type TechnologiesQuery = (
   )> }
 );
 
-
+export const ProjectFieldsFragmentDoc = gql`
+    fragment ProjectFields on ProjectEntity {
+  title
+  frontEndTechnologies {
+    title
+    id
+  }
+  backEndTechnologies {
+    title
+    id
+  }
+  languages {
+    title
+    id
+  }
+  hostingServices {
+    title
+    id
+  }
+  isHighlight
+  endDate
+  startDate
+  description
+  id
+  githubLink
+  websiteLink
+  shortDescription
+}
+    `;
 export const GetHighlightedProjectsDocument = gql`
     query GetHighlightedProjects {
   getHighlightedProjects {
-    title
-    id
-    description
-    shortDescription
-    githubLink
-    websiteLink
-    frontEndTechnologies {
-      title
-    }
-    backEndTechnologies {
-      title
-    }
-    hostingServices {
-      title
-    }
-    languages {
-      title
-    }
+    ...ProjectFields
   }
 }
-    `;
+    ${ProjectFieldsFragmentDoc}`;
 
 export function useGetHighlightedProjectsQuery(options: Omit<Urql.UseQueryArgs<GetHighlightedProjectsQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<GetHighlightedProjectsQuery>({ query: GetHighlightedProjectsDocument, ...options });
@@ -241,34 +244,10 @@ export function useGetHighlightedProjectsQuery(options: Omit<Urql.UseQueryArgs<G
 export const ProjectsDocument = gql`
     query Projects($skip: Int!, $limit: Int!) {
   projects(skip: $skip, limit: $limit) {
-    title
-    frontEndTechnologies {
-      title
-      id
-    }
-    backEndTechnologies {
-      title
-      id
-    }
-    languages {
-      title
-      id
-    }
-    hostingServices {
-      title
-      id
-    }
-    isHighlight
-    endDate
-    startDate
-    description
-    id
-    githubLink
-    websiteLink
-    shortDescription
+    ...ProjectFields
   }
 }
-    `;
+    ${ProjectFieldsFragmentDoc}`;
 
 export function useProjectsQuery(options: Omit<Urql.UseQueryArgs<ProjectsQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<ProjectsQuery>({ query: ProjectsDocument, ...options });

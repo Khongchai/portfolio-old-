@@ -1,29 +1,5 @@
 query Projects($skip: Int!, $limit: Int!) {
   projects(skip: $skip, limit: $limit) {
-    title
-    frontEndTechnologies {
-      title
-      id
-    }
-    backEndTechnologies {
-      title
-      id
-    }
-    languages {
-      title
-      id
-    }
-    hostingServices {
-      title
-      id
-    }
-    isHighlight
-    endDate
-    startDate
-    description
-    id
-    githubLink
-    websiteLink
-    shortDescription
+    ...ProjectFields
   }
 }

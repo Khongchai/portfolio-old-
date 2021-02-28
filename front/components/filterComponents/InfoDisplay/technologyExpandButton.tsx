@@ -23,14 +23,16 @@ const ExpandButton: React.FC<TechDetails> = (techDetails) => {
     const currDir =
       expansionStat === "notExpanded" ? "expanded" : "notExpanded";
     setExpansionStat(currDir);
-    const techHeightOffsetVal = 60;
+
+    const desiredTopPosition: string = "60vh";
     const projDescSection = document.getElementById(
       "project-description-section"
     );
 
     //not expanded
     if (currDir === "notExpanded") {
-      arrow!.style.transform = "translateY(-16%)";
+      arrow!.style.transform = "translateY(-221%)";
+      arrow!.style.top = "0";
       techContainerContainer!.style.top = "0px";
       techContainer!.style.height = "3.3rem";
       techContainer!.style.background = "#636073";
@@ -38,15 +40,12 @@ const ExpandButton: React.FC<TechDetails> = (techDetails) => {
     }
     //expanded
     else {
-      arrow!.style.transform = "translateY(-16%) rotate(180deg)";
-      const techcontainerHeight: string = window
-        .getComputedStyle(techContainer!)
-        .getPropertyValue("height");
-      techContainerContainer!.style.top = `calc(-${techHeightOffsetVal}vh + ${techcontainerHeight})`;
-      techContainer!.style.height = `${techHeightOffsetVal}vh`;
-      console.log(techContainer);
+      arrow!.style.transform = " rotate(180deg)";
+      //set the top side of techContainer to "desiredTopPosition"
+      techContainer!.style.height = desiredTopPosition;
       techContainer!.style.background =
         "linear-gradient(102.77deg, #423E55 -2.52%, rgba(76, 72, 95, 0.627352) 62.8%, rgba(92, 88, 113, 0) 100%), #636073";
+      arrow!.style.top = `-${desiredTopPosition}`;
       projDescSection!.style.opacity = "0.09";
     }
   }
@@ -64,32 +63,25 @@ const ExpandButton: React.FC<TechDetails> = (techDetails) => {
       justifyContent="flex-end"
       id="tech-container-container"
       transition={`.${GLOBAL_TRANSITION}s`}
+      mt="6em"
     >
-      <Box transform="translateY(-100%)" pb="20px">
-        <Box
-          w="fit-content"
-          pos="relative"
-          borderRadius="50%"
-          margin="0 auto"
-          transform="translateY( 30%)"
-        >
-          <Img
-            id="arrow"
-            cursor="pointer"
-            src="/graphics/arrow.png"
-            pos="relative"
-            transition={`.${GLOBAL_TRANSITION}s`}
-            transform="translateY(-16%)"
-            zIndex="4"
-            onClick={() => manageExpansion()}
-          />
-        </Box>
-        <ExpandArea
-          manageExpansion={manageExpansion}
-          expansionStat={expansionStat}
-          techDetails={techDetails}
-        />
-      </Box>
+      <Img
+        margin="0 auto"
+        id="arrow"
+        top="0"
+        cursor="pointer"
+        position="relative"
+        src="/graphics/arrow.png"
+        transition={`.${GLOBAL_TRANSITION}s`}
+        transform="translateY(-221%)"
+        zIndex="4"
+        onClick={() => manageExpansion()}
+      />
+      <ExpandArea
+        manageExpansion={manageExpansion}
+        expansionStat={expansionStat}
+        techDetails={techDetails}
+      ></ExpandArea>
     </Box>
   );
 };
@@ -108,12 +100,11 @@ const ExpandArea: React.FC<{
       pos="absolute"
       bgColor="grey2"
       color="mainOrange"
-      mb="1rem"
       cursor="pointer"
       p={expansionStat === "expanded" ? "2rem" : "1rem"}
       borderRadius="10px"
       textAlign="center"
-      overflow="scroll"
+      overflow={expansionStat === "expanded" ? "scroll" : "hidden"}
       fontWeight="bold"
       css={{
         "&::-webkit-scrollbar": {
@@ -184,8 +175,6 @@ const Logo: React.FC<{
             <Img
               onMouseOver={(e) => {
                 //show name, somehow
-
-                console.log(e);
               }}
               onError={(e: any) => {
                 e.target.src = `/logos/${nameNoSpace}.svg`;

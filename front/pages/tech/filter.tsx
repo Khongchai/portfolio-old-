@@ -1,7 +1,7 @@
 import { Box, Flex } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
 import InfoDisplay from "../../components/filterComponents/InfoDisplay/index";
-import List from "../../components/filterComponents/List/index";
+import List from "../../components/filterComponents/List";
 import { ProjectEntity, useProjectsQuery } from "../../generated/graphql";
 import { GetServerSideProps } from "next";
 import setPadding from "../../utils/seFirstHeightToSecondPadding";
@@ -33,12 +33,23 @@ export const Filter: React.FC<{ selection: string | undefined }> = ({
     return () => updateTopics(null);
   }, []);
 
+  //call this to append list
+  //keep the append list for the "view all"
+  //for the preview, just reload the list
+  function paginateList() {
+    setVariables({
+      limit: variables.limit,
+      skip: variables.skip + variables.limit,
+    });
+  }
+
   return (
     <Flex
       id="filter-page"
       flexDir={["column", "column", "column", "column", "row", "row"]}
       w={"100%"}
       h={["auto", null, "100vh"]}
+      pb="1.5rem"
     >
       {fetching && variables.skip === 0 ? (
         <Box w="100%" textAlign="center">
@@ -48,7 +59,6 @@ export const Filter: React.FC<{ selection: string | undefined }> = ({
         <>
           <SearchAndFind />
           <InfoDisplay details={details} />
-
           <List
             data={data}
             details={details}

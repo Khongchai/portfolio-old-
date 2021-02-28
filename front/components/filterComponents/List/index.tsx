@@ -1,14 +1,23 @@
-import { Box, Stack } from "@chakra-ui/react";
+import { Flex, Stack } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { ProjectsQuery, ProjectEntity } from "../../../generated/graphql";
+import HighlightList from "./highlightList";
+import ProjList from "./projList";
 
-const List: React.FC<{
+interface ListProps {
   data: ProjectsQuery | undefined;
   setDetails: React.Dispatch<React.SetStateAction<ProjectEntity | undefined>>;
   selection: string | undefined;
   details: ProjectEntity | undefined;
-}> = ({ data, setDetails, selection, details }) => {
+}
+
+const List: React.FC<ListProps> = ({
+  data,
+  setDetails,
+  selection,
+  details,
+}) => {
   const [firstLoad, setFirstLoad] = useState<boolean>(true);
   const router = useRouter();
 
@@ -22,7 +31,6 @@ const List: React.FC<{
         //a selection is not specified in the url param, load from localStorage instead, if exists
         loadFromLocalStorage();
       }
-
       setFirstLoad(false);
     }
     if (details?.title) {
@@ -39,23 +47,16 @@ const List: React.FC<{
   }
 
   return (
-    <Stack spacing={"1.5em"} flex="1">
-      <Box overflowX="scroll">
-        {data?.projects.map((proj) => (
-          <Box
-            cursor="pointer"
-            id={proj.title}
-            key={proj.id}
-            onClick={() => {
-              const project = proj as ProjectEntity;
-              localStorage.setItem("savedSelection", JSON.stringify(project));
-              setDetails(project);
-            }}
-          >
-            {proj.title}
-          </Box>
-        ))}
-      </Box>
+    <Stack
+      css={{ "> *": { padding: "2em" } }}
+      as={Flex}
+      flexDir="column"
+      height="100%"
+      spacing={"1.5em"}
+      flex="1"
+    >
+      <HighlightList setDetails={setDetails} />
+      <ProjList data={data} setDetails={setDetails} />
     </Stack>
   );
 };
