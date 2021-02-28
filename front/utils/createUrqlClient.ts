@@ -18,14 +18,3 @@ export const client = createClient({
     fetchExchange,
   ],
 });
-
-/*
-import { cacheExchange } from '@urql/exchange-graphcache';
-import { simplePagination } from '@urql/exchange-graphcache/extras';
-const cache = cacheExchange({
-  resolvers: {
-    Query: {
-      todos: simplePagination(),
-    },
-  },
-}); */

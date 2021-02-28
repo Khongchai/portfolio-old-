@@ -48,12 +48,13 @@ const List: React.FC<ListProps> = ({
 
   return (
     <Stack
-      css={{ "> *": { padding: "2em" } }}
+      css={{ "> *": { padding: "1.6em" } }}
       as={Flex}
       flexDir="column"
       height="100%"
       spacing={"1.5em"}
       flex="1"
+      maxW="50%"
     >
       <HighlightList setDetails={setDetails} />
       <ProjList data={data} setDetails={setDetails} />

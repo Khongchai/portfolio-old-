@@ -1,4 +1,4 @@
-import { Box, Flex, Grid, Heading, Stack, Text } from "@chakra-ui/react";
+import { Box, Flex, Heading, Stack, Text } from "@chakra-ui/react";
 import React from "react";
 import { ProjectEntity, ProjectsQuery } from "../../../generated/graphql";
 
@@ -17,41 +17,68 @@ export const ProjList: React.FC<ProjListProps> = ({ data, setDetails }) => {
       borderRadius="22px"
       flexDir="column"
     >
-      <Heading mb={2}>Projects</Heading>
-      <Grid
-        gridTemplateColumns="1fr 1fr 1fr 1fr"
-        gridTemplateRows="1fr"
+      <Flex placeItems="center">
+        <Heading mb={2}>Projects</Heading>
+        <Text _hover={{ cursor: "pointer" }} color="mainOrange" ml="auto">
+          See all
+        </Text>
+      </Flex>
+
+      <Flex
+        overflowX="scroll"
         id="projects-container"
-        w="100%"
+        width="100%"
         h="100%"
-        placeItems="center"
         _hover={{}}
+        css={{
+          "::-webkit-scrollbar": {
+            width: "10px",
+            height: "10px",
+          },
+          "::-webkit-scrollbar-thumb": {
+            background: "#423F56",
+            opacity: "0.4",
+            borderRadius: "10px",
+          },
+        }}
       >
         {data?.projects.map((proj) => (
           <Flex
-            as={Stack}
-            spacing="0.7rem"
             cursor="pointer"
             id={proj.title}
+            class="projects"
             key={proj.id}
-            mt="2em"
+            minW="220px"
+            minH="220px"
+            pb={2}
             onClick={() => {
               const project = proj as ProjectEntity;
               localStorage.setItem("savedSelection", JSON.stringify(project));
               setDetails(project);
             }}
             className="project-container"
-            w="100%"
-            height="100%"
             flexDir="column"
             placeItems="center"
+            css={{
+              "* + *": {
+                marginBottom: "0.5em",
+              },
+            }}
           >
-            <Box w="85%" pt="85%" bgColor="mainGrey" borderRadius="22px" />
-            <Text>{proj.title}</Text>
-            <Text>{proj.shortDescription}</Text>
+            <Box
+              w="200px"
+              flex="0.8"
+              margin={2}
+              bgColor="mainGrey"
+              borderRadius="22px"
+            />
+            <Heading as="h2" size="md" flex="0.1">
+              {proj.title}
+            </Heading>
+            <Text flex="0.1">{proj.shortDescription}</Text>
           </Flex>
         ))}
-      </Grid>
+      </Flex>
     </Flex>
   );
 };
