@@ -20,7 +20,7 @@ export const Filter: React.FC<{ selection: string | undefined }> = ({
     limit: 5,
   });
   const updateTopics = useContext(AddExtraElemContext);
-  const [{ data, fetching }] = useProjectsQuery({ variables });
+  const [{ data }] = useProjectsQuery({ variables });
   const [details, setDetails] = useState<ProjectEntity | undefined>(undefined);
 
   useEffect(() => {
@@ -33,13 +33,17 @@ export const Filter: React.FC<{ selection: string | undefined }> = ({
     return () => updateTopics(null);
   }, []);
 
-  //call this to append list
-  //keep the append list for the "view all"
-  //for the preview, just reload the list
-  function paginateList() {
+  function paginateForward() {
     setVariables({
       limit: variables.limit,
       skip: variables.skip + variables.limit,
+    });
+  }
+
+  function paginateBackWard() {
+    setVariables({
+      limit: variables.limit,
+      skip: variables.skip - variables.limit,
     });
   }
 
@@ -51,22 +55,16 @@ export const Filter: React.FC<{ selection: string | undefined }> = ({
       h={["auto", null, "100vh"]}
       pb="1.5rem"
     >
-      {fetching && variables.skip === 0 ? (
-        <Box w="100%" textAlign="center">
-          Loading...
-        </Box>
-      ) : (
-        <>
-          <SearchAndFind />
-          <InfoDisplay details={details} />
-          <List
-            data={data}
-            details={details}
-            selection={selection}
-            setDetails={setDetails}
-          />
-        </>
-      )}
+      <SearchAndFind />
+      <InfoDisplay details={details} />
+      <List
+        data={data}
+        details={details}
+        selection={selection}
+        setDetails={setDetails}
+        paginateForward={paginateForward}
+        paginateBackward={paginateBackWard}
+      />
     </Flex>
   );
 };

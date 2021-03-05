@@ -3,6 +3,7 @@ import { Arg, Ctx, Int, Mutation, Query, Resolver } from "type-graphql";
 import { ProjectEntity } from "../entities/ProjectEntity";
 import {
   AddTechInput,
+  PaginatedProjects,
   ProjectCreationInput,
   ProjResponse,
 } from "../inputAndObjectTypes/ProjectResolver";
@@ -11,30 +12,71 @@ import { getTechListForEachProp } from "../utils/getTechnologiesByTitle";
 
 @Resolver()
 export class ProjectsResolver {
-  @Query(() => [ProjectEntity])
+  @Query(() => PaginatedProjects)
   async projects(
     @Arg("limit", () => Int) limit: number,
     @Arg("skip", () => Int) skip: number
-  ): Promise<ProjectEntity[]> {
-    const realLimit = Math.min(6, limit);
+  ): Promise<PaginatedProjects> {
+    const realLimit = Math.min(5, limit);
+    const realLimitPlusOne = realLimit + 1;
 
-    const posts = await ProjectEntity.find({
+    const projects = await ProjectEntity.find({
       relations: [
         "frontEndTechnologies",
         "backEndTechnologies",
         "languages",
         "hostingServices",
       ],
-      take: realLimit,
+      take: realLimitPlusOne,
       skip,
+      order: { title: "ASC" },
     });
-    return posts;
+
+    const isFirstQuery = skip === 0;
+    const isLastQuery = projects.length < realLimitPlusOne;
+
+    return {
+      projects: projects.slice(0, realLimit),
+      isFirstQuery,
+      isLastQuery,
+    };
+  }
+
+  @Query(() => ProjResponse)
+  async getSingleProjectByTitle(
+    @Arg("title", () => String) title: string
+  ): Promise<ProjResponse | undefined> {
+    const project = await ProjectEntity.findOne({
+      where: { title },
+      relations: [
+        "frontEndTechnologies",
+        "backEndTechnologies",
+        "languages",
+        "hostingServices",
+      ],
+    });
+    if (!project) {
+      return {
+        errors: [
+          {
+            message: `Project with name ${title} does not exist`,
+          },
+        ],
+      };
+    }
+    return { proj: project };
   }
 
   @Query(() => [ProjectEntity])
   async getHighlightedProjects(): Promise<ProjectEntity[] | undefined> {
     const highlightedProjects = await ProjectEntity.find({
       where: { isHighlight: true },
+      relations: [
+        "frontEndTechnologies",
+        "backEndTechnologies",
+        "languages",
+        "hostingServices",
+      ],
     });
     return highlightedProjects;
   }

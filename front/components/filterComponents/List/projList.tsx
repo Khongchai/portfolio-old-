@@ -1,13 +1,20 @@
-import { Box, Flex, Heading, Stack, Text } from "@chakra-ui/react";
+import { Box, Flex, Heading, Img, Text } from "@chakra-ui/react";
 import React from "react";
 import { ProjectEntity, ProjectsQuery } from "../../../generated/graphql";
 
 interface ProjListProps {
   data: ProjectsQuery | undefined;
   setDetails: React.Dispatch<React.SetStateAction<ProjectEntity | undefined>>;
+  paginateForward: () => void;
+  paginateBackward: () => void;
 }
 
-export const ProjList: React.FC<ProjListProps> = ({ data, setDetails }) => {
+export const ProjList: React.FC<ProjListProps> = ({
+  data,
+  setDetails,
+  paginateForward,
+  paginateBackward,
+}) => {
   return (
     <Flex
       flex="1"
@@ -16,14 +23,16 @@ export const ProjList: React.FC<ProjListProps> = ({ data, setDetails }) => {
       boxShadow="0px 8px 20px rgba(0, 0, 0, 0.1)"
       borderRadius="22px"
       flexDir="column"
+      pos="relative"
     >
       <Flex placeItems="center">
-        <Heading mb={2}>Projects</Heading>
+        <Heading size="lg" mb={2}>
+          Projects
+        </Heading>
         <Text _hover={{ cursor: "pointer" }} color="mainOrange" ml="auto">
           See all
         </Text>
       </Flex>
-
       <Flex
         overflowX="scroll"
         id="projects-container"
@@ -42,7 +51,7 @@ export const ProjList: React.FC<ProjListProps> = ({ data, setDetails }) => {
           },
         }}
       >
-        {data?.projects.map((proj) => (
+        {data?.projects.projects.map((proj) => (
           <Flex
             cursor="pointer"
             id={proj.title}
@@ -79,8 +88,66 @@ export const ProjList: React.FC<ProjListProps> = ({ data, setDetails }) => {
           </Flex>
         ))}
       </Flex>
+      {data?.projects.isFirstQuery ? null : (
+        <PaginateBackward paginateBackward={paginateBackward} />
+      )}
+      {data?.projects.isLastQuery ? null : (
+        <PaginateForward paginateForward={paginateForward} />
+      )}
     </Flex>
   );
 };
 
 export default ProjList;
+
+const PaginateForward: React.FC<{ paginateForward: () => void }> = ({
+  paginateForward,
+}) => {
+  return (
+    <Img
+      id="loadmore-indicator"
+      cursor="pointer"
+      position="absolute"
+      src="/graphics/arrow.png"
+      transition=".3s"
+      top="50%"
+      zIndex="4"
+      right="0"
+      width="25px"
+      transform="rotate(90deg) translateX(-50%)"
+      _hover={{
+        width: "35px",
+        transform: "rotate(90deg) translateX(-50%)",
+      }}
+      onClick={() => {
+        paginateForward();
+      }}
+    />
+  );
+};
+
+const PaginateBackward: React.FC<{ paginateBackward: () => void }> = ({
+  paginateBackward,
+}) => {
+  return (
+    <Img
+      id="loadmore-indicator"
+      cursor="pointer"
+      position="absolute"
+      src="/graphics/arrow.png"
+      transition=".3s"
+      top="50%"
+      zIndex="4"
+      left="0"
+      width="25px"
+      transform="rotate(-90deg) translateX(50%)"
+      _hover={{
+        width: "35px",
+        transform: "rotate(-90deg) translateX(50%)",
+      }}
+      onClick={() => {
+        paginateBackward();
+      }}
+    />
+  );
+};

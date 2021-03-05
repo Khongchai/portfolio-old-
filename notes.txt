@@ -19,13 +19,7 @@ Once the filter page is finished, try adding subscriptions to it: https://formid
 
 change every logo to png/ on hover, show a bigger version, some might be too hard to read what it is.
 
-make navbar responsive and show hamburger bar
+use the trick from the card thing to reduce the opacity of all the things that are not hovered
+in the projects bar.
 
-
-
-Check for TODOs in searchandfilterrboxes and navbar.tsx
-Use react context to keep track of extra state to put into the sidebar menu
-//things to show in the side bar should be from the global react context so that
-//you can concatenate extra things easily
-//Have a global list basically of things in the drawer, and then if you wanna extend that, just grab the list and
-//concatenate
+TODO: paginate forward and backward instead, and put back the hasmore field

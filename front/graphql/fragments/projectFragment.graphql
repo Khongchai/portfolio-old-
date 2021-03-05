@@ -1,4 +1,5 @@
 fragment ProjectFields on ProjectEntity {
+  id
   title
   frontEndTechnologies {
     title
@@ -20,7 +21,6 @@ fragment ProjectFields on ProjectEntity {
   endDate
   startDate
   description
-  id
   githubLink
   websiteLink
   shortDescription

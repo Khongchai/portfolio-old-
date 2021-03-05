@@ -1,5 +1,9 @@
 query Projects($skip: Int!, $limit: Int!) {
   projects(skip: $skip, limit: $limit) {
-    ...ProjectFields
+    projects {
+      ...ProjectFields
+    }
+    isFirstQuery
+    isLastQuery
   }
 }

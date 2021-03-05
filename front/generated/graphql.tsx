@@ -16,7 +16,8 @@ export type Scalars = {
 
 export type Query = {
   __typename?: 'Query';
-  projects: Array<ProjectEntity>;
+  projects: PaginatedProjects;
+  getSingleProjectByTitle: ProjResponse;
   getHighlightedProjects: Array<ProjectEntity>;
   technologies: Array<TechnologyEntity>;
 };
@@ -25,6 +26,18 @@ export type Query = {
 export type QueryProjectsArgs = {
   skip: Scalars['Int'];
   limit: Scalars['Int'];
+};
+
+
+export type QueryGetSingleProjectByTitleArgs = {
+  title: Scalars['String'];
+};
+
+export type PaginatedProjects = {
+  __typename?: 'PaginatedProjects';
+  projects: Array<ProjectEntity>;
+  isFirstQuery: Scalars['Boolean'];
+  isLastQuery: Scalars['Boolean'];
 };
 
 export type ProjectEntity = {
@@ -52,6 +65,17 @@ export type TechnologyEntity = {
   backEndIn?: Maybe<Array<ProjectEntity>>;
   languageOf?: Maybe<Array<ProjectEntity>>;
   hosting?: Maybe<Array<ProjectEntity>>;
+};
+
+export type ProjResponse = {
+  __typename?: 'ProjResponse';
+  errors?: Maybe<Array<ErrorField>>;
+  proj?: Maybe<ProjectEntity>;
+};
+
+export type ErrorField = {
+  __typename?: 'ErrorField';
+  message: Scalars['String'];
 };
 
 export type Mutation = {
@@ -99,17 +123,6 @@ export type MutationDeleteTechnolgyArgs = {
   title: Scalars['String'];
 };
 
-export type ProjResponse = {
-  __typename?: 'ProjResponse';
-  errors?: Maybe<Array<ErrorField>>;
-  proj?: Maybe<ProjectEntity>;
-};
-
-export type ErrorField = {
-  __typename?: 'ErrorField';
-  message: Scalars['String'];
-};
-
 export type ProjectCreationInput = {
   startDate: Scalars['String'];
   endDate: Scalars['String'];
@@ -136,7 +149,7 @@ export type AddTechInput = {
 
 export type ProjectFieldsFragment = (
   { __typename?: 'ProjectEntity' }
-  & Pick<ProjectEntity, 'title' | 'isHighlight' | 'endDate' | 'startDate' | 'description' | 'id' | 'githubLink' | 'websiteLink' | 'shortDescription'>
+  & Pick<ProjectEntity, 'id' | 'title' | 'isHighlight' | 'endDate' | 'startDate' | 'description' | 'githubLink' | 'websiteLink' | 'shortDescription'>
   & { frontEndTechnologies?: Maybe<Array<(
     { __typename?: 'TechnologyEntity' }
     & Pick<TechnologyEntity, 'title' | 'id'>
@@ -171,10 +184,33 @@ export type ProjectsQueryVariables = Exact<{
 
 export type ProjectsQuery = (
   { __typename?: 'Query' }
-  & { projects: Array<(
-    { __typename?: 'ProjectEntity' }
-    & ProjectFieldsFragment
-  )> }
+  & { projects: (
+    { __typename?: 'PaginatedProjects' }
+    & Pick<PaginatedProjects, 'isFirstQuery' | 'isLastQuery'>
+    & { projects: Array<(
+      { __typename?: 'ProjectEntity' }
+      & ProjectFieldsFragment
+    )> }
+  ) }
+);
+
+export type GetSingleProjectByTitleQueryVariables = Exact<{
+  title: Scalars['String'];
+}>;
+
+
+export type GetSingleProjectByTitleQuery = (
+  { __typename?: 'Query' }
+  & { getSingleProjectByTitle: (
+    { __typename?: 'ProjResponse' }
+    & { proj?: Maybe<(
+      { __typename?: 'ProjectEntity' }
+      & ProjectFieldsFragment
+    )>, errors?: Maybe<Array<(
+      { __typename?: 'ErrorField' }
+      & Pick<ErrorField, 'message'>
+    )>> }
+  ) }
 );
 
 export type TechnologiesQueryVariables = Exact<{ [key: string]: never; }>;
@@ -203,6 +239,7 @@ export type TechnologiesQuery = (
 
 export const ProjectFieldsFragmentDoc = gql`
     fragment ProjectFields on ProjectEntity {
+  id
   title
   frontEndTechnologies {
     title
@@ -224,7 +261,6 @@ export const ProjectFieldsFragmentDoc = gql`
   endDate
   startDate
   description
-  id
   githubLink
   websiteLink
   shortDescription
@@ -244,13 +280,33 @@ export function useGetHighlightedProjectsQuery(options: Omit<Urql.UseQueryArgs<G
 export const ProjectsDocument = gql`
     query Projects($skip: Int!, $limit: Int!) {
   projects(skip: $skip, limit: $limit) {
-    ...ProjectFields
+    projects {
+      ...ProjectFields
+    }
+    isFirstQuery
+    isLastQuery
   }
 }
     ${ProjectFieldsFragmentDoc}`;
 
 export function useProjectsQuery(options: Omit<Urql.UseQueryArgs<ProjectsQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<ProjectsQuery>({ query: ProjectsDocument, ...options });
+};
+export const GetSingleProjectByTitleDocument = gql`
+    query GetSingleProjectByTitle($title: String!) {
+  getSingleProjectByTitle(title: $title) {
+    proj {
+      ...ProjectFields
+    }
+    errors {
+      message
+    }
+  }
+}
+    ${ProjectFieldsFragmentDoc}`;
+
+export function useGetSingleProjectByTitleQuery(options: Omit<Urql.UseQueryArgs<GetSingleProjectByTitleQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GetSingleProjectByTitleQuery>({ query: GetSingleProjectByTitleDocument, ...options });
 };
 export const TechnologiesDocument = gql`
     query Technologies {

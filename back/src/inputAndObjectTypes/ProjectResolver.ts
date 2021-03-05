@@ -71,3 +71,15 @@ export class ProjResponse {
   @Field(() => ProjectEntity, { nullable: true })
   proj?: ProjectEntity;
 }
+
+@ObjectType()
+export class PaginatedProjects {
+  @Field(() => [ProjectEntity])
+  projects: ProjectEntity[];
+
+  @Field(() => Boolean)
+  isFirstQuery: boolean;
+
+  @Field(() => Boolean)
+  isLastQuery: boolean;
+}

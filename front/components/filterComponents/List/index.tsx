@@ -1,7 +1,11 @@
 import { Flex, Stack } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { ProjectsQuery, ProjectEntity } from "../../../generated/graphql";
+import {
+  ProjectsQuery,
+  ProjectEntity,
+  useGetSingleProjectByTitleQuery,
+} from "../../../generated/graphql";
 import HighlightList from "./highlightList";
 import ProjList from "./projList";
 
@@ -10,6 +14,8 @@ interface ListProps {
   setDetails: React.Dispatch<React.SetStateAction<ProjectEntity | undefined>>;
   selection: string | undefined;
   details: ProjectEntity | undefined;
+  paginateForward: () => void;
+  paginateBackward: () => void;
 }
 
 const List: React.FC<ListProps> = ({
@@ -17,21 +23,31 @@ const List: React.FC<ListProps> = ({
   setDetails,
   selection,
   details,
+  paginateForward,
+  paginateBackward,
 }) => {
-  const [firstLoad, setFirstLoad] = useState<boolean>(true);
+  const [runOnceAlready, setRunOnceAlready] = useState<boolean>(false);
+  const [singleFetchParam, setSingleFetchParam] = useState<string | undefined>(
+    undefined
+  );
+  const [{ data: singleProject, fetching }] = useGetSingleProjectByTitleQuery({
+    variables: { title: singleFetchParam } as any,
+  });
   const router = useRouter();
-
   useEffect(() => {
-    if (firstLoad) {
+    if (!runOnceAlready) {
       if (selection) {
-        //a selection is specified in the url param, load from that
-        const HTMLObjWithProjID = document.getElementById(selection);
-        HTMLObjWithProjID?.click();
-      } else {
+        //a selection is specified in the url param; a single query will be made
+        setSingleFetchParam(selection);
+        if (!fetching) {
+          setDetails(singleProject?.getSingleProjectByTitle.proj!);
+          setRunOnceAlready(true);
+        }
+      } else if (!fetching) {
         //a selection is not specified in the url param, load from localStorage instead, if exists
         loadFromLocalStorage();
+        setRunOnceAlready(true);
       }
-      setFirstLoad(false);
     }
     if (details?.title) {
       router.push({
@@ -39,7 +55,7 @@ const List: React.FC<ListProps> = ({
         query: { selection: details.title },
       });
     }
-  }, [details]);
+  }, [details, fetching]);
 
   function loadFromLocalStorage() {
     const savedSelection = localStorage.getItem("savedSelection");
@@ -57,7 +73,12 @@ const List: React.FC<ListProps> = ({
       maxW="50%"
     >
       <HighlightList setDetails={setDetails} />
-      <ProjList data={data} setDetails={setDetails} />
+      <ProjList
+        paginateForward={paginateForward}
+        paginateBackward={paginateBackward}
+        data={data}
+        setDetails={setDetails}
+      />
     </Stack>
   );
 };

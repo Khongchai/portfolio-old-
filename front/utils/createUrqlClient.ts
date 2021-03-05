@@ -1,20 +1,23 @@
-import { createClient, fetchExchange } from "urql";
-import { cacheExchange } from "@urql/exchange-graphcache";
-import { simplePagination } from "@urql/exchange-graphcache/extras";
+import { createClient, fetchExchange, stringifyVariables } from "urql";
+
 export const client = createClient({
   url: "http://localhost:4000/graphql",
   fetchOptions: {
     //for getting and setting cookies
     credentials: "include" as const,
   },
-  exchanges: [
-    cacheExchange({
-      resolvers: {
-        Query: {
-          projects: simplePagination(),
-        },
-      },
-    }),
-    fetchExchange,
-  ],
+  exchanges: [fetchExchange],
 });
+
+/*
+
+Query: {
+          projects: (parent, args) => {
+            console.log(parent);
+            return {
+              __typename: "PaginatedProjects",
+              id: args.id,
+            };
+          },
+        },
+*/

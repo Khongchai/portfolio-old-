@@ -29,7 +29,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         username: "postgres",
         password: "postgres",
         migrations: [path_1.default.join(__dirname, "/migrations/*")],
-        logging: true,
+        logging: false,
         synchronize: true,
         entities: [ProjectEntity_1.ProjectEntity, TechnologyEntity_1.TechnologyEntity],
     });

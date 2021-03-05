@@ -29,24 +29,61 @@ const getTechnologiesByTitle_1 = require("../utils/getTechnologiesByTitle");
 let ProjectsResolver = class ProjectsResolver {
     projects(limit, skip) {
         return __awaiter(this, void 0, void 0, function* () {
-            const realLimit = Math.min(6, limit);
-            const posts = yield ProjectEntity_1.ProjectEntity.find({
+            const realLimit = Math.min(5, limit);
+            const realLimitPlusOne = realLimit + 1;
+            const projects = yield ProjectEntity_1.ProjectEntity.find({
                 relations: [
                     "frontEndTechnologies",
                     "backEndTechnologies",
                     "languages",
                     "hostingServices",
                 ],
-                take: realLimit,
+                take: realLimitPlusOne,
                 skip,
+                order: { title: "ASC" },
             });
-            return posts;
+            const isFirstQuery = skip === 0;
+            const isLastQuery = projects.length < realLimitPlusOne;
+            return {
+                projects: projects.slice(0, realLimit),
+                isFirstQuery,
+                isLastQuery,
+            };
+        });
+    }
+    getSingleProjectByTitle(title) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const project = yield ProjectEntity_1.ProjectEntity.findOne({
+                where: { title },
+                relations: [
+                    "frontEndTechnologies",
+                    "backEndTechnologies",
+                    "languages",
+                    "hostingServices",
+                ],
+            });
+            if (!project) {
+                return {
+                    errors: [
+                        {
+                            message: `Project with name ${title} does not exist`,
+                        },
+                    ],
+                };
+            }
+            return { proj: project };
         });
     }
     getHighlightedProjects() {
         return __awaiter(this, void 0, void 0, function* () {
             const highlightedProjects = yield ProjectEntity_1.ProjectEntity.find({
                 where: { isHighlight: true },
+                relations: [
+                    "frontEndTechnologies",
+                    "backEndTechnologies",
+                    "languages",
+                    "hostingServices",
+                ],
             });
             return highlightedProjects;
         });
@@ -173,13 +210,20 @@ let ProjectsResolver = class ProjectsResolver {
     }
 };
 __decorate([
-    type_graphql_1.Query(() => [ProjectEntity_1.ProjectEntity]),
+    type_graphql_1.Query(() => ProjectResolver_1.PaginatedProjects),
     __param(0, type_graphql_1.Arg("limit", () => type_graphql_1.Int)),
     __param(1, type_graphql_1.Arg("skip", () => type_graphql_1.Int)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number, Number]),
     __metadata("design:returntype", Promise)
 ], ProjectsResolver.prototype, "projects", null);
+__decorate([
+    type_graphql_1.Query(() => ProjectResolver_1.ProjResponse),
+    __param(0, type_graphql_1.Arg("title", () => String)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], ProjectsResolver.prototype, "getSingleProjectByTitle", null);
 __decorate([
     type_graphql_1.Query(() => [ProjectEntity_1.ProjectEntity]),
     __metadata("design:type", Function),

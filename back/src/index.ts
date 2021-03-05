@@ -16,7 +16,7 @@ const main = async () => {
     username: "postgres",
     password: "postgres",
     migrations: [path.join(__dirname, "/migrations/*")],
-    logging: true,
+    logging: false,
     synchronize: true,
     entities: [ProjectEntity, TechnologyEntity],
   });
