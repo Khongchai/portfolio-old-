@@ -5,45 +5,66 @@ import List from "../../components/filterComponents/List";
 import { ProjectEntity, useProjectsQuery } from "../../generated/graphql";
 import { GetServerSideProps } from "next";
 import setPadding from "../../utils/seFirstHeightToSecondPadding";
-import {
-  SearchAndFind,
-  SearchAndFindForMobile,
-} from "../../components/filterComponents/SearchAndFilterBoxes";
+import { SearchAndFindWrapper } from "../../components/filterComponents/SearchAndFilterBoxes";
 import { AddExtraElemContext } from "../../globalContexts/extraNavbarElem";
 
 export const Filter: React.FC<{ selection: string | undefined }> = ({
   selection,
 }) => {
-  //setVariables for pagination
-  const [variables, setVariables] = useState({
+  const [searchParams, setSearchParams] = useState<{
+    search: string | undefined;
+    sortBy: string | undefined;
+    order: string | undefined;
+  }>({
+    search: undefined,
+    sortBy: "Date",
+    order: "DSC",
+  });
+
+  //TODO --> call setQueryVariables, passing in current search params to get a new query
+  //, and reset the skip and limit to 5 as well
+  const [queryVariables, setQueryVariables] = useState({
     skip: 0,
     limit: 5,
+    //initial value is the searchParams' initial value
+    ...searchParams,
   });
   const updateTopics = useContext(AddExtraElemContext);
-  const [{ data }] = useProjectsQuery({ variables });
+  const [{ data }] = useProjectsQuery({ variables: queryVariables });
   const [details, setDetails] = useState<ProjectEntity | undefined>(undefined);
-
   useEffect(() => {
     const filterPage = document.getElementById("filter-page");
     const navbar = document.getElementById("navbar");
     if (filterPage && navbar) {
       setPadding(navbar, filterPage, 2);
     }
-    updateTopics(<SearchAndFindForMobile />);
-    return () => updateTopics(null);
+    updateTopics(
+      <SearchAndFindWrapper
+        mode="mobile"
+        setSearchParams={setSearchParams}
+        searchParams={searchParams}
+      />
+    );
+    return () => updateTopics(undefined);
   }, []);
 
   function paginateForward() {
-    setVariables({
-      limit: variables.limit,
-      skip: variables.skip + variables.limit,
+    setQueryVariables({
+      limit: queryVariables.limit,
+      skip: queryVariables.skip + queryVariables.limit,
+      order: queryVariables.order,
+      sortBy: queryVariables.sortBy,
+      search: queryVariables.search,
     });
   }
 
   function paginateBackWard() {
-    setVariables({
-      limit: variables.limit,
-      skip: variables.skip - variables.limit,
+    setQueryVariables({
+      limit: queryVariables.limit,
+      skip: queryVariables.skip - queryVariables.limit,
+      order: queryVariables.order,
+      sortBy: queryVariables.sortBy,
+      search: queryVariables.search,
     });
   }
 
@@ -55,7 +76,11 @@ export const Filter: React.FC<{ selection: string | undefined }> = ({
       h={["auto", null, "100vh"]}
       pb="1.5rem"
     >
-      <SearchAndFind />
+      <SearchAndFindWrapper
+        mode="desktop"
+        setSearchParams={setSearchParams}
+        searchParams={searchParams}
+      />
       <InfoDisplay details={details} />
       <List
         data={data}

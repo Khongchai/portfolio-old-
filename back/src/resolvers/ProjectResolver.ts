@@ -1,5 +1,14 @@
 import { TechnologyEntity } from "../entities/TechnologyEntity";
-import { Arg, Ctx, Int, Mutation, Query, Resolver } from "type-graphql";
+import {
+  Arg,
+  Ctx,
+  Field,
+  InputType,
+  Int,
+  Mutation,
+  Query,
+  Resolver,
+} from "type-graphql";
 import { ProjectEntity } from "../entities/ProjectEntity";
 import {
   AddTechInput,
@@ -9,18 +18,42 @@ import {
 } from "../inputAndObjectTypes/ProjectResolver";
 import { Context } from "../types";
 import { getTechListForEachProp } from "../utils/getTechnologiesByTitle";
+import { Like } from "typeorm";
+
+@InputType()
+class PaginatedProjectsInput {
+  @Field()
+  limit: number;
+
+  @Field()
+  skip: number;
+
+  @Field(() => String, { nullable: true })
+  search?: string;
+
+  @Field({ nullable: true })
+  order?: "ASC" | "DESC";
+
+  @Field({ nullable: true })
+  sort?: "Title" | "Date";
+}
 
 @Resolver()
 export class ProjectsResolver {
   @Query(() => PaginatedProjects)
   async projects(
-    @Arg("limit", () => Int) limit: number,
-    @Arg("skip", () => Int) skip: number
+    @Arg("input") input: PaginatedProjectsInput
   ): Promise<PaginatedProjects> {
+    const { limit, skip, order, search, sort } = input;
     const realLimit = Math.min(5, limit);
     const realLimitPlusOne = realLimit + 1;
+    const searchCap = search
+      ? `%${search.charAt(0).toUpperCase() + search.slice(1)}%`
+      : "%";
 
+    //change to query builder and do like
     const projects = await ProjectEntity.find({
+      where: { title: Like(searchCap) },
       relations: [
         "frontEndTechnologies",
         "backEndTechnologies",
@@ -29,7 +62,8 @@ export class ProjectsResolver {
       ],
       take: realLimitPlusOne,
       skip,
-      order: { title: "ASC" },
+      //if not equal to date or not provided
+      order: sort === "Date" ? { startDate: order } : { title: order },
     });
 
     const isFirstQuery = skip === 0;

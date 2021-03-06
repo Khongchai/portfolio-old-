@@ -26,12 +26,43 @@ const type_graphql_1 = require("type-graphql");
 const ProjectEntity_1 = require("../entities/ProjectEntity");
 const ProjectResolver_1 = require("../inputAndObjectTypes/ProjectResolver");
 const getTechnologiesByTitle_1 = require("../utils/getTechnologiesByTitle");
+const typeorm_1 = require("typeorm");
+let PaginatedProjectsInput = class PaginatedProjectsInput {
+};
+__decorate([
+    type_graphql_1.Field(),
+    __metadata("design:type", Number)
+], PaginatedProjectsInput.prototype, "limit", void 0);
+__decorate([
+    type_graphql_1.Field(),
+    __metadata("design:type", Number)
+], PaginatedProjectsInput.prototype, "skip", void 0);
+__decorate([
+    type_graphql_1.Field(() => String, { nullable: true }),
+    __metadata("design:type", String)
+], PaginatedProjectsInput.prototype, "search", void 0);
+__decorate([
+    type_graphql_1.Field({ nullable: true }),
+    __metadata("design:type", String)
+], PaginatedProjectsInput.prototype, "order", void 0);
+__decorate([
+    type_graphql_1.Field({ nullable: true }),
+    __metadata("design:type", String)
+], PaginatedProjectsInput.prototype, "sort", void 0);
+PaginatedProjectsInput = __decorate([
+    type_graphql_1.InputType()
+], PaginatedProjectsInput);
 let ProjectsResolver = class ProjectsResolver {
-    projects(limit, skip) {
+    projects(input) {
         return __awaiter(this, void 0, void 0, function* () {
+            const { limit, skip, order, search, sort } = input;
             const realLimit = Math.min(5, limit);
             const realLimitPlusOne = realLimit + 1;
+            const searchCap = search
+                ? `%${search.charAt(0).toUpperCase() + search.slice(1)}%`
+                : "%";
             const projects = yield ProjectEntity_1.ProjectEntity.find({
+                where: { title: typeorm_1.Like(searchCap) },
                 relations: [
                     "frontEndTechnologies",
                     "backEndTechnologies",
@@ -40,7 +71,7 @@ let ProjectsResolver = class ProjectsResolver {
                 ],
                 take: realLimitPlusOne,
                 skip,
-                order: { title: "ASC" },
+                order: sort === "Date" ? { startDate: order } : { title: order },
             });
             const isFirstQuery = skip === 0;
             const isLastQuery = projects.length < realLimitPlusOne;
@@ -211,10 +242,9 @@ let ProjectsResolver = class ProjectsResolver {
 };
 __decorate([
     type_graphql_1.Query(() => ProjectResolver_1.PaginatedProjects),
-    __param(0, type_graphql_1.Arg("limit", () => type_graphql_1.Int)),
-    __param(1, type_graphql_1.Arg("skip", () => type_graphql_1.Int)),
+    __param(0, type_graphql_1.Arg("input")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Number]),
+    __metadata("design:paramtypes", [PaginatedProjectsInput]),
     __metadata("design:returntype", Promise)
 ], ProjectsResolver.prototype, "projects", null);
 __decorate([

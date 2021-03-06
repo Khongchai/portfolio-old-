@@ -24,8 +24,7 @@ export type Query = {
 
 
 export type QueryProjectsArgs = {
-  skip: Scalars['Int'];
-  limit: Scalars['Int'];
+  input: PaginatedProjectsInput;
 };
 
 
@@ -65,6 +64,14 @@ export type TechnologyEntity = {
   backEndIn?: Maybe<Array<ProjectEntity>>;
   languageOf?: Maybe<Array<ProjectEntity>>;
   hosting?: Maybe<Array<ProjectEntity>>;
+};
+
+export type PaginatedProjectsInput = {
+  limit: Scalars['Float'];
+  skip: Scalars['Float'];
+  search?: Maybe<Scalars['String']>;
+  order?: Maybe<Scalars['String']>;
+  sort?: Maybe<Scalars['String']>;
 };
 
 export type ProjResponse = {
@@ -177,8 +184,8 @@ export type GetHighlightedProjectsQuery = (
 );
 
 export type ProjectsQueryVariables = Exact<{
-  skip: Scalars['Int'];
-  limit: Scalars['Int'];
+  skip: Scalars['Float'];
+  limit: Scalars['Float'];
 }>;
 
 
@@ -278,8 +285,8 @@ export function useGetHighlightedProjectsQuery(options: Omit<Urql.UseQueryArgs<G
   return Urql.useQuery<GetHighlightedProjectsQuery>({ query: GetHighlightedProjectsDocument, ...options });
 };
 export const ProjectsDocument = gql`
-    query Projects($skip: Int!, $limit: Int!) {
-  projects(skip: $skip, limit: $limit) {
+    query Projects($skip: Float!, $limit: Float!) {
+  projects(input: {skip: $skip, limit: $limit}) {
     projects {
       ...ProjectFields
     }

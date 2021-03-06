@@ -23,3 +23,7 @@ use the trick from the card thing to reduce the opacity of all the things that a
 in the projects bar.
 
 TODO: paginate forward and backward instead, and put back the hasmore field
+
+why does search value reset when navbar is collapsed and reopened?
+
+call setQueryVariables

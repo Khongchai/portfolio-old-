@@ -1,5 +1,5 @@
-query Projects($skip: Int!, $limit: Int!) {
-  projects(skip: $skip, limit: $limit) {
+query Projects($skip: Float!, $limit: Float!) {
+  projects(input: { skip: $skip, limit: $limit }) {
     projects {
       ...ProjectFields
     }

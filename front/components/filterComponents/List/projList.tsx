@@ -17,13 +17,14 @@ export const ProjList: React.FC<ProjListProps> = ({
 }) => {
   return (
     <Flex
-      flex="1"
+      gridColumn="left-padding-end / right-padding-end"
       bg="linear-gradient(102.77deg, #423E55 -2.52%, rgba(74, 70, 94, 0.691587) 38.75%, rgba(92, 88, 113, 0) 100%, rgba(68, 64, 86, 0.627352) 100%), #636073;"
       id="projects-view"
       boxShadow="0px 8px 20px rgba(0, 0, 0, 0.1)"
       borderRadius="22px"
       flexDir="column"
       pos="relative"
+      gridRow="3"
     >
       <Flex placeItems="center">
         <Heading size="lg" mb={2}>
@@ -70,7 +71,7 @@ export const ProjList: React.FC<ProjListProps> = ({
             placeItems="center"
             css={{
               "* + *": {
-                marginBottom: "0.5em",
+                marginTop: "0.5em",
               },
             }}
           >

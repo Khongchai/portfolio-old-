@@ -18,6 +18,8 @@ const InfoDisplay: React.FC<{ details: ProjectEntity | undefined }> = ({
       ]}
       minHeight="100%"
       flex="1"
+      id="info-display-container"
+      mb="3em"
     >
       {!details ? (
         <Heading gridColumn="left-padding-end / right-padding-end">

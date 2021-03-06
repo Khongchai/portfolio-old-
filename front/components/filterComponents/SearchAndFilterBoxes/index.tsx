@@ -1,10 +1,85 @@
 import { Flex, Input, Select, Text } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 
-export const SearchAndFind: React.FC<{}> = ({}) => {
+interface searchQueryParams {
+  searchParams: {
+    search: string | undefined;
+    sortBy: string | undefined;
+    order: string | undefined;
+  };
+  setSearchParams: React.Dispatch<
+    React.SetStateAction<{
+      search: string | undefined;
+      sortBy: string | undefined;
+      order: string | undefined;
+    }>
+  >;
+  mode: "desktop" | "mobile";
+}
+
+export const SearchAndFindWrapper: React.FC<searchQueryParams> = ({
+  searchParams,
+  setSearchParams,
+  mode,
+}) => {
   useEffect(() => {
-    //set Height to be equal to the navbar
-  }, []);
+    console.log(searchParams);
+  }, [searchParams]);
+
+  function setSearch(value: string) {
+    setSearchParams({
+      order: searchParams.order,
+      sortBy: searchParams.sortBy,
+      search: value,
+    });
+  }
+
+  function setSort(value: string) {
+    setSearchParams({
+      order: value,
+      sortBy: searchParams.sortBy,
+      search: searchParams.search,
+    });
+  }
+
+  function setOrder(value: string) {
+    setSearchParams({
+      order: searchParams.order,
+      sortBy: value,
+      search: searchParams.search,
+    });
+  }
+
+  return (
+    <>
+      {mode === "desktop" ? (
+        <SearchAndFind
+          setSearch={setSearch}
+          setSort={setSort}
+          setOrder={setOrder}
+        />
+      ) : (
+        <SearchAndFindForMobile
+          setSearch={setSearch}
+          setSort={setSort}
+          setOrder={setOrder}
+        />
+      )}
+    </>
+  );
+};
+
+interface setFunctions {
+  setSearch: (value: string) => void;
+  setSort: (value: string) => void;
+  setOrder: (value: string) => void;
+}
+
+const SearchAndFind: React.FC<setFunctions> = ({
+  setOrder,
+  setSort,
+  setSearch,
+}) => {
   return (
     <Flex
       id="navbar"
@@ -22,14 +97,33 @@ export const SearchAndFind: React.FC<{}> = ({}) => {
         },
       }}
     >
-      <Input placeholder="Search by title" width={"20em"}></Input>
+      <Input
+        placeholder="Search by title"
+        onChange={(e) => {
+          setSearch(e.target.value);
+        }}
+        width={"20em"}
+      />
+
       {/* Determines the order in which the search queries gets returned. */}
       <Text>Sort</Text>
-      <Select color="grey3" w="fit-content">
+      <Select
+        onChange={(e) => {
+          setSort(e.target.value);
+        }}
+        color="grey3"
+        w="fit-content"
+      >
         <option value="Date">Date</option>
         <option value="Title">Title</option>
       </Select>
-      <Select color="grey3" w="fit-content">
+      <Select
+        onChange={(e) => {
+          setOrder(e.target.value);
+        }}
+        color="grey3"
+        w="fit-content"
+      >
         <option value="ASC">ASC</option>
         <option value="DESC">DESC</option>
       </Select>
@@ -37,7 +131,11 @@ export const SearchAndFind: React.FC<{}> = ({}) => {
   );
 };
 
-export const SearchAndFindForMobile: React.FC<{}> = ({}) => {
+const SearchAndFindForMobile: React.FC<setFunctions> = ({
+  setOrder,
+  setSearch,
+  setSort,
+}) => {
   return (
     <Flex
       id="navbar"
@@ -53,14 +151,34 @@ export const SearchAndFindForMobile: React.FC<{}> = ({}) => {
         },
       }}
     >
-      <Input placeholder="Search by title" width={"100%"}></Input>
+      <Input
+        onChange={(e) => {
+          setSearch(e.target.value);
+        }}
+        placeholder="Search by title"
+        width={"100%"}
+      ></Input>
       {/* Determines the order in which the search queries gets returned. */}
       <Text>Sort</Text>
-      <Select width={"100%"} color="grey3" w="fit-content">
+      <Select
+        width={"100%"}
+        onChange={(e) => {
+          setSort(e.target.value);
+        }}
+        color="grey3"
+        w="fit-content"
+      >
         <option value="Date">Date</option>
         <option value="Title">Title</option>
       </Select>
-      <Select width={"100%"} color="grey3" w="fit-content">
+      <Select
+        width={"100%"}
+        onChange={(e) => {
+          setOrder(e.target.value);
+        }}
+        color="grey3"
+        w="fit-content"
+      >
         <option value="ASC">ASC</option>
         <option value="DESC">DESC</option>
       </Select>

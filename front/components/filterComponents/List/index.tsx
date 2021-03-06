@@ -1,4 +1,4 @@
-import { Flex, Stack } from "@chakra-ui/react";
+import { Flex, Grid } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import {
@@ -33,7 +33,9 @@ const List: React.FC<ListProps> = ({
   const [{ data: singleProject, fetching }] = useGetSingleProjectByTitleQuery({
     variables: { title: singleFetchParam } as any,
   });
+
   const router = useRouter();
+
   useEffect(() => {
     if (!runOnceAlready) {
       if (selection) {
@@ -49,6 +51,7 @@ const List: React.FC<ListProps> = ({
         setRunOnceAlready(true);
       }
     }
+
     if (details?.title) {
       router.push({
         pathname: "/tech/filter",
@@ -63,23 +66,30 @@ const List: React.FC<ListProps> = ({
   }
 
   return (
-    <Stack
+    <Grid
       css={{ "> *": { padding: "1.6em" } }}
-      as={Flex}
-      flexDir="column"
       height="100%"
       spacing={"1.5em"}
       flex="1"
-      maxW="50%"
+      gridTemplateColumns={[
+        "0.3fr [left-padding-end] repeat(4, minmax(auto, 1fr)) [right-padding-end] 0.3fr",
+        null,
+        null,
+        null,
+        "0.3fr [left-padding-end] repeat(4, minmax(auto, 1fr)) [right-padding-end] 0.7fr",
+      ]}
+      gridTemplateRows="1fr 0.1fr 1fr"
+      id="list-container"
     >
       <HighlightList setDetails={setDetails} />
+
       <ProjList
         paginateForward={paginateForward}
         paginateBackward={paginateBackward}
         data={data}
         setDetails={setDetails}
       />
-    </Stack>
+    </Grid>
   );
 };
 
