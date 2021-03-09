@@ -99,7 +99,7 @@ const SearchAndFind: React.FC<setFunctions> = ({
       }}
     >
       <Input
-        placeholder={'Search: "Django" "React" etc.'}
+        placeholder="Search by technologies name"
         onChange={(e) => {
           setSearch(e.target.value);
         }}

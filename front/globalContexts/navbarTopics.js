@@ -8,10 +8,10 @@ export const navbarTopics = {
     pageName: "Home",
   },
   filter: {
-    url: "tech/filter",
+    url: "/tech/filter",
     pageName: "Filter",
   },
-  about: { url: "tech/about", pageName: "About" },
+  about: { url: "/tech/about", pageName: "About" },
 };
 
 export const TopicsContext = React.createContext();

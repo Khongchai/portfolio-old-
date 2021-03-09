@@ -17,6 +17,7 @@ export type Scalars = {
 export type Query = {
   __typename?: 'Query';
   projects: PaginatedProjects;
+  allProjectsNotPaginated: Array<ProjectEntity>;
   getSingleProjectByTitle: ProjResponse;
   getHighlightedProjects: Array<ProjectEntity>;
   technologies: Array<TechnologyEntity>;
@@ -172,6 +173,17 @@ export type ProjectFieldsFragment = (
   )>> }
 );
 
+export type AllProjectsNotPaginatedQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllProjectsNotPaginatedQuery = (
+  { __typename?: 'Query' }
+  & { allProjectsNotPaginated: Array<(
+    { __typename?: 'ProjectEntity' }
+    & ProjectFieldsFragment
+  )> }
+);
+
 export type GetHighlightedProjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -276,6 +288,17 @@ export const ProjectFieldsFragmentDoc = gql`
   shortDescription
 }
     `;
+export const AllProjectsNotPaginatedDocument = gql`
+    query AllProjectsNotPaginated {
+  allProjectsNotPaginated {
+    ...ProjectFields
+  }
+}
+    ${ProjectFieldsFragmentDoc}`;
+
+export function useAllProjectsNotPaginatedQuery(options: Omit<Urql.UseQueryArgs<AllProjectsNotPaginatedQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<AllProjectsNotPaginatedQuery>({ query: AllProjectsNotPaginatedDocument, ...options });
+};
 export const GetHighlightedProjectsDocument = gql`
     query GetHighlightedProjects {
   getHighlightedProjects {

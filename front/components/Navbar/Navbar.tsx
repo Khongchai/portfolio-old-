@@ -20,7 +20,6 @@ import { ExtraElemContext } from "../../globalContexts/extraNavbarElem";
 
 export const Navbar: React.FC<{}> = () => {
   const defaultNavbarTopics: typeof navbarTopics = useContext(TopicsContext);
-
   return (
     <Flex
       id="navbar"
