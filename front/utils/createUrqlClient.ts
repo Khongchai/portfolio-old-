@@ -1,4 +1,4 @@
-import { createClient, fetchExchange, stringifyVariables } from "urql";
+import { createClient, fetchExchange } from "urql";
 
 export const client = createClient({
   url: "http://localhost:4000/graphql",

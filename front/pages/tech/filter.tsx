@@ -1,12 +1,12 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
+import { GetServerSideProps } from "next";
 import React, { useContext, useEffect, useState } from "react";
 import InfoDisplay from "../../components/filterComponents/InfoDisplay/index";
 import List from "../../components/filterComponents/List";
-import { ProjectEntity, useProjectsQuery } from "../../generated/graphql";
-import { GetServerSideProps } from "next";
-import setPadding from "../../utils/seFirstHeightToSecondPadding";
 import { SearchAndFindWrapper } from "../../components/filterComponents/SearchAndFilterBoxes";
+import { ProjectEntity, useProjectsQuery } from "../../generated/graphql";
 import { AddExtraElemContext } from "../../globalContexts/extraNavbarElem";
+import setPadding from "../../utils/setFirstHeightToSecondPadding";
 
 export const Filter: React.FC<{ selection: string | undefined }> = ({
   selection,
@@ -18,11 +18,9 @@ export const Filter: React.FC<{ selection: string | undefined }> = ({
   }>({
     search: undefined,
     sortBy: "Date",
-    order: "DSC",
+    order: "ASC",
   });
 
-  //TODO --> call setQueryVariables, passing in current search params to get a new query
-  //, and reset the skip and limit to 5 as well
   const [queryVariables, setQueryVariables] = useState({
     skip: 0,
     limit: 5,
@@ -32,6 +30,7 @@ export const Filter: React.FC<{ selection: string | undefined }> = ({
   const updateTopics = useContext(AddExtraElemContext);
   const [{ data }] = useProjectsQuery({ variables: queryVariables });
   const [details, setDetails] = useState<ProjectEntity | undefined>(undefined);
+
   useEffect(() => {
     const filterPage = document.getElementById("filter-page");
     const navbar = document.getElementById("navbar");
@@ -47,6 +46,14 @@ export const Filter: React.FC<{ selection: string | undefined }> = ({
     );
     return () => updateTopics(undefined);
   }, []);
+
+  useEffect(() => {
+    setQueryVariables({
+      skip: queryVariables.skip,
+      limit: queryVariables.limit,
+      ...searchParams,
+    });
+  }, [searchParams]);
 
   function paginateForward() {
     setQueryVariables({

@@ -4,9 +4,9 @@ import { ProjectEntity } from "../../../generated/graphql";
 import Links from "./ExternLinks";
 import ExpandButton from "./technologyExpandButton";
 
-const InfoDisplay: React.FC<{ details: ProjectEntity | undefined }> = ({
-  details,
-}) => {
+const InfoDisplay: React.FC<{
+  details: ProjectEntity | undefined;
+}> = ({ details }) => {
   return (
     <Grid
       gridTemplateColumns=" 0.7fr [left-padding-end] repeat(4, minmax(auto, 1fr)) [right-padding-end] 0.7fr "

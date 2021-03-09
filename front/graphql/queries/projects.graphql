@@ -1,5 +1,19 @@
-query Projects($skip: Float!, $limit: Float!) {
-  projects(input: { skip: $skip, limit: $limit }) {
+query Projects(
+  $skip: Int!
+  $limit: Int!
+  $sortBy: String
+  $order: String
+  $search: String
+) {
+  projects(
+    input: {
+      skip: $skip
+      limit: $limit
+      sortBy: $sortBy
+      order: $order
+      search: $search
+    }
+  ) {
     projects {
       ...ProjectFields
     }

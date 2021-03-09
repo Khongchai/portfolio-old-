@@ -1,5 +1,5 @@
-import { Box, Flex, Img, Stack, Text } from "@chakra-ui/react";
-import React, { useState } from "react";
+import { Box, Flex, Img, scaleFadeConfig, Stack, Text } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
 import { TechnologyEntity } from "../../../generated/graphql";
 
 const GLOBAL_TRANSITION = 3;
@@ -137,15 +137,53 @@ const ExpandedContent: React.FC<{
   techDetails: { backEnd, hostingServices, languages, frontEnd },
   expansionStat,
 }) => {
+  const [hoverComponentName, setHoverComponentName] = useState<
+    string | undefined
+  >();
+  useEffect(() => {
+    let logo: HTMLElement;
+    if (hoverComponentName) {
+      logo = document.getElementById(hoverComponentName)!;
+      const infoCard = document.getElementById("info-card")!;
+      const logoLeft = logo.getBoundingClientRect().left;
+      const logoTop = logo.getBoundingClientRect().top;
+      const logoHeight = parseInt(
+        window.getComputedStyle(logo).getPropertyValue("height")
+      );
+      const logoWidth = parseInt(
+        window.getComputedStyle(logo).getPropertyValue("width")
+      );
+      infoCard.style.left = `${logoLeft + logoWidth / 2}px`;
+      infoCard.style.top = `${logoTop - logoHeight - 30}px`;
+    }
+  }, [hoverComponentName]);
+
   return (
     <>
+      {hoverComponentName ? <InfoCard>{hoverComponentName}</InfoCard> : null}
       <Text pb={3}>Technologies used in this project.</Text>
       {expansionStat === "expanded" ? (
         <>
-          <Logo tech={frontEnd} desc="Front" />
-          <Logo tech={backEnd} desc="Back" />
-          <Logo tech={languages} desc="Language" />
-          <Logo tech={hostingServices} desc="Hosting" />
+          <Logo
+            setHoverComponentName={setHoverComponentName}
+            tech={frontEnd}
+            desc="Front"
+          />
+          <Logo
+            setHoverComponentName={setHoverComponentName}
+            tech={backEnd}
+            desc="Back"
+          />
+          <Logo
+            setHoverComponentName={setHoverComponentName}
+            tech={languages}
+            desc="Language"
+          />
+          <Logo
+            setHoverComponentName={setHoverComponentName}
+            tech={hostingServices}
+            desc="Hosting"
+          />
         </>
       ) : null}
     </>
@@ -153,9 +191,12 @@ const ExpandedContent: React.FC<{
 };
 
 const Logo: React.FC<{
+  setHoverComponentName: React.Dispatch<
+    React.SetStateAction<string | undefined>
+  >;
   tech: TechnologyEntity[] | null | undefined;
   desc: string;
-}> = ({ tech, desc }) => {
+}> = ({ tech, desc, setHoverComponentName }) => {
   return (
     <Flex flex="auto" align="center">
       <Text>{desc}: </Text>
@@ -173,14 +214,20 @@ const Logo: React.FC<{
           let src = `/logos/${nameNoSpace}.png`;
           let img = (
             <Img
-              onMouseOver={(e) => {
-                //show name, somehow
+              onMouseOver={(e: any) => {
+                setHoverComponentName(e.target.id);
+              }}
+              onMouseOut={() => {
+                setHoverComponentName(undefined);
+              }}
+              onClick={(e: any) => {
+                e.stopPropagation();
               }}
               onError={(e: any) => {
                 e.target.src = `/logos/${nameNoSpace}.svg`;
               }}
               _hover={{
-                borderRadius: "2px",
+                transform: "scale(1.3)",
               }}
               m="1rem"
               filter="drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))"
@@ -189,6 +236,8 @@ const Logo: React.FC<{
               h={["25px", null, "40px"]}
               src={src}
               alt={nameNoSpace}
+              id={nameOriginal}
+              transition=".2s"
             />
           );
 
@@ -196,6 +245,25 @@ const Logo: React.FC<{
         })}
       </Flex>
     </Flex>
+  );
+};
+
+const InfoCard: React.FC = ({ children }) => {
+  return (
+    <Box
+      zIndex="100"
+      backgroundColor="white"
+      p={3}
+      left="-1000px"
+      id="info-card"
+      position="fixed"
+      borderRadius={4}
+      boxSizing="content-box"
+      pointerEvents="none"
+      transform="translateX(-50%)"
+    >
+      {children}
+    </Box>
   );
 };
 

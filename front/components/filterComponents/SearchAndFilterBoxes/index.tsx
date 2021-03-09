@@ -1,5 +1,5 @@
 import { Flex, Input, Select, Text } from "@chakra-ui/react";
-import React, { useEffect } from "react";
+import React from "react";
 
 interface searchQueryParams {
   searchParams: {
@@ -22,10 +22,11 @@ export const SearchAndFindWrapper: React.FC<searchQueryParams> = ({
   setSearchParams,
   mode,
 }) => {
+  /* 
   useEffect(() => {
-    console.log(searchParams);
+    console.log("searchParams", searchParams);
   }, [searchParams]);
-
+*/
   function setSearch(value: string) {
     setSearchParams({
       order: searchParams.order,
@@ -34,7 +35,7 @@ export const SearchAndFindWrapper: React.FC<searchQueryParams> = ({
     });
   }
 
-  function setSort(value: string) {
+  function setOrder(value: string) {
     setSearchParams({
       order: value,
       sortBy: searchParams.sortBy,
@@ -42,7 +43,7 @@ export const SearchAndFindWrapper: React.FC<searchQueryParams> = ({
     });
   }
 
-  function setOrder(value: string) {
+  function setSort(value: string) {
     setSearchParams({
       order: searchParams.order,
       sortBy: value,
@@ -98,11 +99,13 @@ const SearchAndFind: React.FC<setFunctions> = ({
       }}
     >
       <Input
-        placeholder="Search by title"
+        placeholder={'Search: "Django" "React" etc.'}
         onChange={(e) => {
           setSearch(e.target.value);
         }}
         width={"20em"}
+        border="none"
+        bgColor="#636073"
       />
 
       {/* Determines the order in which the search queries gets returned. */}
@@ -111,6 +114,8 @@ const SearchAndFind: React.FC<setFunctions> = ({
         onChange={(e) => {
           setSort(e.target.value);
         }}
+        border="none"
+        bgColor="#636073"
         color="grey3"
         w="fit-content"
       >
@@ -123,6 +128,8 @@ const SearchAndFind: React.FC<setFunctions> = ({
         }}
         color="grey3"
         w="fit-content"
+        border="none"
+        bgColor="#636073"
       >
         <option value="ASC">ASC</option>
         <option value="DESC">DESC</option>

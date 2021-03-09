@@ -6,6 +6,7 @@ import {
   ProjectEntity,
   useGetSingleProjectByTitleQuery,
 } from "../../../generated/graphql";
+import { SearchAndFindWrapper } from "../SearchAndFilterBoxes";
 import HighlightList from "./highlightList";
 import ProjList from "./projList";
 
