@@ -1,17 +1,23 @@
 import { Flex, Input, Select, Text } from "@chakra-ui/react";
-import React from "react";
+import React, { useState } from "react";
+
+type orderType = "ASC" | "DESC" | undefined;
+type sortType = "Title" | "Date" | undefined;
+type fieldType = "Title" | "Technologies" | undefined;
 
 interface searchQueryParams {
   searchParams: {
     search: string | undefined;
-    sortBy: string | undefined;
-    order: string | undefined;
+    sortBy: sortType;
+    order: orderType;
+    field: fieldType;
   };
   setSearchParams: React.Dispatch<
     React.SetStateAction<{
       search: string | undefined;
-      sortBy: string | undefined;
-      order: string | undefined;
+      sortBy: sortType;
+      order: orderType;
+      field: fieldType;
     }>
   >;
   mode: "desktop" | "mobile";
@@ -22,32 +28,39 @@ export const SearchAndFindWrapper: React.FC<searchQueryParams> = ({
   setSearchParams,
   mode,
 }) => {
-  /* 
-  useEffect(() => {
-    console.log("searchParams", searchParams);
-  }, [searchParams]);
-*/
   function setSearch(value: string) {
     setSearchParams({
       order: searchParams.order,
       sortBy: searchParams.sortBy,
       search: value,
+      field: searchParams.field,
     });
   }
 
-  function setOrder(value: string) {
+  function setOrder(value: orderType) {
     setSearchParams({
       order: value,
       sortBy: searchParams.sortBy,
       search: searchParams.search,
+      field: searchParams.field,
     });
   }
 
-  function setSort(value: string) {
+  function setSort(value: sortType) {
     setSearchParams({
       order: searchParams.order,
       sortBy: value,
       search: searchParams.search,
+      field: searchParams.field,
+    });
+  }
+
+  function setField(value: fieldType) {
+    setSearchParams({
+      order: searchParams.order,
+      sortBy: searchParams.sortBy,
+      search: searchParams.search,
+      field: value,
     });
   }
 
@@ -58,12 +71,14 @@ export const SearchAndFindWrapper: React.FC<searchQueryParams> = ({
           setSearch={setSearch}
           setSort={setSort}
           setOrder={setOrder}
+          setField={setField}
         />
       ) : (
         <SearchAndFindForMobile
           setSearch={setSearch}
           setSort={setSort}
           setOrder={setOrder}
+          setField={setField}
         />
       )}
     </>
@@ -72,14 +87,16 @@ export const SearchAndFindWrapper: React.FC<searchQueryParams> = ({
 
 interface setFunctions {
   setSearch: (value: string) => void;
-  setSort: (value: string) => void;
-  setOrder: (value: string) => void;
+  setSort: (value: sortType) => void;
+  setOrder: (value: orderType) => void;
+  setField: (value: fieldType) => void;
 }
 
 const SearchAndFind: React.FC<setFunctions> = ({
   setOrder,
   setSort,
   setSearch,
+  setField,
 }) => {
   return (
     <Flex
@@ -98,6 +115,18 @@ const SearchAndFind: React.FC<setFunctions> = ({
         },
       }}
     >
+      <Select
+        onChange={(e) => {
+          setField(e.target.value as any);
+        }}
+        border="none"
+        bgColor="#636073"
+        color="grey3"
+        w="fit-content"
+      >
+        <option value="Title">Title</option>
+        <option value="Technologies">Technology</option>
+      </Select>
       <Input
         placeholder="Search by technologies name"
         onChange={(e) => {
@@ -112,7 +141,7 @@ const SearchAndFind: React.FC<setFunctions> = ({
       <Text>Sort</Text>
       <Select
         onChange={(e) => {
-          setSort(e.target.value);
+          setSort(e.target.value as any);
         }}
         border="none"
         bgColor="#636073"
@@ -124,7 +153,7 @@ const SearchAndFind: React.FC<setFunctions> = ({
       </Select>
       <Select
         onChange={(e) => {
-          setOrder(e.target.value);
+          setOrder(e.target.value as any);
         }}
         color="grey3"
         w="fit-content"
@@ -142,6 +171,7 @@ const SearchAndFindForMobile: React.FC<setFunctions> = ({
   setOrder,
   setSearch,
   setSort,
+  setField,
 }) => {
   return (
     <Flex
@@ -158,19 +188,29 @@ const SearchAndFindForMobile: React.FC<setFunctions> = ({
         },
       }}
     >
+      <Select
+        onChange={(e) => {
+          setField(e.target.value as any);
+        }}
+        color="grey3"
+        w="fit-content"
+      >
+        <option value="Title">Title</option>
+        <option value="Technologies">Technology</option>
+      </Select>
       <Input
         onChange={(e) => {
           setSearch(e.target.value);
         }}
         placeholder="Search by title"
         width={"100%"}
-      ></Input>
+      />
       {/* Determines the order in which the search queries gets returned. */}
       <Text>Sort</Text>
       <Select
         width={"100%"}
         onChange={(e) => {
-          setSort(e.target.value);
+          setSort(e.target.value as any);
         }}
         color="grey3"
         w="fit-content"
@@ -181,7 +221,7 @@ const SearchAndFindForMobile: React.FC<setFunctions> = ({
       <Select
         width={"100%"}
         onChange={(e) => {
-          setOrder(e.target.value);
+          setOrder(e.target.value as any);
         }}
         color="grey3"
         w="fit-content"

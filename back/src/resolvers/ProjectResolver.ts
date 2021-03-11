@@ -18,14 +18,14 @@ import {
 } from "../inputAndObjectTypes/ProjectResolver";
 import { Context } from "../types";
 import { getTechListForEachProp } from "../utils/getTechnologiesByTitle";
-import { Like } from "typeorm";
+import { getConnection, Like, SimpleConsoleLogger } from "typeorm";
 
 @InputType()
 class PaginatedProjectsInput {
-  @Field()
+  @Field(() => Int)
   limit: number;
 
-  @Field()
+  @Field(() => Int)
   skip: number;
 
   @Field(() => String, { nullable: true })
@@ -35,7 +35,10 @@ class PaginatedProjectsInput {
   order?: "ASC" | "DESC";
 
   @Field({ nullable: true })
-  sort?: "Title" | "Date";
+  sortBy?: "Title" | "Date";
+
+  @Field({ nullable: true })
+  field?: "Projects" | "Technologies";
 }
 
 @Resolver()
@@ -44,36 +47,67 @@ export class ProjectsResolver {
   async projects(
     @Arg("input") input: PaginatedProjectsInput
   ): Promise<PaginatedProjects> {
-    const { limit, skip, order, search, sort } = input;
+    const { limit, skip, order, search, sortBy, field } = input;
+
+    console.log(input);
+
     const realLimit = Math.min(5, limit);
     const realLimitPlusOne = realLimit + 1;
     const searchCap = search
       ? `%${search.charAt(0).toUpperCase() + search.slice(1)}%`
       : "%";
 
-    //change to query builder and do like
-    const projects = await ProjectEntity.find({
-      where: { title: Like(searchCap) },
-      relations: [
-        "frontEndTechnologies",
-        "backEndTechnologies",
-        "languages",
-        "hostingServices",
-      ],
-      take: realLimitPlusOne,
-      skip,
-      //if not equal to date or not provided
-      order: sort === "Date" ? { startDate: order } : { title: order },
-    });
+    let returnedEntity: any;
+    returnedEntity = getConnection()
+      .createQueryBuilder()
+      .select("project")
+      .from(ProjectEntity, "project")
+      .innerJoinAndSelect(
+        "project.frontEndTechnologies",
+        "frontEndTechnologies"
+      )
+      .take(realLimitPlusOne)
+      .skip(skip)
+      .innerJoinAndSelect("project.backEndTechnologies", "backEndTechnologies")
+      .innerJoinAndSelect("project.languages", "languages")
+      .innerJoinAndSelect("project.hostingServices", "hostingServices");
+    if (!field || field !== "Technologies") {
+      returnedEntity = returnedEntity.where("project.title like :searchCap", {
+        searchCap,
+      });
+    } else {
+      returnedEntity = returnedEntity.where(
+        "backEndTechnologies.title like :searchCap OR frontEndTechnologies.title like :searchCap OR languages.title like :searchCap OR hostingServices.title like :searchCap",
+        {
+          searchCap,
+        }
+      );
+    }
+    if (sortBy === "Date") {
+      returnedEntity.orderBy("project.startDate", order);
+    } else {
+      returnedEntity.orderBy("project.title", order);
+    }
+    returnedEntity = await returnedEntity.getMany();
 
     const isFirstQuery = skip === 0;
-    const isLastQuery = projects.length < realLimitPlusOne;
+    const isLastQuery = returnedEntity.length < realLimitPlusOne;
 
-    return {
-      projects: projects.slice(0, realLimit),
+    const returnProjects = {
+      projects: returnedEntity.slice(0, realLimit),
       isFirstQuery,
       isLastQuery,
     };
+
+    //console.log(returnProjects);
+
+    return returnProjects;
+  }
+
+  @Query(() => [ProjectEntity])
+  async allProjectsNotPaginated(): Promise<ProjectEntity[]> {
+    const allProjects = await ProjectEntity.find({});
+    return allProjects;
   }
 
   @Query(() => ProjResponse)

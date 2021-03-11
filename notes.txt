@@ -1,19 +1,12 @@
-Finish modelling database relationship: add field for link to tech's website, field for logo (link to the logo), and github field for project
 
 TODO: 
 add auth system so that only superuser can edit page // technologies should be able to add projects as well // add fields for github link, website link, and short description
  add more data to backend so that you can begin implementing the relay pagination.
 
-Change resolvers to work with the new datashape
 
 CRUD for both project and technology resolvers.
 
-
-Try adding projects, see if it works, then add website link then work on the look of the filter page;
-
-
 Come up with a better error return for project creation//updation error;
-
 
 Once the filter page is finished, try adding subscriptions to it: https://formidable.com/open-source/urql/docs/advanced/subscriptions/
 
@@ -22,8 +15,21 @@ change every logo to png/ on hover, show a bigger version, some might be too har
 use the trick from the card thing to reduce the opacity of all the things that are not hovered
 in the projects bar.
 
-TODO: paginate forward and backward instead, and put back the hasmore field
-
 why does search value reset when navbar is collapsed and reopened?
 
-call setQueryVariables
+in "See all" mode, make it so that it is possible to look up by name as well.
+the sorting by date and asc should all be moved to "see all" page only
+
+Timeline:
+
+
+TODO => set search by technologies = the value of field
+
+
+
+
+Finalizing:
+
+    For next database mockup, make sure all technologies are stored as lower case letters so that you can look up name of technologies leasily. 
+    For now, the first letter is capitalized.
+

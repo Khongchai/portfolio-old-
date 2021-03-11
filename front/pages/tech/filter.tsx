@@ -13,12 +13,15 @@ export const Filter: React.FC<{ selection: string | undefined }> = ({
 }) => {
   const [searchParams, setSearchParams] = useState<{
     search: string | undefined;
-    sortBy: string | undefined;
-    order: string | undefined;
+    sortBy: "Title" | "Date" | undefined;
+    order: "ASC" | "DESC" | undefined;
+    //"Projects" = search by projects, "Technologies" = search by Technologies used
+    field: "Title" | "Technologies" | undefined;
   }>({
     search: undefined,
     sortBy: "Date",
     order: "ASC",
+    field: "Title",
   });
 
   const [queryVariables, setQueryVariables] = useState({
@@ -37,6 +40,9 @@ export const Filter: React.FC<{ selection: string | undefined }> = ({
     if (filterPage && navbar) {
       setPadding(navbar, filterPage, 2);
     }
+  }, []);
+
+  useEffect(() => {
     updateTopics(
       <SearchAndFindWrapper
         mode="mobile"
@@ -45,7 +51,7 @@ export const Filter: React.FC<{ selection: string | undefined }> = ({
       />
     );
     return () => updateTopics(undefined);
-  }, []);
+  }, [searchParams]);
 
   useEffect(() => {
     setQueryVariables({
@@ -62,6 +68,7 @@ export const Filter: React.FC<{ selection: string | undefined }> = ({
       order: queryVariables.order,
       sortBy: queryVariables.sortBy,
       search: queryVariables.search,
+      field: queryVariables.field,
     });
   }
 
@@ -72,6 +79,7 @@ export const Filter: React.FC<{ selection: string | undefined }> = ({
       order: queryVariables.order,
       sortBy: queryVariables.sortBy,
       search: queryVariables.search,
+      field: queryVariables.field,
     });
   }
 

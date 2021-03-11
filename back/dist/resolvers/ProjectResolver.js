@@ -30,11 +30,11 @@ const typeorm_1 = require("typeorm");
 let PaginatedProjectsInput = class PaginatedProjectsInput {
 };
 __decorate([
-    type_graphql_1.Field(),
+    type_graphql_1.Field(() => type_graphql_1.Int),
     __metadata("design:type", Number)
 ], PaginatedProjectsInput.prototype, "limit", void 0);
 __decorate([
-    type_graphql_1.Field(),
+    type_graphql_1.Field(() => type_graphql_1.Int),
     __metadata("design:type", Number)
 ], PaginatedProjectsInput.prototype, "skip", void 0);
 __decorate([
@@ -48,38 +48,66 @@ __decorate([
 __decorate([
     type_graphql_1.Field({ nullable: true }),
     __metadata("design:type", String)
-], PaginatedProjectsInput.prototype, "sort", void 0);
+], PaginatedProjectsInput.prototype, "sortBy", void 0);
+__decorate([
+    type_graphql_1.Field({ nullable: true }),
+    __metadata("design:type", String)
+], PaginatedProjectsInput.prototype, "field", void 0);
 PaginatedProjectsInput = __decorate([
     type_graphql_1.InputType()
 ], PaginatedProjectsInput);
 let ProjectsResolver = class ProjectsResolver {
     projects(input) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { limit, skip, order, search, sort } = input;
+            const { limit, skip, order, search, sortBy, field } = input;
+            console.log(input);
             const realLimit = Math.min(5, limit);
             const realLimitPlusOne = realLimit + 1;
             const searchCap = search
                 ? `%${search.charAt(0).toUpperCase() + search.slice(1)}%`
                 : "%";
-            const projects = yield ProjectEntity_1.ProjectEntity.find({
-                where: { title: typeorm_1.Like(searchCap) },
-                relations: [
-                    "frontEndTechnologies",
-                    "backEndTechnologies",
-                    "languages",
-                    "hostingServices",
-                ],
-                take: realLimitPlusOne,
-                skip,
-                order: sort === "Date" ? { startDate: order } : { title: order },
-            });
+            let returnedEntity;
+            returnedEntity = typeorm_1.getConnection()
+                .createQueryBuilder()
+                .select("project")
+                .from(ProjectEntity_1.ProjectEntity, "project")
+                .innerJoinAndSelect("project.frontEndTechnologies", "frontEndTechnologies")
+                .take(realLimitPlusOne)
+                .skip(skip)
+                .innerJoinAndSelect("project.backEndTechnologies", "backEndTechnologies")
+                .innerJoinAndSelect("project.languages", "languages")
+                .innerJoinAndSelect("project.hostingServices", "hostingServices");
+            if (!field || field !== "Technologies") {
+                returnedEntity = returnedEntity.where("project.title like :searchCap", {
+                    searchCap,
+                });
+            }
+            else {
+                returnedEntity = returnedEntity.where("backEndTechnologies.title like :searchCap OR frontEndTechnologies.title like :searchCap OR languages.title like :searchCap OR hostingServices.title like :searchCap", {
+                    searchCap,
+                });
+            }
+            if (sortBy === "Date") {
+                returnedEntity.orderBy("project.startDate", order);
+            }
+            else {
+                returnedEntity.orderBy("project.title", order);
+            }
+            returnedEntity = yield returnedEntity.getMany();
             const isFirstQuery = skip === 0;
-            const isLastQuery = projects.length < realLimitPlusOne;
-            return {
-                projects: projects.slice(0, realLimit),
+            const isLastQuery = returnedEntity.length < realLimitPlusOne;
+            const returnProjects = {
+                projects: returnedEntity.slice(0, realLimit),
                 isFirstQuery,
                 isLastQuery,
             };
+            return returnProjects;
+        });
+    }
+    allProjectsNotPaginated() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const allProjects = yield ProjectEntity_1.ProjectEntity.find({});
+            return allProjects;
         });
     }
     getSingleProjectByTitle(title) {
@@ -247,6 +275,12 @@ __decorate([
     __metadata("design:paramtypes", [PaginatedProjectsInput]),
     __metadata("design:returntype", Promise)
 ], ProjectsResolver.prototype, "projects", null);
+__decorate([
+    type_graphql_1.Query(() => [ProjectEntity_1.ProjectEntity]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], ProjectsResolver.prototype, "allProjectsNotPaginated", null);
 __decorate([
     type_graphql_1.Query(() => ProjectResolver_1.ProjResponse),
     __param(0, type_graphql_1.Arg("title", () => String)),
