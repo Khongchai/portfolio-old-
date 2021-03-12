@@ -37,6 +37,7 @@ const List: React.FC<ListProps> = ({
 
   const router = useRouter();
 
+  //refactor to multiple useEffect
   useEffect(() => {
     if (!runOnceAlready) {
       if (selection) {
@@ -88,6 +89,7 @@ const List: React.FC<ListProps> = ({
         paginateForward={paginateForward}
         paginateBackward={paginateBackward}
         data={data}
+        fetching={fetching}
         setDetails={setDetails}
       />
     </Grid>

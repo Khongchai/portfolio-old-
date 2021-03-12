@@ -38,7 +38,7 @@ class PaginatedProjectsInput {
   sortBy?: "Title" | "Date";
 
   @Field({ nullable: true })
-  field?: "Projects" | "Technologies";
+  field?: "Title" | "Technology";
 }
 
 @Resolver()
@@ -48,8 +48,6 @@ export class ProjectsResolver {
     @Arg("input") input: PaginatedProjectsInput
   ): Promise<PaginatedProjects> {
     const { limit, skip, order, search, sortBy, field } = input;
-
-    console.log(input);
 
     const realLimit = Math.min(5, limit);
     const realLimitPlusOne = realLimit + 1;
@@ -71,7 +69,7 @@ export class ProjectsResolver {
       .innerJoinAndSelect("project.backEndTechnologies", "backEndTechnologies")
       .innerJoinAndSelect("project.languages", "languages")
       .innerJoinAndSelect("project.hostingServices", "hostingServices");
-    if (!field || field !== "Technologies") {
+    if (!field || field !== "Technology") {
       returnedEntity = returnedEntity.where("project.title like :searchCap", {
         searchCap,
       });

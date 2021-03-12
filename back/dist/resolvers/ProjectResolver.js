@@ -60,7 +60,6 @@ let ProjectsResolver = class ProjectsResolver {
     projects(input) {
         return __awaiter(this, void 0, void 0, function* () {
             const { limit, skip, order, search, sortBy, field } = input;
-            console.log(input);
             const realLimit = Math.min(5, limit);
             const realLimitPlusOne = realLimit + 1;
             const searchCap = search
@@ -77,7 +76,7 @@ let ProjectsResolver = class ProjectsResolver {
                 .innerJoinAndSelect("project.backEndTechnologies", "backEndTechnologies")
                 .innerJoinAndSelect("project.languages", "languages")
                 .innerJoinAndSelect("project.hostingServices", "hostingServices");
-            if (!field || field !== "Technologies") {
+            if (!field || field !== "Technology") {
                 returnedEntity = returnedEntity.where("project.title like :searchCap", {
                     searchCap,
                 });

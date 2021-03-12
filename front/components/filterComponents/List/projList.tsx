@@ -1,5 +1,5 @@
-import { Box, Flex, Heading, Img, Text } from "@chakra-ui/react";
-import React from "react";
+import { Box, Flex, Grid, Heading, Img, Text } from "@chakra-ui/react";
+import React, { useState } from "react";
 import { ProjectEntity, ProjectsQuery } from "../../../generated/graphql";
 
 interface ProjListProps {
@@ -7,95 +7,116 @@ interface ProjListProps {
   setDetails: React.Dispatch<React.SetStateAction<ProjectEntity | undefined>>;
   paginateForward: () => void;
   paginateBackward: () => void;
+  fetching: Boolean;
 }
 
 export const ProjList: React.FC<ProjListProps> = ({
   data,
+  fetching,
   setDetails,
   paginateForward,
   paginateBackward,
 }) => {
+  const [enableSeeAll, setEnableSeeAll] = useState(false);
   return (
-    <Flex
-      gridColumn="left-padding-end / right-padding-end"
-      bg="linear-gradient(102.77deg, #423E55 -2.52%, rgba(74, 70, 94, 0.691587) 38.75%, rgba(92, 88, 113, 0) 100%, rgba(68, 64, 86, 0.627352) 100%), #636073;"
-      id="projects-view"
-      boxShadow="0px 8px 20px rgba(0, 0, 0, 0.1)"
-      borderRadius="22px"
-      flexDir="column"
-      pos="relative"
-      gridRow="3"
-    >
-      <Flex placeItems="center">
-        <Heading size="lg" mb={2}>
-          Projects
-        </Heading>
-        <Text _hover={{ cursor: "pointer" }} color="mainOrange" ml="auto">
-          See all
-        </Text>
-      </Flex>
+    <>
       <Flex
-        overflowX="scroll"
-        id="projects-container"
-        width="100%"
-        h="100%"
-        _hover={{}}
-        css={{
-          "::-webkit-scrollbar": {
-            width: "10px",
-            height: "10px",
-          },
-          "::-webkit-scrollbar-thumb": {
-            background: "#423F56",
-            opacity: "0.4",
-            borderRadius: "10px",
-          },
-        }}
+        gridColumn="left-padding-end / right-padding-end"
+        bg="linear-gradient(102.77deg, #423E55 -2.52%, rgba(74, 70, 94, 0.691587) 38.75%, rgba(92, 88, 113, 0) 100%, rgba(68, 64, 86, 0.627352) 100%), #636073;"
+        id="projects-view"
+        boxShadow="0px 8px 20px rgba(0, 0, 0, 0.1)"
+        borderRadius="22px"
+        flexDir="column"
+        pos="relative"
+        gridRow="3"
       >
-        {data?.projects.projects.map((proj) => (
-          <Flex
-            cursor="pointer"
-            id={proj.title}
-            class="projects"
-            key={proj.id}
-            minW="220px"
-            minH="220px"
-            pb={2}
+        <Flex placeItems="center">
+          <Heading size="lg" mb={2}>
+            Projects
+          </Heading>
+          <Text
+            _hover={{ cursor: "pointer" }}
             onClick={() => {
-              const project = proj as ProjectEntity;
-              localStorage.setItem("savedSelection", JSON.stringify(project));
-              setDetails(project);
+              setEnableSeeAll(!enableSeeAll);
             }}
-            className="project-container"
-            flexDir="column"
-            placeItems="center"
-            css={{
-              "* + *": {
-                marginTop: "0.5em",
-              },
-            }}
+            color="mainOrange"
+            ml="auto"
           >
-            <Box
-              w="200px"
-              flex="0.8"
-              margin={2}
-              bgColor="mainGrey"
-              borderRadius="22px"
-            />
-            <Heading as="h2" size="md" flex="0.1">
-              {proj.title}
-            </Heading>
-            <Text flex="0.1">{proj.shortDescription}</Text>
-          </Flex>
-        ))}
+            See all
+          </Text>
+        </Flex>
+        <Flex
+          overflowX="scroll"
+          id="projects-container"
+          width="100%"
+          h="100%"
+          _hover={{}}
+          css={{
+            "::-webkit-scrollbar": {
+              width: "10px",
+              height: "10px",
+            },
+            "::-webkit-scrollbar-thumb": {
+              background: "#423F56",
+              opacity: "0.4",
+              borderRadius: "10px",
+            },
+          }}
+        >
+          {!data || fetching ? (
+            <Grid w="100%" h="100%" placeItems="center">
+              Loading...
+            </Grid>
+          ) : (
+            data?.projects.projects.map((proj) => (
+              <Flex
+                cursor="pointer"
+                id={proj.title}
+                class="projects"
+                key={proj.id}
+                minW="220px"
+                minH="220px"
+                pb={2}
+                onClick={() => {
+                  const project = proj as ProjectEntity;
+                  localStorage.setItem(
+                    "savedSelection",
+                    JSON.stringify(project)
+                  );
+                  setDetails(project);
+                }}
+                className="project-container"
+                flexDir="column"
+                placeItems="center"
+                css={{
+                  "* + *": {
+                    marginTop: "0.5em",
+                  },
+                }}
+              >
+                <Box
+                  w="200px"
+                  flex="0.8"
+                  margin={2}
+                  bgColor="mainGrey"
+                  borderRadius="22px"
+                />
+                <Heading as="h2" size="md" flex="0.1">
+                  {proj.title}
+                </Heading>
+                <Text flex="0.1">{proj.shortDescription}</Text>
+              </Flex>
+            ))
+          )}
+        </Flex>
+        {data?.projects.isFirstQuery ? null : (
+          <PaginateBackward paginateBackward={paginateBackward} />
+        )}
+        {data?.projects.isLastQuery ? null : (
+          <PaginateForward paginateForward={paginateForward} />
+        )}
       </Flex>
-      {data?.projects.isFirstQuery ? null : (
-        <PaginateBackward paginateBackward={paginateBackward} />
-      )}
-      {data?.projects.isLastQuery ? null : (
-        <PaginateForward paginateForward={paginateForward} />
-      )}
-    </Flex>
+    </>
   );
 };
 

@@ -16,7 +16,7 @@ export const Filter: React.FC<{ selection: string | undefined }> = ({
     sortBy: "Title" | "Date" | undefined;
     order: "ASC" | "DESC" | undefined;
     //"Projects" = search by projects, "Technologies" = search by Technologies used
-    field: "Title" | "Technologies" | undefined;
+    field: "Title" | "Technology" | undefined;
   }>({
     search: undefined,
     sortBy: "Date",
@@ -30,6 +30,7 @@ export const Filter: React.FC<{ selection: string | undefined }> = ({
     //initial value is the searchParams' initial value
     ...searchParams,
   });
+
   const updateTopics = useContext(AddExtraElemContext);
   const [{ data }] = useProjectsQuery({ variables: queryVariables });
   const [details, setDetails] = useState<ProjectEntity | undefined>(undefined);
@@ -108,19 +109,6 @@ export const Filter: React.FC<{ selection: string | undefined }> = ({
     </Flex>
   );
 };
-/*
-pagination
-      <Box
-        onClick={() => {
-          setVariables({
-            limit: variables.limit,
-            skip: variables.skip + variables.limit,
-          });
-        }}
-      >
-        load more
-      </Box>
-*/
 
 export default Filter;
 

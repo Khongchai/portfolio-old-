@@ -1,17 +1,12 @@
 import { Flex, Input, Select, Text } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React from "react";
 
 type orderType = "ASC" | "DESC" | undefined;
 type sortType = "Title" | "Date" | undefined;
-type fieldType = "Title" | "Technologies" | undefined;
+type fieldType = "Title" | "Technology" | undefined;
 
 interface searchQueryParams {
-  searchParams: {
-    search: string | undefined;
-    sortBy: sortType;
-    order: orderType;
-    field: fieldType;
-  };
+  searchParams: searchParams;
   setSearchParams: React.Dispatch<
     React.SetStateAction<{
       search: string | undefined;
@@ -21,6 +16,12 @@ interface searchQueryParams {
     }>
   >;
   mode: "desktop" | "mobile";
+}
+interface searchParams {
+  search: string | undefined;
+  sortBy: sortType;
+  order: orderType;
+  field: fieldType;
 }
 
 export const SearchAndFindWrapper: React.FC<searchQueryParams> = ({
@@ -72,6 +73,7 @@ export const SearchAndFindWrapper: React.FC<searchQueryParams> = ({
           setSort={setSort}
           setOrder={setOrder}
           setField={setField}
+          searchParams={searchParams}
         />
       ) : (
         <SearchAndFindForMobile
@@ -79,6 +81,7 @@ export const SearchAndFindWrapper: React.FC<searchQueryParams> = ({
           setSort={setSort}
           setOrder={setOrder}
           setField={setField}
+          searchParams={searchParams}
         />
       )}
     </>
@@ -90,6 +93,7 @@ interface setFunctions {
   setSort: (value: sortType) => void;
   setOrder: (value: orderType) => void;
   setField: (value: fieldType) => void;
+  searchParams: searchParams;
 }
 
 const SearchAndFind: React.FC<setFunctions> = ({
@@ -97,6 +101,7 @@ const SearchAndFind: React.FC<setFunctions> = ({
   setSort,
   setSearch,
   setField,
+  searchParams,
 }) => {
   return (
     <Flex
@@ -125,10 +130,10 @@ const SearchAndFind: React.FC<setFunctions> = ({
         w="fit-content"
       >
         <option value="Title">Title</option>
-        <option value="Technologies">Technology</option>
+        <option value="Technology">Technology</option>
       </Select>
       <Input
-        placeholder="Search by technologies name"
+        placeholder={`Search ${searchParams.field?.toLowerCase()}`}
         onChange={(e) => {
           setSearch(e.target.value);
         }}
@@ -172,6 +177,7 @@ const SearchAndFindForMobile: React.FC<setFunctions> = ({
   setSearch,
   setSort,
   setField,
+  searchParams,
 }) => {
   return (
     <Flex
@@ -196,13 +202,13 @@ const SearchAndFindForMobile: React.FC<setFunctions> = ({
         w="fit-content"
       >
         <option value="Title">Title</option>
-        <option value="Technologies">Technology</option>
+        <option value="Technology">Technology</option>
       </Select>
       <Input
         onChange={(e) => {
           setSearch(e.target.value);
         }}
-        placeholder="Search by title"
+        placeholder={`Search ${searchParams.field?.toLowerCase()}`}
         width={"100%"}
       />
       {/* Determines the order in which the search queries gets returned. */}
