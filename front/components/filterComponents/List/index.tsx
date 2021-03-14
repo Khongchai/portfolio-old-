@@ -1,12 +1,11 @@
-import { Flex, Grid } from "@chakra-ui/react";
+import { Grid } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import {
-  ProjectsQuery,
   ProjectEntity,
+  ProjectsQuery,
   useGetSingleProjectByTitleQuery,
 } from "../../../generated/graphql";
-import { SearchAndFindWrapper } from "../SearchAndFilterBoxes";
 import HighlightList from "./highlightList";
 import ProjList from "./projList";
 
@@ -17,9 +16,11 @@ interface ListProps {
   details: ProjectEntity | undefined;
   paginateForward: () => void;
   paginateBackward: () => void;
+  searchFetching: Boolean;
 }
 
 const List: React.FC<ListProps> = ({
+  searchFetching,
   data,
   setDetails,
   selection,
@@ -86,10 +87,10 @@ const List: React.FC<ListProps> = ({
       <HighlightList setDetails={setDetails} />
 
       <ProjList
+        searchFetching={searchFetching}
         paginateForward={paginateForward}
         paginateBackward={paginateBackward}
         data={data}
-        fetching={fetching}
         setDetails={setDetails}
       />
     </Grid>

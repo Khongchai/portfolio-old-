@@ -32,7 +32,7 @@ export const Filter: React.FC<{ selection: string | undefined }> = ({
   });
 
   const updateTopics = useContext(AddExtraElemContext);
-  const [{ data }] = useProjectsQuery({ variables: queryVariables });
+  let [{ data, fetching }] = useProjectsQuery({ variables: queryVariables });
   const [details, setDetails] = useState<ProjectEntity | undefined>(undefined);
 
   useEffect(() => {
@@ -55,11 +55,13 @@ export const Filter: React.FC<{ selection: string | undefined }> = ({
   }, [searchParams]);
 
   useEffect(() => {
-    setQueryVariables({
-      skip: queryVariables.skip,
-      limit: queryVariables.limit,
-      ...searchParams,
-    });
+    {
+      setQueryVariables({
+        skip: queryVariables.skip,
+        limit: queryVariables.limit,
+        ...searchParams,
+      });
+    }
   }, [searchParams]);
 
   function paginateForward() {
@@ -99,6 +101,7 @@ export const Filter: React.FC<{ selection: string | undefined }> = ({
       />
       <InfoDisplay details={details} />
       <List
+        searchFetching={fetching}
         data={data}
         details={details}
         selection={selection}

@@ -7,12 +7,12 @@ interface ProjListProps {
   setDetails: React.Dispatch<React.SetStateAction<ProjectEntity | undefined>>;
   paginateForward: () => void;
   paginateBackward: () => void;
-  fetching: Boolean;
+  searchFetching: Boolean;
 }
 
 export const ProjList: React.FC<ProjListProps> = ({
+  searchFetching,
   data,
-  fetching,
   setDetails,
   paginateForward,
   paginateBackward,
@@ -63,7 +63,7 @@ export const ProjList: React.FC<ProjListProps> = ({
             },
           }}
         >
-          {!data || fetching ? (
+          {searchFetching ? (
             <Grid w="100%" h="100%" placeItems="center">
               Loading...
             </Grid>

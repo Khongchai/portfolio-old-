@@ -1,16 +1,11 @@
 
+Filter page-----------------------------------------------------------------------------------------
 TODO: 
 add auth system so that only superuser can edit page // technologies should be able to add projects as well // add fields for github link, website link, and short description
  add more data to backend so that you can begin implementing the relay pagination.
 
 
 CRUD for both project and technology resolvers.
-
-Come up with a better error return for project creation//updation error;
-
-Once the filter page is finished, try adding subscriptions to it: https://formidable.com/open-source/urql/docs/advanced/subscriptions/
-
-change every logo to png/ on hover, show a bigger version, some might be too hard to read what it is.
 
 use the trick from the card thing to reduce the opacity of all the things that are not hovered
 in the projects bar.
@@ -33,3 +28,6 @@ Finalizing:
     For next database mockup, make sure all technologies are stored as lower case letters so that you can look up name of technologies leasily. 
     For now, the first letter is capitalized.
 
+Home/timeline page --------------------------------------------------------------------------
+
+clear projects and technology, create new projects with varying dates and make sure that all technologies names are stored in the database in lowercase
