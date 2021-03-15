@@ -23,8 +23,8 @@ export class ProjectCreationInput {
   @Field()
   startDate!: string;
 
-  @Field()
-  endDate!: string;
+  @Field({ nullable: true })
+  endDate: string;
 
   @Field()
   title!: string;

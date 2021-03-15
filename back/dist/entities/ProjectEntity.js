@@ -71,8 +71,8 @@ __decorate([
     __metadata("design:type", String)
 ], ProjectEntity.prototype, "startDate", void 0);
 __decorate([
-    type_graphql_1.Field(),
-    typeorm_1.Column(),
+    type_graphql_1.Field({ nullable: true }),
+    typeorm_1.Column({ nullable: true }),
     __metadata("design:type", String)
 ], ProjectEntity.prototype, "endDate", void 0);
 __decorate([

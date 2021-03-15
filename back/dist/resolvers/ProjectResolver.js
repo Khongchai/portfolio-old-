@@ -62,28 +62,26 @@ let ProjectsResolver = class ProjectsResolver {
             const { limit, skip, order, search, sortBy, field } = input;
             const realLimit = Math.min(5, limit);
             const realLimitPlusOne = realLimit + 1;
-            const searchCap = search
-                ? `%${search.charAt(0).toUpperCase() + search.slice(1)}%`
-                : "%";
+            const searchLowerCase = search ? `%${search.toLowerCase()}%` : "%";
             let returnedEntity;
             returnedEntity = typeorm_1.getConnection()
                 .createQueryBuilder()
                 .select("project")
                 .from(ProjectEntity_1.ProjectEntity, "project")
-                .innerJoinAndSelect("project.frontEndTechnologies", "frontEndTechnologies")
+                .leftJoinAndSelect("project.frontEndTechnologies", "frontEndTechnologies")
+                .leftJoinAndSelect("project.backEndTechnologies", "backEndTechnologies")
+                .leftJoinAndSelect("project.languages", "languages")
+                .leftJoinAndSelect("project.hostingServices", "hostingServices")
                 .take(realLimitPlusOne)
-                .skip(skip)
-                .innerJoinAndSelect("project.backEndTechnologies", "backEndTechnologies")
-                .innerJoinAndSelect("project.languages", "languages")
-                .innerJoinAndSelect("project.hostingServices", "hostingServices");
+                .skip(skip);
             if (!field || field !== "Technology") {
-                returnedEntity = returnedEntity.where("project.title like :searchCap", {
-                    searchCap,
+                returnedEntity = returnedEntity.where("LOWER(project.title) like :searchLowerCase", {
+                    searchLowerCase,
                 });
             }
             else {
-                returnedEntity = returnedEntity.where("backEndTechnologies.title like :searchCap OR frontEndTechnologies.title like :searchCap OR languages.title like :searchCap OR hostingServices.title like :searchCap", {
-                    searchCap,
+                returnedEntity = returnedEntity.where("LOWER(backEndTechnologies.title) like :searchLowerCase OR LOWER(frontEndTechnologies.title) like :searchLowerCase OR LOWER(languages.title) like :searchLowerCase OR LOWER(hostingServices.title) like :searchLowerCase", {
+                    searchLowerCase,
                 });
             }
             if (sortBy === "Date") {

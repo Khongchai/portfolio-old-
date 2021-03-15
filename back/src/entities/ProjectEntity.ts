@@ -58,9 +58,9 @@ export class ProjectEntity extends BaseEntity {
   @Column()
   startDate!: string;
 
-  @Field()
-  @Column()
-  endDate!: string;
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  endDate: string;
 
   @Field(() => Boolean, { nullable: true })
   @Column({ nullable: true })

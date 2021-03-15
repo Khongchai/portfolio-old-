@@ -29,8 +29,9 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         username: "postgres",
         password: "postgres",
         migrations: [path_1.default.join(__dirname, "/migrations/*")],
-        logging: false,
+        logging: true,
         synchronize: true,
+        migrationsRun: true,
         entities: [ProjectEntity_1.ProjectEntity, TechnologyEntity_1.TechnologyEntity],
     });
     const app = express_1.default();
