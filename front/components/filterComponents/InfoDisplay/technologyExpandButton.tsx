@@ -205,6 +205,7 @@ const Logo: React.FC<{
         flexWrap="wrap"
         id="logo-container"
         w="100%"
+        align="center"
       >
         {tech?.map((front) => {
           const nameOriginal = front.title;
@@ -224,7 +225,18 @@ const Logo: React.FC<{
                 e.stopPropagation();
               }}
               onError={(e: any) => {
-                e.target.src = `/logos/${nameNoSpace}.svg`;
+                //prevent infinite loop by checking if "svg" is already checked
+                if (e.target.src.slice(-3) !== `svg`) {
+                  e.target.src = `/logos/${nameNoSpace}.svg`;
+                } else {
+                  //If get to this point, 1. tech does not have a logo OR 2. error loading
+                  //fix by just replacing with a text
+                  const textContainer = document.createElement("div");
+                  textContainer.innerHTML = `<p>${nameOriginal}</p>`;
+                  textContainer.style.height = "fit-content";
+                  //find some way to make this a legit react child
+                  e.target.parentNode.replaceChild(textContainer, e.target);
+                }
               }}
               _hover={{
                 transform: "scale(1.3)",
@@ -235,7 +247,6 @@ const Logo: React.FC<{
               key={name}
               h={["25px", null, "40px"]}
               src={src}
-              alt={nameNoSpace}
               id={nameOriginal}
               transition=".2s"
             />

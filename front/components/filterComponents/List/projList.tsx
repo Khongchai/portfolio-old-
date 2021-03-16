@@ -17,7 +17,6 @@ export const ProjList: React.FC<ProjListProps> = ({
   paginateForward,
   paginateBackward,
 }) => {
-  const [enableSeeAll, setEnableSeeAll] = useState(false);
   return (
     <>
       <Flex
@@ -34,16 +33,6 @@ export const ProjList: React.FC<ProjListProps> = ({
           <Heading size="lg" mb={2}>
             Projects
           </Heading>
-          <Text
-            _hover={{ cursor: "pointer" }}
-            onClick={() => {
-              setEnableSeeAll(!enableSeeAll);
-            }}
-            color="mainOrange"
-            ml="auto"
-          >
-            See all
-          </Text>
         </Flex>
         <Flex
           overflowX="scroll"
@@ -104,7 +93,9 @@ export const ProjList: React.FC<ProjListProps> = ({
                 <Heading as="h2" size="md" flex="0.1">
                   {proj.title}
                 </Heading>
-                <Text flex="0.1">{proj.shortDescription}</Text>
+                <Text align="center" flex="0.1">
+                  {proj.shortDescription}
+                </Text>
               </Flex>
             ))
           )}
