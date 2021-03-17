@@ -1,6 +1,7 @@
 import { Box, Flex, Img, scaleFadeConfig, Stack, Text } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { TechnologyEntity } from "../../../generated/graphql";
+import removeAllAlternateDescriptions from "../../../utils/removeAlternateDescription";
 
 const GLOBAL_TRANSITION = 3;
 
@@ -203,9 +204,12 @@ const Logo: React.FC<{
       <Flex
         justifyContent="space-evenly"
         flexWrap="wrap"
-        id="logo-container"
+        className="logo-container"
         w="100%"
         align="center"
+        onLoad={() => {
+          removeAllAlternateDescriptions();
+        }}
       >
         {tech?.map((front) => {
           const nameOriginal = front.title;
@@ -214,42 +218,47 @@ const Logo: React.FC<{
 
           let src = `/logos/${nameNoSpace}.png`;
           let img = (
-            <Img
-              onMouseOver={(e: any) => {
-                setHoverComponentName(e.target.id);
-              }}
-              onMouseOut={() => {
-                setHoverComponentName(undefined);
-              }}
-              onClick={(e: any) => {
-                e.stopPropagation();
-              }}
-              onError={(e: any) => {
-                //prevent infinite loop by checking if "svg" is already checked
-                if (e.target.src.slice(-3) !== `svg`) {
-                  e.target.src = `/logos/${nameNoSpace}.svg`;
-                } else {
-                  //If get to this point, 1. tech does not have a logo OR 2. error loading
-                  //fix by just replacing with a text
-                  const textContainer = document.createElement("div");
-                  textContainer.innerHTML = `<p>${nameOriginal}</p>`;
-                  textContainer.style.height = "fit-content";
-                  //find some way to make this a legit react child
-                  e.target.parentNode.replaceChild(textContainer, e.target);
-                }
-              }}
-              _hover={{
-                transform: "scale(1.3)",
-              }}
-              m="1rem"
-              filter="drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))"
-              padding={"1px"}
-              key={name}
-              h={["25px", null, "40px"]}
-              src={src}
-              id={nameOriginal}
-              transition=".2s"
-            />
+            <Box>
+              <Img
+                onMouseOver={(e: any) => {
+                  setHoverComponentName(e.target.id);
+                }}
+                onMouseOut={() => {
+                  setHoverComponentName(undefined);
+                }}
+                onClick={(e: any) => {
+                  e.stopPropagation();
+                }}
+                onError={(e: any) => {
+                  //prevent infinite loop by checking if "svg" is already checked
+                  if (e.target.src.slice(-3) !== `svg`) {
+                    e.target.src = `/logos/${nameNoSpace}.svg`;
+                  } else {
+                    //If get to this point, 1. tech does not have a logo OR 2. error loading
+                    //fix by just replacing with a text
+                    const textContainer = document.createElement("div");
+                    textContainer.innerHTML = `<p>${nameOriginal}</p>`;
+                    textContainer.style.height = "fit-content";
+                    e.target.parentNode.insertBefore(textContainer, e.target);
+                    (e.target as HTMLImageElement).style.display = "none";
+                    //move all aletrnate textx to a state in react
+                    textContainer.className = "alternate-text-as-logo";
+                    textContainer.style.color = "white";
+                  }
+                }}
+                _hover={{
+                  transform: "scale(1.3)",
+                }}
+                m="1rem"
+                filter="drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))"
+                padding={"1px"}
+                key={name}
+                h={["25px", null, "40px"]}
+                src={src}
+                id={nameOriginal}
+                transition=".2s"
+              />
+            </Box>
           );
 
           return img;

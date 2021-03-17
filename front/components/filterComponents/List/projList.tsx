@@ -1,6 +1,7 @@
 import { Box, Flex, Grid, Heading, Img, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { ProjectEntity, ProjectsQuery } from "../../../generated/graphql";
+import removeAllAlternateDescriptions from "../../../utils/removeAlternateDescription";
 
 interface ProjListProps {
   data: ProjectsQuery | undefined;

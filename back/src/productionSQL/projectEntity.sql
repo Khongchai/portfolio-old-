@@ -12,8 +12,8 @@
            
            insert into technology_entity_front_end_in_project_entity ("technologyEntityId", "projectEntityId") values 
               ((select id from technology_entity where title='jQuery'), (select id from project_entity where title = 'ASTRUM')),
-              ((select id from technology_entity where title='Sass'), (select id from project_entity where title = 'ASTRUM')),
-           insert into technology_entity_hosting_project_entity ("technologyEntityId", "projectEntityId") values ((select id from technology_entity where title in ('GitHub_Pages')),(select id from project_entity where title = 'ASTRUM'));
+              ((select id from technology_entity where title='Sass'), (select id from project_entity where title = 'ASTRUM'));
+           insert into technology_entity_hosting_project_entity ("technologyEntityId", "projectEntityId") values ((select id from technology_entity where title in ('GitHub Pages')),(select id from project_entity where title = 'ASTRUM'));
            insert into technology_entity_language_of_project_entity ("technologyEntityId", "projectEntityId") values ((select id from technology_entity where title in ('Javascript')), (select id from project_entity where title = 'ASTRUM'));
 
 
@@ -27,12 +27,11 @@
            insert into technology_entity_front_end_in_project_entity ("technologyEntityId", "projectEntityId") values 
               ((select id from technology_entity where title='Gatsby'), (select id from project_entity where title = 'Journeys')),
               ((select id from technology_entity where title='React'), (select id from project_entity where title = 'Journeys')),
-              ((select id from technology_entity where title='styled-components'), (select id from project_entity where title = 'Journeys')),
-           insert into technology_entity_hosting_project_entity ("technologyEntityId", "projectEntityId") values ((select id from technology_entity where title in ('GitHub_Pages')),(select id from project_entity where title = 'Journeys'));
+              ((select id from technology_entity where title='styled-components'), (select id from project_entity where title = 'Journeys'));
+           insert into technology_entity_hosting_project_entity ("technologyEntityId", "projectEntityId") values ((select id from technology_entity where title in ('GitHub Pages')),(select id from project_entity where title = 'Journeys'));
            insert into technology_entity_language_of_project_entity ("technologyEntityId", "projectEntityId") values  
            ((select id from technology_entity where title = 'Javascript'), (select id from project_entity where title = 'Journeys')), 
            ((select id from technology_entity where title = 'TypeScript'), (select id from project_entity where title = 'Journeys')); 
-/* fix production data syntax below  */
 
       insert into project_entity (title, description, "shortDescription", "githubLink", "websiteLink", "startDate", "endDate", "isHighlight") 
            values ('WordMem', 'A vocab memorization application, allows for simple CRUD operation, auth (login, logout, register), and dictionary scraping with beautiful soup.', 
@@ -46,8 +45,9 @@
               ((select id from technology_entity where title='Redux'), (select id from project_entity where title = 'WordMem'));
            insert into technology_entity_back_end_in_project_entity ("technologyEntityId", "projectEntityId") values ((select id from technology_entity where title='Django'), (select id from project_entity where title = 'WordMem'));
            insert into technology_entity_hosting_project_entity ("technologyEntityId", "projectEntityId") values ((select id from technology_entity where title in ('Heroku')),(select id from project_entity where title = 'WordMem'));
-           insert into technology_entity_language_of_project_entity ("technologyEntityId", "projectEntityId") values ((select id from technology_entity where title in ('Javascript')), (select id from project_entity where title = 'WordMem')); 
-           insert into technology_entity_language_of_project_entity ("technologyEntityId", "projectEntityId") values ((select id from technology_entity where title in ('Python')), (select id from project_entity where title = 'WordMem')); 
+           insert into technology_entity_language_of_project_entity ("technologyEntityId", "projectEntityId") values 
+              ((select id from technology_entity where title in ('Javascript')), (select id from project_entity where title = 'WordMem')), 
+              ((select id from technology_entity where title in ('Python')), (select id from project_entity where title = 'WordMem')); 
 
 
       insert into project_entity (title, description, "shortDescription", "githubLink", "startDate", "isHighlight") 
@@ -58,15 +58,16 @@
            
            insert into technology_entity_front_end_in_project_entity ("technologyEntityId", "projectEntityId") values 
               ((select id from technology_entity where title='React'), (select id from project_entity where title = 'VocabMem')),
-              ((select id from technology_entity where title='Chakra_UI'), (select id from project_entity where title = 'VocabMem')),
+              ((select id from technology_entity where title='Chakra UI'), (select id from project_entity where title = 'VocabMem')),
              ((select id from technology_entity where title='Apollo'), (select id from project_entity where title = 'VocabMem')),
-              ((select id from technology_entity where title='Next.js'), (select id from project_entity where title = 'VocabMem'));
+              ((select id from technology_entity where title='Next.js'), (select id from project_entity where title = 'VocabMem')),
               ((select id from technology_entity where title='GraphQL'), (select id from project_entity where title = 'VocabMem'));
-           insert into technology_entity_back_end_in_project_entity ("technologyEntityId", "projectEntityId") values ((select id from technology_entity where title='Node'), (select id from project_entity where title = 'VocabMem')),
-           insert into technology_entity_back_end_in_project_entity ("technologyEntityId", "projectEntityId") values ((select id from technology_entity where title='Express'), (select id from project_entity where title = 'VocabMem')),
-           insert into technology_entity_back_end_in_project_entity ("technologyEntityId", "projectEntityId") values ((select id from technology_entity where title='PostgresQL'), (select id from project_entity where title = 'VocabMem')),
-           insert into technology_entity_back_end_in_project_entity ("technologyEntityId", "projectEntityId") values ((select id from technology_entity where title='Apollo'), (select id from project_entity where title = 'VocabMem')),
-           insert into technology_entity_back_end_in_project_entity ("technologyEntityId", "projectEntityId") values ((select id from technology_entity where title='TypeORM'), (select id from project_entity where title = 'VocabMem')),
+           insert into technology_entity_back_end_in_project_entity ("technologyEntityId", "projectEntityId") values 
+           ((select id from technology_entity where title='Node'), (select id from project_entity where title = 'VocabMem')),
+            ((select id from technology_entity where title='Express'), (select id from project_entity where title = 'VocabMem')),
+           ((select id from technology_entity where title='PostgreSQL'), (select id from project_entity where title = 'VocabMem')),
+           ((select id from technology_entity where title='Apollo'), (select id from project_entity where title = 'VocabMem')),
+            ((select id from technology_entity where title='TypeORM'), (select id from project_entity where title = 'VocabMem'));
            insert into technology_entity_language_of_project_entity ("technologyEntityId", "projectEntityId") values ((select id from technology_entity where title in ('TypeScript')), (select id from project_entity where title = 'VocabMem')); 
            
 
@@ -84,14 +85,16 @@
               ((select id from technology_entity where title='Chakra UI'), (select id from project_entity where title = 'Portfolio')),
               ((select id from technology_entity where title='Urql'), (select id from project_entity where title = 'Portfolio')),
               ((select id from technology_entity where title='GraphQL'), (select id from project_entity where title = 'Portfolio'));
-           insert into technology_entity_back_end_in_project_entity ("technologyEntityId", "projectEntityId") values ((select id from technology_entity where title='Express'), (select id from project_entity where title = 'Portfolio'));
-           insert into technology_entity_back_end_in_project_entity ("technologyEntityId", "projectEntityId") values ((select id from technology_entity where title='Node'), (select id from project_entity where title = 'Portfolio'));
-           insert into technology_entity_back_end_in_project_entity ("technologyEntityId", "projectEntityId") values ((select id from technology_entity where title='TypeGraphQL'), (select id from project_entity where title = 'Portfolio'));
-           insert into technology_entity_back_end_in_project_entity ("technologyEntityId", "projectEntityId") values ((select id from technology_entity where title='TypeORM'), (select id from project_entity where title = 'Portfolio'));
-           insert into technology_entity_back_end_in_project_entity ("technologyEntityId", "projectEntityId") values ((select id from technology_entity where title='Redis'), (select id from project_entity where title = 'Portfolio'));
-           insert into technology_entity_back_end_in_project_entity ("technologyEntityId", "projectEntityId") values ((select id from technology_entity where title='PostgresQL'), (select id from project_entity where title = 'Portfolio'));
+           insert into technology_entity_back_end_in_project_entity ("technologyEntityId", "projectEntityId") values 
+            ((select id from technology_entity where title='Express'), (select id from project_entity where title = 'Portfolio')),
+            ((select id from technology_entity where title='Node'), (select id from project_entity where title = 'Portfolio')),
+            ((select id from technology_entity where title='TypeGraphQL'), (select id from project_entity where title = 'Portfolio')),
+            ((select id from technology_entity where title='TypeORM'), (select id from project_entity where title = 'Portfolio')),
+            ((select id from technology_entity where title='Redis'), (select id from project_entity where title = 'Portfolio')),
+            ((select id from technology_entity where title='PostgreSQL'), (select id from project_entity where title = 'Portfolio'));
            insert into technology_entity_hosting_project_entity ("technologyEntityId", "projectEntityId") values ((select id from technology_entity where title in ('Heroku')),(select id from project_entity where title = 'Portfolio'));
-           insert into technology_entity_language_of_project_entity ("technologyEntityId", "projectEntityId") values ((select id from technology_entity where title in ('Javascript')), (select id from project_entity where title = 'Portfolio')); 
-           insert into technology_entity_language_of_project_entity ("technologyEntityId", "projectEntityId") values ((select id from technology_entity where title in ('TypeScript')), (select id from project_entity where title = 'Portfolio')); 
-           insert into technology_entity_language_of_project_entity ("technologyEntityId", "projectEntityId") values ((select id from technology_entity where title in ('SQL')), (select id from project_entity where title = 'Portfolio')); 
+           insert into technology_entity_language_of_project_entity ("technologyEntityId", "projectEntityId") values 
+           ((select id from technology_entity where title in ('Javascript')), (select id from project_entity where title = 'Portfolio')), 
+           ((select id from technology_entity where title in ('TypeScript')), (select id from project_entity where title = 'Portfolio')), 
+           ((select id from technology_entity where title in ('SQL')), (select id from project_entity where title = 'Portfolio')); 
 
