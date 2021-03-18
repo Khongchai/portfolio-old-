@@ -20,13 +20,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProjectsResolver = void 0;
 const type_graphql_1 = require("type-graphql");
+const typeorm_1 = require("typeorm");
 const ProjectEntity_1 = require("../entities/ProjectEntity");
 const ProjectResolver_1 = require("../inputAndObjectTypes/ProjectResolver");
+const filterTechnologiesArray_1 = __importDefault(require("../utils/filterTechnologiesArray"));
 const getTechnologiesByTitle_1 = require("../utils/getTechnologiesByTitle");
-const typeorm_1 = require("typeorm");
 let PaginatedProjectsInput = class PaginatedProjectsInput {
 };
 __decorate([
@@ -176,10 +180,10 @@ let ProjectsResolver = class ProjectsResolver {
     }
     addOrRemoveTechnologies(input, operation) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { projName } = input;
+            const { projTitle } = input;
             const { backEndNames, frontEndNames, hostingServiceNames, languagesNames, } = input.techProps;
             const proj = yield ProjectEntity_1.ProjectEntity.findOne({
-                where: { title: projName },
+                where: { title: projTitle },
                 relations: [
                     "frontEndTechnologies",
                     "backEndTechnologies",
@@ -224,6 +228,10 @@ let ProjectsResolver = class ProjectsResolver {
                 ];
             }
             else {
+                proj.backEndTechnologies = filterTechnologiesArray_1.default(proj.backEndTechnologies, backEnd);
+                proj.frontEndTechnologies = filterTechnologiesArray_1.default(proj.frontEndTechnologies, frontEnd);
+                proj.hostingServices = filterTechnologiesArray_1.default(proj.hostingServices, hostingServices);
+                proj.languages = filterTechnologiesArray_1.default(proj.languages, languages);
             }
             yield proj.save();
             return { proj };

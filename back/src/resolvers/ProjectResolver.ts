@@ -1,4 +1,3 @@
-import { TechnologyEntity } from "../entities/TechnologyEntity";
 import {
   Arg,
   Ctx,
@@ -9,7 +8,9 @@ import {
   Query,
   Resolver,
 } from "type-graphql";
+import { getConnection } from "typeorm";
 import { ProjectEntity } from "../entities/ProjectEntity";
+import { TechnologyEntity } from "../entities/TechnologyEntity";
 import {
   AddTechInput,
   PaginatedProjects,
@@ -17,8 +18,8 @@ import {
   ProjResponse,
 } from "../inputAndObjectTypes/ProjectResolver";
 import { Context } from "../types";
+import filterTechnologiesArray from "../utils/filterTechnologiesArray";
 import { getTechListForEachProp } from "../utils/getTechnologiesByTitle";
-import { getConnection, Like, SimpleConsoleLogger } from "typeorm";
 
 @InputType()
 class PaginatedProjectsInput {
@@ -210,7 +211,7 @@ export class ProjectsResolver {
     @Arg("projectData") input: AddTechInput,
     @Arg("operation") operation: boolean
   ): Promise<ProjResponse> {
-    const { projName } = input;
+    const { projTitle } = input;
     const {
       backEndNames,
       frontEndNames,
@@ -219,7 +220,7 @@ export class ProjectsResolver {
     } = input.techProps;
 
     const proj = await ProjectEntity.findOne({
-      where: { title: projName },
+      where: { title: projTitle },
       relations: [
         "frontEndTechnologies",
         "backEndTechnologies",
@@ -227,6 +228,7 @@ export class ProjectsResolver {
         "hostingServices",
       ],
     });
+
     if (!proj) {
       return {
         errors: [
@@ -276,7 +278,19 @@ export class ProjectsResolver {
         ...(hostingServices as TechnologyEntity[]),
       ];
     } else {
-      //TODO implement remove logic
+      proj.backEndTechnologies = filterTechnologiesArray(
+        proj.backEndTechnologies,
+        backEnd
+      );
+      proj.frontEndTechnologies = filterTechnologiesArray(
+        proj.frontEndTechnologies,
+        frontEnd
+      );
+      proj.hostingServices = filterTechnologiesArray(
+        proj.hostingServices,
+        hostingServices
+      );
+      proj.languages = filterTechnologiesArray(proj.languages, languages);
     }
 
     await proj.save();

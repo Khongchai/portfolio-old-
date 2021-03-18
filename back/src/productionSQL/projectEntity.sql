@@ -12,6 +12,7 @@
            
            insert into technology_entity_front_end_in_project_entity ("technologyEntityId", "projectEntityId") values 
               ((select id from technology_entity where title='jQuery'), (select id from project_entity where title = 'ASTRUM')),
+              ((select id from technology_entity where title='Android'), (select id from project_entity where title = 'ASTRUM')),
               ((select id from technology_entity where title='Sass'), (select id from project_entity where title = 'ASTRUM'));
            insert into technology_entity_hosting_project_entity ("technologyEntityId", "projectEntityId") values ((select id from technology_entity where title in ('GitHub Pages')),(select id from project_entity where title = 'ASTRUM'));
            insert into technology_entity_language_of_project_entity ("technologyEntityId", "projectEntityId") values ((select id from technology_entity where title in ('Javascript')), (select id from project_entity where title = 'ASTRUM'));

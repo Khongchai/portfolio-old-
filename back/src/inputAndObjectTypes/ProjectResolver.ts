@@ -51,7 +51,7 @@ export class ProjectCreationInput {
 @InputType()
 export class AddTechInput {
   @Field()
-  projName!: string;
+  projTitle!: string;
 
   @Field(() => TechnologyProperties, { nullable: true })
   techProps: TechnologyProperties;
