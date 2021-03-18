@@ -30,4 +30,11 @@ Finalizing:
 
 Home/timeline page --------------------------------------------------------------------------
 
-clear projects and technology, create new projects with varying dates and make sure that all technologies names are stored in the database in lowercase
+create the main line for timeline and hydrate it
+
+move 2018 off screen so that 2019 becomes the first year 
+ 
+ reset the border every time on zoom in and out
+
+utils --------------
+clean up utils folder

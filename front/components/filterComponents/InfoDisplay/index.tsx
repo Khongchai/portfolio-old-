@@ -36,7 +36,9 @@ const InfoDisplay: React.FC<{
         >
           <Heading as="h2">{details.title}</Heading>
           <Text>
-            Date: {details?.startDate} to {details?.endDate}
+            Date: &nbsp; <i>{`${details?.startDate} `}</i>
+            &nbsp; to &nbsp;
+            <i>{details.endDate ? details.endDate : "present"}</i>
           </Text>
           <Text mb="3rem" textAlign="justify" style={{ textIndent: "1.4em" }}>
             {details?.description}

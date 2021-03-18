@@ -1,9 +1,9 @@
 import { Box, Flex, Grid } from "@chakra-ui/react";
-import NextLink from "next/link";
 import React, { useEffect, useState } from "react";
 import { useAllProjectsNotPaginatedQuery } from "../../generated/graphql";
 import removeDuplicatesFromArray from "../../utils/removeDuplicatesFromArray";
 import setPadding from "../../utils/setFirstHeightToSecondPadding";
+import Timeline from "../../components/timelineComponents";
 
 export default function Tech() {
   const [{ data }] = useAllProjectsNotPaginatedQuery();
@@ -30,7 +30,12 @@ export default function Tech() {
         }
       );
       const allYearsNoDuplicates = removeDuplicatesFromArray(allYears);
-      setYears(allYearsNoDuplicates);
+      //add an extra year at the end and the beginning just for looks
+      setYears([
+        allYearsNoDuplicates[0] - 1,
+        ...allYearsNoDuplicates,
+        allYearsNoDuplicates[allYearsNoDuplicates.length - 1] + 1,
+      ]);
     }
   }, [data]);
 
@@ -44,10 +49,10 @@ export default function Tech() {
   }, []);
 
   return (
-    <Box id="tech-timeline" height="100vh">
+    <Flex id="tech-timeline" overflowX="hidden" flexDir="column" height="100vh">
       <Grid
+        flex="0.65"
         width="100%"
-        height="530px"
         bgColor="#444057"
         id="wallpaper-container"
         placeItems="center"
@@ -62,14 +67,13 @@ export default function Tech() {
       </Grid>
       <Grid
         cursor="pointer"
-        minWidth="2000px"
+        minWidth="1200px"
         id="timeline-container"
         height="100%"
+        flex="0.35"
       >
-        {fullDateStartNumber.map((date) => (
-          <div>{date}</div>
-        ))}
+        <Timeline years={years} />
       </Grid>
-    </Box>
+    </Flex>
   );
 }

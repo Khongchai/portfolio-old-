@@ -241,7 +241,6 @@ const Logo: React.FC<{
                     textContainer.style.height = "fit-content";
                     e.target.parentNode.insertBefore(textContainer, e.target);
                     (e.target as HTMLImageElement).style.display = "none";
-                    //move all aletrnate textx to a state in react
                     textContainer.className = "alternate-text-as-logo";
                     textContainer.style.color = "white";
                   }
@@ -252,7 +251,7 @@ const Logo: React.FC<{
                 m="1rem"
                 filter="drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))"
                 padding={"1px"}
-                key={name}
+                key={nameOriginal}
                 h={["25px", null, "40px"]}
                 src={src}
                 id={nameOriginal}
