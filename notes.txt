@@ -18,10 +18,6 @@ the sorting by date and asc should all be moved to "see all" page only
 Timeline:
 
 
-TODO => If seeAll is enabled, extend the "projects" view to full screen and change the graphql req point to one  that queries for everything 
-
-
-
 
 Finalizing:
 

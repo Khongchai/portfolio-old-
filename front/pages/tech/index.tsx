@@ -4,8 +4,16 @@ import { useAllProjectsNotPaginatedQuery } from "../../generated/graphql";
 import removeDuplicatesFromArray from "../../utils/removeDuplicatesFromArray";
 import setPadding from "../../utils/setFirstHeightToSecondPadding";
 import Timeline from "../../components/timelineComponents";
+import setEventsYearsBorderPosition from "../../utils/timeline/setEventsYearsBorderPosition";
 
 export default function Tech() {
+  useEffect(() => {
+    window.addEventListener("resize", setEventsYearsBorderPosition);
+    return () => {
+      window.removeEventListener("resize", setEventsYearsBorderPosition);
+    };
+  }, []);
+
   const [{ data }] = useAllProjectsNotPaginatedQuery();
   const [years, setYears] = useState<number[]>([]);
   //fullDateStartNumber is for sorting
@@ -13,6 +21,12 @@ export default function Tech() {
   const [fullDateStartString, setFullDateStartString] = useState<string[]>([]);
   const [fullDateEndString, setFullDateEndString] = useState<string[]>([]);
 
+  const [allDateInfo, setAllDateInfo] = useState({
+    fullDateStartNumber,
+    fullDateStartString,
+    fullDateEndString,
+    years,
+  });
   //this useeffect gets all the necessary data
   useEffect(() => {
     if (data) {
@@ -36,6 +50,12 @@ export default function Tech() {
         ...allYearsNoDuplicates,
         allYearsNoDuplicates[allYearsNoDuplicates.length - 1] + 1,
       ]);
+      setAllDateInfo({
+        fullDateStartNumber,
+        fullDateStartString,
+        fullDateEndString,
+        years,
+      });
     }
   }, [data]);
 
@@ -66,13 +86,18 @@ export default function Tech() {
         ></Flex>
       </Grid>
       <Grid
-        cursor="pointer"
+        cursor="grab"
         minWidth="1200px"
         id="timeline-container"
         height="100%"
         flex="0.35"
       >
-        <Timeline years={years} />
+        <Timeline
+          fullDateEndString={fullDateEndString}
+          fullDateStartNumber={fullDateStartNumber}
+          fullDateStartString={fullDateStartString}
+          years={years}
+        />
       </Grid>
     </Flex>
   );
