@@ -1,7 +1,7 @@
-import { Box, Flex, Img, scaleFadeConfig, Stack, Text } from "@chakra-ui/react";
+import { Box, Flex, Img, Stack, Text } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { TechnologyEntity } from "../../../generated/graphql";
-import removeAllAlternateDescriptions from "../../../utils/removeAlternateDescription";
+import removeAllAlternateDescriptions from "../../../utils/filter/removeAlternateDescription";
 
 const GLOBAL_TRANSITION = 3;
 

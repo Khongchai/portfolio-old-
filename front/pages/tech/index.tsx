@@ -1,8 +1,8 @@
 import { Box, Flex, Grid } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useAllProjectsNotPaginatedQuery } from "../../generated/graphql";
-import removeDuplicatesFromArray from "../../utils/removeDuplicatesFromArray";
-import setPadding from "../../utils/setFirstHeightToSecondPadding";
+import removeDuplicatesFromArray from "../../utils/generics/removeDuplicatesFromArray";
+import { setFirstHeightToSecondPadding } from "../../utils/generics/setFirstHeightToSecondPadding";
 import Timeline from "../../components/timelineComponents";
 import setEventsYearsBorderPosition from "../../utils/timeline/setEventsYearsBorderPosition";
 
@@ -64,7 +64,7 @@ export default function Tech() {
     const timelinePage = document.getElementById("tech-timeline");
     const navbar = document.getElementById("navbar");
     if (timelinePage && navbar) {
-      setPadding(navbar, timelinePage, 2);
+      setFirstHeightToSecondPadding(navbar, timelinePage, 2);
     }
   }, []);
 
