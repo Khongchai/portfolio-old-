@@ -8,16 +8,3 @@ export const client = createClient({
   },
   exchanges: [fetchExchange],
 });
-
-/*
-
-Query: {
-          projects: (parent, args) => {
-            console.log(parent);
-            return {
-              __typename: "PaginatedProjects",
-              id: args.id,
-            };
-          },
-        },
-*/

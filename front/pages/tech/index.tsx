@@ -2,7 +2,7 @@ import { Box, Flex, Grid } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useAllProjectsNotPaginatedQuery } from "../../generated/graphql";
 import removeDuplicatesFromArray from "../../utils/generics/removeDuplicatesFromArray";
-import { setFirstHeightToSecondPadding } from "../../utils/generics/setFirstHeightToSecondPadding";
+import setFirstHeightToSecondPadding from "../../utils/generics/setFirstHeightToSecondPadding";
 import Timeline from "../../components/timelineComponents";
 import setEventsYearsBorderPosition from "../../utils/timeline/setEventsYearsBorderPosition";
 

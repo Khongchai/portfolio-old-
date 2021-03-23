@@ -1,4 +1,4 @@
-export function setFirstHeightToSecondPadding(
+export default function setFirstHeightToSecondPadding(
   from: HTMLElement,
   to: HTMLElement,
   extraEM: number

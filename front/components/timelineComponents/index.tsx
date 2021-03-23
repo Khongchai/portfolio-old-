@@ -1,7 +1,7 @@
 import { Box, Flex, Grid } from "@chakra-ui/react";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { AllProjectsNotPaginatedQuery } from "../../generated/graphql";
-import mapProjectToTimelineEvent from "../../utils/timeline/mapProjectToTimelineEvent";
+import ProjectAsTimelineEvent from "./ProjectAsTimelineEvent";
 import setEventsYearsBorderPosition from "../../utils/timeline/setEventsYearsBorderPosition";
 import setScrollPositionTo2019 from "../../utils/timeline/setScrollPositionTo2019";
 
@@ -13,6 +13,14 @@ interface timelineProps {
   data: AllProjectsNotPaginatedQuery | undefined;
 }
 
+interface GridRowPos {
+  first: number;
+  second: number;
+  third: number;
+  fourth: number;
+  fifth: number;
+}
+
 export const timeline: React.FC<timelineProps> = ({
   years,
   fullDateStartNumber,
@@ -20,6 +28,14 @@ export const timeline: React.FC<timelineProps> = ({
   fullDateStartString,
   data,
 }) => {
+  const gridRowPos = {
+    first: 0,
+    second: 0,
+    third: 0,
+    fourth: 0,
+    fifth: 0,
+  };
+
   useEffect(() => {
     setEventsYearsBorderPosition();
     //TO BE IMPLEMENTED
@@ -41,10 +57,18 @@ export const timeline: React.FC<timelineProps> = ({
         gridRow="timeline-top / timeline-bottom"
         flexDir="row"
         gridTemplateColumns={gridTemplateColumns}
+        //number of row is arbitrary (as long as there is enough)
         gridTemplateRows="1fr 1fr 1fr 1fr 1fr"
       >
         {data?.allProjectsNotPaginated.map((proj, i) => {
-          return mapProjectToTimelineEvent(proj, i, years[0]);
+          return (
+            <ProjectAsTimelineEvent
+              proj={proj}
+              index={i}
+              firstYearInTimeline={years[0]}
+              gridRowPos={gridRowPos}
+            />
+          );
         })}
 
         {years.map((year, i) => {
@@ -56,6 +80,7 @@ export const timeline: React.FC<timelineProps> = ({
               className="year-borders"
               w="1px"
               borderLeft="1px solid #828282"
+              zIndex="0"
               gridColumn={`${12 * i + 1} / span 12`}
               gridRow="1 / span 6 "
               key={`${year}border`}
