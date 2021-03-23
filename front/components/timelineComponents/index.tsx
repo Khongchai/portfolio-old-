@@ -1,28 +1,35 @@
 import { Box, Flex, Grid } from "@chakra-ui/react";
 import React, { useEffect } from "react";
+import { AllProjectsNotPaginatedQuery } from "../../generated/graphql";
+import mapProjectToTimelineEvent from "../../utils/timeline/mapProjectToTimelineEvent";
 import setEventsYearsBorderPosition from "../../utils/timeline/setEventsYearsBorderPosition";
+import setScrollPositionTo2019 from "../../utils/timeline/setScrollPositionTo2019";
 
-interface indexProps {
+interface timelineProps {
   years: number[];
   fullDateStartNumber: number[];
   fullDateStartString: string[];
   fullDateEndString: string[];
+  data: AllProjectsNotPaginatedQuery | undefined;
 }
 
-export const index: React.FC<indexProps> = ({
+export const timeline: React.FC<timelineProps> = ({
   years,
   fullDateStartNumber,
   fullDateEndString,
   fullDateStartString,
+  data,
 }) => {
   useEffect(() => {
     setEventsYearsBorderPosition();
+    //TO BE IMPLEMENTED
+    //2019 === first year of coding
+    setScrollPositionTo2019();
   }, []);
 
   const oneMonthLengthInPixel = "40px";
   const twelveMonths = 12;
-  //TO BE IMPLEMENTED
-  //setScrollPositionTo2019() <--first year of coding
+
   //manageTimelineScroll
   const gridTemplateColumns = `repeat(${
     years.length * twelveMonths
@@ -36,22 +43,24 @@ export const index: React.FC<indexProps> = ({
         gridTemplateColumns={gridTemplateColumns}
         gridTemplateRows="1fr 1fr 1fr 1fr 1fr"
       >
-        {years.map((year, index) => {
+        {data?.allProjectsNotPaginated.map((proj, i) => {
+          return mapProjectToTimelineEvent(proj, i, years[0]);
+        })}
+
+        {years.map((year, i) => {
           return (
-            <>
-              <Box
-                //the specificity locks these elements to the defined grid;
-                //prevents them from being pushed around
-                //now you can overlay anything over them
-                className="year-borders"
-                w="1px"
-                borderLeft="1px solid #828282"
-                gridColumn={`${12 * index + 1} / span 12`}
-                gridRow="1 / 6"
-                key={`${year}border`}
-                position="relative"
-              />
-            </>
+            <Box
+              //the specificity locks these elements to the defined grid;
+              //prevents them from being pushed around
+              //now you can overlay anything over them
+              className="year-borders"
+              w="1px"
+              borderLeft="1px solid #828282"
+              gridColumn={`${12 * i + 1} / span 12`}
+              gridRow="1 / span 6 "
+              key={`${year}border`}
+              position="relative"
+            />
           );
         })}
       </Grid>
@@ -98,4 +107,4 @@ const EventsYearsBorder = () => {
   );
 };
 
-export default index;
+export default timeline;

@@ -16,17 +16,13 @@ export default function Tech() {
 
   const [{ data }] = useAllProjectsNotPaginatedQuery();
   const [years, setYears] = useState<number[]>([]);
+
   //fullDateStartNumber is for sorting
+  //all the date info are in the same order as the data
   const [fullDateStartNumber, setFullDateStartNumber] = useState<number[]>([]);
   const [fullDateStartString, setFullDateStartString] = useState<string[]>([]);
   const [fullDateEndString, setFullDateEndString] = useState<string[]>([]);
 
-  const [allDateInfo, setAllDateInfo] = useState({
-    fullDateStartNumber,
-    fullDateStartString,
-    fullDateEndString,
-    years,
-  });
   //this useeffect gets all the necessary data
   useEffect(() => {
     if (data) {
@@ -50,12 +46,6 @@ export default function Tech() {
         ...allYearsNoDuplicates,
         allYearsNoDuplicates[allYearsNoDuplicates.length - 1] + 1,
       ]);
-      setAllDateInfo({
-        fullDateStartNumber,
-        fullDateStartString,
-        fullDateEndString,
-        years,
-      });
     }
   }, [data]);
 
@@ -97,6 +87,7 @@ export default function Tech() {
           fullDateStartNumber={fullDateStartNumber}
           fullDateStartString={fullDateStartString}
           years={years}
+          data={data}
         />
       </Grid>
     </Flex>
