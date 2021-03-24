@@ -1,4 +1,4 @@
-import { Box, Grid, Text } from "@chakra-ui/react";
+import { Grid, Text } from "@chakra-ui/react";
 import React from "react";
 import { ProjectEntity } from "../../generated/graphql";
 import { GridRowPos } from "../../types/GridRowPos";
@@ -11,37 +11,31 @@ const ProjectAsTimelineEvent: React.FC<{
   firstYearInTimeline: number;
   gridRowPos: GridRowPos;
 }> = ({ firstYearInTimeline, index, proj, gridRowPos }) => {
-  //endDate can be null (not finished, cancelled, on hold)
   const projectEndDate = {
     month: parseInt(proj.endDate?.split("-")[1]),
     year: parseInt(proj.endDate?.split("-")[0]),
   };
-
   const projectBeginDate = {
     month: parseInt(proj.startDate.split("-")[1]),
     year: parseInt(proj.startDate.split("-")[0]),
   };
-
   const projectStartYear = parseInt(proj?.startDate.split("-")[0]);
   const numberOfMonths = 12;
-  //first column position is 1
+  const firstColumnPosition = 1;
   const gridColumnBeginPosition =
     (projectStartYear - firstYearInTimeline) * numberOfMonths +
-    1 +
+    firstColumnPosition +
     projectBeginDate.month;
   const gridColumnLength = getGridColumnLength(
     projectBeginDate,
     projectEndDate
   );
-
   const gridRow = getGridRow(
     gridColumnBeginPosition,
     gridColumnBeginPosition + gridColumnLength,
     gridRowPos
   );
 
-  //check if project-event-title is longer than project-event
-  //if so, change it to somethi...
   return (
     <Grid
       className="project-event"
@@ -51,6 +45,10 @@ const ProjectAsTimelineEvent: React.FC<{
       gridRow={gridRow}
       placeItems={"center"}
       borderRadius="0 8px 8px 0"
+      textOverflow="ellipsis"
+      overflow="hidden"
+      whiteSpace="nowrap"
+      p="1em"
     >
       <Text className="project-event-title">{proj.title}</Text>
     </Grid>

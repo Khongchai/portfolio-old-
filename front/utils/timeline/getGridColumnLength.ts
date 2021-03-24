@@ -23,13 +23,26 @@ export function getGridColumnLength(start: StartDate, end: EndDate): number {
         5. 9 months
     */
   if (!end.year || !end.month) {
-    const ArbitraryLengthForWhenEndDateNotDefined = 2;
-    return ArbitraryLengthForWhenEndDateNotDefined;
+    /*
+      If ending date is not defined, project is not finished
+      extend to current date
+     */
+    const now = new Date();
+    const thisMonth = now.getMonth();
+    const thisYear = now.getFullYear();
+    const todayAsEndDate = getGridColumnLength(start, {
+      month: thisMonth,
+      year: thisYear,
+    });
+    return todayAsEndDate;
   }
   const numberOfMonths = 12;
   const yearSubtractionResult = (end.year - start.year) * numberOfMonths;
   const monthSubtractionResult = end.month - start.month;
   const monthLength = yearSubtractionResult + monthSubtractionResult;
 
-  return monthLength;
+  /* 
+    Month Length is equal to 0 when the start month is the same as the end month; defaults to 1
+  */
+  return monthLength === 0 ? 1 : monthLength;
 }
