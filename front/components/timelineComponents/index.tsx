@@ -5,6 +5,8 @@ import ProjectAsTimelineEvent from "./ProjectAsTimelineEvent";
 import setEventsYearsBorderPosition from "../../utils/timeline/setEventsYearsBorderPosition";
 import EventsYearsBorder from "./EventsYearsBorder";
 import setScrollPositionTo2019 from "../../utils/timeline/setScrollPositionTo2019";
+import Years from "./Years";
+import manageBlockMove from "../../utils/timeline/manageBlockMove";
 
 interface timelineProps {
   years: number[];
@@ -30,6 +32,13 @@ export const Timeline: React.FC<timelineProps> = ({ years, data }) => {
     setEventsYearsBorderPosition();
   }, []);
 
+  useEffect(() => {
+    manageBlockMove("timeline", "monitor");
+    return () => {
+      manageBlockMove("timeline", "de-monitor");
+    };
+  }, []);
+
   useLayoutEffect(() => {
     const timeline = document.getElementById("timeline");
     const year2019Element = document.getElementById("year-2019-element");
@@ -38,7 +47,6 @@ export const Timeline: React.FC<timelineProps> = ({ years, data }) => {
     }
   });
 
-  //manageTimelineScroll
   return (
     <>
       <EventsYearsBorder />
@@ -50,13 +58,15 @@ export const Timeline: React.FC<timelineProps> = ({ years, data }) => {
           id="events-container"
           gridRow="timeline-top / timeline-bottom"
           flexDir="row"
+          rowGap="1.3em"
           gridTemplateColumns={gridTemplateColumns}
           //number of row is arbitrary (as long as there is enough)
-          gridTemplateRows="1fr 1fr 1fr 1fr 1fr"
+          gridTemplateRows="[events-container-top] 1fr 1fr 1fr 1fr [events-container-bottom]"
         >
           {data?.allProjectsNotPaginated.map((proj, i) => {
             return (
               <ProjectAsTimelineEvent
+                key={proj.title}
                 proj={proj}
                 index={i}
                 firstYearInTimeline={years[0]}
@@ -76,7 +86,7 @@ export const Timeline: React.FC<timelineProps> = ({ years, data }) => {
                 borderLeft="1px solid #828282"
                 zIndex="0"
                 gridColumn={`${12 * i + 1} / span 12`}
-                gridRow="1 / span 6 "
+                gridRow="1 / span 4 "
                 key={`${year}border`}
                 position="relative"
               />
@@ -87,40 +97,6 @@ export const Timeline: React.FC<timelineProps> = ({ years, data }) => {
           <Years years={years} />
         </Grid>
       </Grid>
-    </>
-  );
-};
-
-const Years: React.FC<{
-  years: number[];
-}> = ({ years }) => {
-  return (
-    <>
-      {years.map((year) => {
-        return (
-          <Flex flexDir="column" gridColumn="span 12" key={year}>
-            <Box
-              as="span"
-              className="circle"
-              position="relative"
-              bgColor="#C4C4C4"
-              width="14px"
-              height="14px"
-              borderRadius="50%"
-              ml="0.5px" //value of the black left border between each year
-              transform="translateY(-50%) translateX(-50%)"
-            ></Box>
-            <Box
-              width="fit-content"
-              transform="translateX(calc(-50% + 7px))"
-              as="span"
-              key={year}
-            >
-              <Text id={`year-${year}-element`}>{year}</Text>
-            </Box>
-          </Flex>
-        );
-      })}
     </>
   );
 };

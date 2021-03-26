@@ -22,7 +22,7 @@ export default function Tech() {
       const allYears = data.allProjectsNotPaginated.map((proj) =>
         //date format = yyyy-mm-dd
         {
-          const [yearStart, monthStart, dayStart] = proj.startDate.split("-");
+          const [yearStart] = proj.startDate.split("-");
           return parseInt(yearStart);
         }
       );
@@ -48,7 +48,7 @@ export default function Tech() {
   return (
     <Flex id="tech-timeline" overflowX="hidden" flexDir="column" height="100vh">
       <Grid
-        flex="0.65"
+        flex="0.60"
         width="100%"
         bgColor="#444057"
         id="wallpaper-container"
@@ -68,7 +68,7 @@ export default function Tech() {
         minWidth="1200px"
         id="timeline-container"
         maxHeight="100%"
-        flex="0.35"
+        flex="0.40"
       >
         <Timeline years={years} data={data} />
       </Grid>

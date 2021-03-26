@@ -20,11 +20,9 @@ Timeline:
 
 Home/timeline page --------------------------------------------------------------------------
 
-create the main line for timeline and hydrate it
 Manage timeline move
 move 2018 off screen so that 2019 becomes the first year 
 
-populate timeline
-- TODO => look for TODO in ProjectAsTimelineEvent.tsx 
+use date to offset the position of each event by a percentage
 
 

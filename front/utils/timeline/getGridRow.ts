@@ -15,12 +15,9 @@ export function getGridRow(
   } else if (beginVal > gridRowPos.third) {
     gridRowPos.third = endVal;
     row = 3;
-  } else if (beginVal > gridRowPos.fourth) {
+  } else {
     gridRowPos.fourth = endVal;
     row = 4;
-  } else {
-    gridRowPos.fifth = endVal;
-    row = 5;
   }
   return row;
 }
