@@ -65,6 +65,12 @@ export default function Tech() {
 
       <Grid
         cursor="grab"
+        onMouseDown={(e: any) => {
+          e.target.style.cursor = "grabbing";
+        }}
+        onMouseUp={(e: any) => {
+          e.target.style.cursor = "grab";
+        }}
         minWidth="1200px"
         id="timeline-container"
         maxHeight="100%"

@@ -6,7 +6,7 @@ import setEventsYearsBorderPosition from "../../utils/timeline/setEventsYearsBor
 import EventsYearsBorder from "./EventsYearsBorder";
 import setScrollPositionTo2019 from "../../utils/timeline/setScrollPositionTo2019";
 import Years from "./Years";
-import manageBlockMove from "../../utils/timeline/manageBlockMove";
+import manageBlockMove from "../../utils/timeline/manageBlockMove/manageBlockMove";
 
 interface timelineProps {
   years: number[];
@@ -22,11 +22,11 @@ export const Timeline: React.FC<timelineProps> = ({ years, data }) => {
     fifth: 0,
   };
 
-  const oneMonthLengthInPixel = "55px";
+  const oneMonthLengthInPixels = "55px";
   const twelveMonths = 12;
   const gridTemplateColumns = `repeat(${
     years.length * twelveMonths
-  }, ${oneMonthLengthInPixel})`;
+  }, ${oneMonthLengthInPixels})`;
 
   useEffect(() => {
     setEventsYearsBorderPosition();
@@ -69,6 +69,7 @@ export const Timeline: React.FC<timelineProps> = ({ years, data }) => {
                 key={proj.title}
                 proj={proj}
                 index={i}
+                oneMonthLengthInPixels={oneMonthLengthInPixels}
                 firstYearInTimeline={years[0]}
                 gridRowPos={gridRowPos}
               />
