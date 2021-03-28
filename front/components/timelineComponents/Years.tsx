@@ -25,7 +25,9 @@ const Years: React.FC<{
               as="span"
               key={year}
             >
-              <Text id={`year-${year}-element`}>{year}</Text>
+              <Text id={`year-${year}-element`} className="year-elements">
+                {year}
+              </Text>
             </Box>
           </Flex>
         );

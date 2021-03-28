@@ -1,3 +1,5 @@
+import handleEdgeOffset from "./handleEdgeOffset";
+
 let dragSwitch = false;
 let block: HTMLElement | null;
 let initialX = 0;
@@ -40,6 +42,7 @@ function handleMouseUp(e: MouseEvent) {
   dragSwitch = false;
   if (block) {
     block.style.transition = "transform .5s";
+    handleEdgeOffset(undefined, true);
   }
 }
 
@@ -50,8 +53,10 @@ function checkCurrentTranslateX() {
     ).m41;
   }
 }
-const moveBlock = (xOffset: number) => {
+
+function moveBlock(xOffset: number) {
+  xOffset = handleEdgeOffset(xOffset);
   if (block) {
     block.style.transform = `translateX(${xOffset}px)`;
   }
-};
+}

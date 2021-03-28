@@ -4,7 +4,7 @@ import { AllProjectsNotPaginatedQuery } from "../../generated/graphql";
 import ProjectAsTimelineEvent from "./ProjectAsTimelineEvent";
 import setEventsYearsBorderPosition from "../../utils/timeline/setEventsYearsBorderPosition";
 import EventsYearsBorder from "./EventsYearsBorder";
-import setScrollPositionTo2019 from "../../utils/timeline/setScrollPositionTo2019";
+import setScrollPositionToYearX from "../../utils/timeline/setScrollPositionToYearX";
 import Years from "./Years";
 import manageBlockMove from "../../utils/timeline/manageBlockMove/manageBlockMove";
 
@@ -43,7 +43,7 @@ export const Timeline: React.FC<timelineProps> = ({ years, data }) => {
     const timeline = document.getElementById("timeline");
     const year2019Element = document.getElementById("year-2019-element");
     if (timeline && year2019Element) {
-      setScrollPositionTo2019(year2019Element, timeline);
+      setScrollPositionToYearX(year2019Element, timeline);
     }
   });
 
