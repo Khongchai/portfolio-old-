@@ -1,9 +1,16 @@
-import { Box, Grid, Text } from "@chakra-ui/react";
+import { Box, Grid, Text, Flex, transition } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { ProjectEntity } from "../../generated/graphql";
 import { GridRowPos } from "../../types/GridRowPos";
 import { getGridColumnLength } from "../../utils/timeline/getGridColumnLength";
 import { getGridRow } from "../../utils/timeline/getGridRow";
+import {
+  getExtraDayOffset,
+  setProjectAndIndicatorFocusColor,
+  revealTitleIfWidthLessThanTitle,
+  removeProjectAndIndicatorFocusColor,
+  resetWidthIfWidthNotOriginal,
+} from "../../utils/timeline/projectTimelineAsEventUtils";
 
 const ProjectAsTimelineEvent: React.FC<{
   proj: ProjectEntity;
@@ -18,6 +25,8 @@ const ProjectAsTimelineEvent: React.FC<{
   proj,
   gridRowPos,
 }) => {
+  const transitionTime = ".2s";
+
   const projectEndDate = {
     month: parseInt(proj.endDate?.split("-")[1]),
     year: parseInt(proj.endDate?.split("-")[0]),
@@ -49,6 +58,8 @@ const ProjectAsTimelineEvent: React.FC<{
     oneMonthLengthInPixels
   );
 
+  const projIdAsString = `${proj.id}`;
+
   return (
     <>
       <Box
@@ -57,41 +68,44 @@ const ProjectAsTimelineEvent: React.FC<{
         width="1px"
         transform={`translateX(${extraDayOffsetInPixels})`}
         bgColor="#828282"
-      ></Box>
-      <Grid
+        transition={`background-color ${transitionTime}, width ${transitionTime}`}
+        className="project-event-time-indicator"
+        id={`${projIdAsString}-time-indicator`}
+      />
+      <Flex
+        id={projIdAsString}
+        transition={`background-color ${transitionTime}, width ${transitionTime}`}
         className="project-event"
         bgColor="#858294"
+        onMouseOver={() => {
+          setProjectAndIndicatorFocusColor(projIdAsString);
+          revealTitleIfWidthLessThanTitle(projIdAsString);
+        }}
+        onMouseOut={() => {
+          resetWidthIfWidthNotOriginal(projIdAsString);
+          removeProjectAndIndicatorFocusColor(projIdAsString);
+        }}
         zIndex="2"
-        _hover={{ backgroundColor: "#FA9D55" }}
         transform={`translateX(${extraDayOffsetInPixels})`}
         gridColumn={`${gridColumnBeginPosition} / span ${gridColumnLength}`}
         gridRow={gridRow}
         placeItems={"center"}
         borderRadius="0 8px 8px 0"
         overflow="hidden"
-        justifyContent="center"
         fontSize="0.9rem"
-        p="0.1em 0.3em 0.1em 0.3em"
+        p="0.1em 0.3em 0.1em 1em"
+        cursor="pointer"
       >
-        <Text className="project-event-title">{proj.title}</Text>
-      </Grid>
+        <Text
+          pointerEvents="none"
+          className="project-event-title"
+          id={`${projIdAsString}-title`}
+        >
+          {proj.title}
+        </Text>
+      </Flex>
     </>
   );
 };
-
-function getExtraDayOffset(
-  projectBeginDay: number,
-  oneMonthLengthInPixel: string
-) {
-  //assume all month has 31 days for simplicity sake.
-  const daysInMonth = 31;
-  const offsetRight =
-    (parseInt(oneMonthLengthInPixel) * projectBeginDay) / daysInMonth;
-  return `${Math.floor(offsetRight)}px`;
-}
-
-function setToFocusColor() {
-  //TODO
-}
 
 export default ProjectAsTimelineEvent;
