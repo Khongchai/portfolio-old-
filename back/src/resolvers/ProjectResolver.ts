@@ -101,7 +101,14 @@ export class ProjectsResolver {
 
   @Query(() => [ProjectEntity])
   async allProjectsNotPaginated(): Promise<ProjectEntity[]> {
-    const allProjects = await ProjectEntity.find({});
+    const allProjects = await ProjectEntity.find({
+      relations: [
+        "frontEndTechnologies",
+        "backEndTechnologies",
+        "languages",
+        "hostingServices",
+      ],
+    });
     return allProjects;
   }
 

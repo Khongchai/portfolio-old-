@@ -107,7 +107,14 @@ let ProjectsResolver = class ProjectsResolver {
     }
     allProjectsNotPaginated() {
         return __awaiter(this, void 0, void 0, function* () {
-            const allProjects = yield ProjectEntity_1.ProjectEntity.find({});
+            const allProjects = yield ProjectEntity_1.ProjectEntity.find({
+                relations: [
+                    "frontEndTechnologies",
+                    "backEndTechnologies",
+                    "languages",
+                    "hostingServices",
+                ],
+            });
             return allProjects;
         });
     }
