@@ -6,6 +6,7 @@ import {
   ProjectsQuery,
   useGetSingleProjectByTitleQuery,
 } from "../../../generated/graphql";
+import setQueryParam from "../../../utils/generics/setQueryParam";
 import HighlightList from "./highlightList";
 import ProjList from "./projList";
 
@@ -56,10 +57,7 @@ const List: React.FC<ListProps> = ({
     }
 
     if (details?.title) {
-      router.push({
-        pathname: "/tech/filter",
-        query: { selection: details.title },
-      });
+      setQueryParam(details.title, "/tech/filter");
     }
   }, [details, fetching]);
 
@@ -85,7 +83,6 @@ const List: React.FC<ListProps> = ({
       id="list-container"
     >
       <HighlightList setDetails={setDetails} />
-
       <ProjList
         searchFetching={searchFetching}
         paginateForward={paginateForward}

@@ -1,7 +1,8 @@
 import { Grid, Heading, Stack, Text } from "@chakra-ui/react";
 import React from "react";
 import { ProjectEntity } from "../../../generated/graphql";
-import Links from "./ExternLinks";
+import Links from "../../shared/Links";
+import { ProjectDetails } from "../../shared/ProjectDetails";
 import ExpandButton from "./technologyExpandButton";
 
 const InfoDisplay: React.FC<{
@@ -34,15 +35,7 @@ const InfoDisplay: React.FC<{
           id="project-description-section"
           transition=".3s"
         >
-          <Heading as="h2">{details.title}</Heading>
-          <Text>
-            Date: &nbsp; <i>{`${details?.startDate} `}</i>
-            &nbsp; to &nbsp;
-            <i>{details.endDate ? details.endDate : "present"}</i>
-          </Text>
-          <Text mb="3rem" textAlign="justify" style={{ textIndent: "1.4em" }}>
-            {details?.description}
-          </Text>
+          <ProjectDetails mb="3rem" details={details} />
           <Links
             webLink={details.websiteLink}
             githubLink={details.githubLink}

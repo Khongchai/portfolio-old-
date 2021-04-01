@@ -15,9 +15,14 @@ export function getGridRow(
   } else if (beginVal > gridRowPos.third) {
     gridRowPos.third = endVal;
     row = 3;
-  } else {
+  } else if (beginVal > gridRowPos.fourth) {
     gridRowPos.fourth = endVal;
     row = 4;
+  } else {
+    //reset back to first if overlaps
+    //preferred solution: create another row
+    gridRowPos.first = endVal;
+    row = 1;
   }
   return row;
 }

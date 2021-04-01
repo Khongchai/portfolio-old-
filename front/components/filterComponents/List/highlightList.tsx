@@ -21,6 +21,7 @@ const HighlightList: React.FC<HighlightListProps> = ({ setDetails }) => {
       id="projects-view"
       boxShadow="0px 8px 20px rgba(0, 0, 0, 0.1)"
       borderRadius="22px"
+      overflow="auto"
       flexDir="column"
       pos="relative"
       gridRow="1"
@@ -51,7 +52,6 @@ const HighlightList: React.FC<HighlightListProps> = ({ setDetails }) => {
           <Flex
             cursor="pointer"
             id={proj.title}
-            class="projects"
             key={proj.id}
             minW="220px"
             minH="220px"
@@ -61,7 +61,7 @@ const HighlightList: React.FC<HighlightListProps> = ({ setDetails }) => {
               localStorage.setItem("savedSelection", JSON.stringify(project));
               setDetails(project);
             }}
-            className="project-container"
+            className="project-container projects"
             flexDir="column"
             placeItems="center"
             css={{

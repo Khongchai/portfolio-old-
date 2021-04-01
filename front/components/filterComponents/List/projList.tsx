@@ -28,6 +28,7 @@ export const ProjList: React.FC<ProjListProps> = ({
         borderRadius="22px"
         flexDir="column"
         pos="relative"
+        overflow="auto"
         gridRow="3"
       >
         <Flex placeItems="center">
@@ -62,7 +63,6 @@ export const ProjList: React.FC<ProjListProps> = ({
               <Flex
                 cursor="pointer"
                 id={proj.title}
-                class="projects"
                 key={proj.id}
                 minW="220px"
                 minH="220px"
@@ -75,7 +75,7 @@ export const ProjList: React.FC<ProjListProps> = ({
                   );
                   setDetails(project);
                 }}
-                className="project-container"
+                className="project-container projects"
                 flexDir="column"
                 placeItems="center"
                 css={{

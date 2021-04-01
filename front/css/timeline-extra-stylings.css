@@ -1,0 +1,9 @@
+.is-selected-proj {
+  z-index: 100;
+  background-color: #fa9d55 !important;
+}
+
+.is-hovered-proj {
+  z-index: 100;
+  background-color: #fa9d55 !important;
+}

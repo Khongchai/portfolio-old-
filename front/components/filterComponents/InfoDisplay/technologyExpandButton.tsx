@@ -159,6 +159,10 @@ const ExpandedContent: React.FC<{
     }
   }, [hoverComponentName]);
 
+  useEffect(() => {
+    removeAllAlternateDescriptions();
+  }, []);
+
   return (
     <>
       {hoverComponentName ? <InfoCard>{hoverComponentName}</InfoCard> : null}
@@ -208,14 +212,13 @@ const Logo: React.FC<{
         w="100%"
         align="center"
         onLoad={() => {
-          removeAllAlternateDescriptions();
+          //removeAllAlternateDescriptions();
         }}
       >
         {tech?.map((front) => {
           const nameOriginal = front.title;
           const name = nameOriginal.toLowerCase();
           const nameNoSpace = name.replace(/[\s\.]+/g, "");
-
           let src = `/logos/${nameNoSpace}.png`;
           let img = (
             <Box>

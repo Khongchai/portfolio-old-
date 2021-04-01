@@ -13,10 +13,8 @@ export function setProjectAndIndicatorFocusColor(projTitle: string) {
   const proj = document.getElementById(projTitle);
   const projIndicator = document.getElementById(`${projTitle}-time-indicator`);
   if (proj && projIndicator) {
-    proj.style.zIndex = "100";
-    proj.style.backgroundColor = "#FA9D55";
-    projIndicator.style.zIndex = "100";
-    projIndicator.style.backgroundColor = "#FA9D55";
+    proj.classList.add("is-hovered-proj");
+    projIndicator.classList.add("is-hovered-proj");
   }
 }
 
@@ -24,10 +22,30 @@ export function removeProjectAndIndicatorFocusColor(projId: string) {
   const proj = document.getElementById(projId);
   const projIndicator = document.getElementById(`${projId}-time-indicator`);
   if (proj && projIndicator) {
-    proj.style.zIndex = "2";
-    proj.style.backgroundColor = "#858294";
-    projIndicator.style.zIndex = "2";
-    projIndicator.style.backgroundColor = "#858294";
+    proj.classList.remove("is-hovered-proj");
+    projIndicator.classList.remove("is-hovered-proj");
+  }
+}
+
+export function setElementAsFocused(elemId: string, elemIndicatorId: string) {
+  //remove previously seledcted element(s)
+  const prevSelected = document.getElementsByClassName("is-selected-proj");
+  console.log(prevSelected);
+  const length = prevSelected.length;
+  if (length > 0) {
+    for (let i = 0; i < length; i++) {
+      /*
+        After removing an element from a class, the second element gets pushed to the first position "0" 
+      */
+      prevSelected[0].classList.remove("is-selected-proj");
+    }
+  }
+  //add classname to element
+  const elem = document.getElementById(elemId);
+  const elemIndicator = document.getElementById(elemIndicatorId);
+  if (elem && elemIndicator) {
+    elem.classList.add("is-selected-proj");
+    elemIndicator.classList.add("is-selected-proj");
   }
 }
 

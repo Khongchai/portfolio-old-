@@ -9,9 +9,9 @@ export default function removeAllAlternateDescriptions() {
     "alternate-text-as-logo"
   );
   const length = alternateTexts.length;
-  for (let i = 0; i < length; i++) {
-    if (alternateTexts[i]) {
-      alternateTexts[i].remove();
+  if (length > 0) {
+    for (let i = 0; i < length; i++) {
+      alternateTexts[0].remove();
     }
   }
 }

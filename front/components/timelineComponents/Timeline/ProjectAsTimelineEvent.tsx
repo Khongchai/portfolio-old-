@@ -1,29 +1,32 @@
 import { Box, Grid, Text, Flex, transition } from "@chakra-ui/react";
 import React, { useEffect } from "react";
-import { ProjectEntity } from "../../generated/graphql";
-import { GridRowPos } from "../../types/GridRowPos";
-import { getGridColumnLength } from "../../utils/timeline/getGridColumnLength";
-import { getGridRow } from "../../utils/timeline/getGridRow";
+import { ProjectEntity } from "../../../generated/graphql";
+import { GridRowPos } from "../../../types/GridRowPos";
+import { getGridColumnLength } from "../../../utils/timeline/getGridColumnLength";
+import { getGridRow } from "../../../utils/timeline/getGridRow";
 import {
   getExtraDayOffset,
   setProjectAndIndicatorFocusColor,
   revealTitleIfWidthLessThanTitle,
   removeProjectAndIndicatorFocusColor,
   resetWidthIfWidthNotOriginal,
-} from "../../utils/timeline/projectTimelineAsEventUtils";
+  setElementAsFocused,
+} from "../../../utils/timeline/projectTimelineAsEventUtils";
 
 const ProjectAsTimelineEvent: React.FC<{
   proj: ProjectEntity;
-  index: number;
   firstYearInTimeline: number;
   gridRowPos: GridRowPos;
   oneMonthLengthInPixels: string;
+  setSelectedProject: React.Dispatch<
+    React.SetStateAction<ProjectEntity | null>
+  >;
 }> = ({
   firstYearInTimeline,
   oneMonthLengthInPixels,
-  index,
   proj,
   gridRowPos,
+  setSelectedProject,
 }) => {
   const transitionTime = ".2s";
 
@@ -82,8 +85,16 @@ const ProjectAsTimelineEvent: React.FC<{
           revealTitleIfWidthLessThanTitle(projIdAsString);
         }}
         onMouseOut={() => {
-          resetWidthIfWidthNotOriginal(projIdAsString);
           removeProjectAndIndicatorFocusColor(projIdAsString);
+          resetWidthIfWidthNotOriginal(projIdAsString);
+        }}
+        onClick={(e) => {
+          e.stopPropagation();
+          setSelectedProject(proj);
+          setElementAsFocused(
+            projIdAsString,
+            `${projIdAsString}-time-indicator`
+          );
         }}
         zIndex="2"
         transform={`translateX(${extraDayOffsetInPixels})`}

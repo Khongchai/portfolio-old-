@@ -1,19 +1,29 @@
-import { Text, Box, Flex, Grid } from "@chakra-ui/react";
-import React, { useEffect, useLayoutEffect, useState } from "react";
-import { AllProjectsNotPaginatedQuery } from "../../generated/graphql";
-import ProjectAsTimelineEvent from "./ProjectAsTimelineEvent";
-import setEventsYearsBorderPosition from "../../utils/timeline/setEventsYearsBorderPosition";
+import { Box, Grid } from "@chakra-ui/react";
+import React, { useEffect, useRef } from "react";
+import {
+  AllProjectsNotPaginatedQuery,
+  ProjectEntity,
+} from "../../../generated/graphql";
+import manageBlockMove from "../../../utils/timeline/manageBlockMove/manageBlockMove";
+import setEventsYearsBorderPosition from "../../../utils/timeline/setEventsYearsBorderPosition";
+import setScrollPositionToYearX from "../../../utils/timeline/setScrollPositionToYearX";
+import Years from "../Years";
 import EventsYearsBorder from "./EventsYearsBorder";
-import setScrollPositionToYearX from "../../utils/timeline/setScrollPositionToYearX";
-import Years from "./Years";
-import manageBlockMove from "../../utils/timeline/manageBlockMove/manageBlockMove";
+import ProjectAsTimelineEvent from "./ProjectAsTimelineEvent";
 
 interface timelineProps {
   years: number[];
   data: AllProjectsNotPaginatedQuery | undefined;
+  setSelectedProject: React.Dispatch<
+    React.SetStateAction<ProjectEntity | null>
+  >;
 }
 
-export const Timeline: React.FC<timelineProps> = ({ years, data }) => {
+export const Timeline: React.FC<timelineProps> = ({
+  years,
+  data,
+  setSelectedProject,
+}) => {
   const gridRowPos = {
     first: 0,
     second: 0,
@@ -27,6 +37,7 @@ export const Timeline: React.FC<timelineProps> = ({ years, data }) => {
   const gridTemplateColumns = `repeat(${
     years.length * twelveMonths
   }, ${oneMonthLengthInPixels})`;
+  const yearElemToSetInitialScrollToRef = useRef<null | HTMLElement>(null);
 
   useEffect(() => {
     setEventsYearsBorderPosition();
@@ -39,13 +50,15 @@ export const Timeline: React.FC<timelineProps> = ({ years, data }) => {
     };
   }, []);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const timeline = document.getElementById("timeline");
-    const year2019Element = document.getElementById("year-2019-element");
-    if (timeline && year2019Element) {
-      setScrollPositionToYearX(year2019Element, timeline);
+    if (timeline && yearElemToSetInitialScrollToRef.current !== null) {
+      setScrollPositionToYearX(
+        yearElemToSetInitialScrollToRef.current,
+        timeline
+      );
     }
-  });
+  }, [yearElemToSetInitialScrollToRef.current]);
 
   return (
     <>
@@ -66,9 +79,9 @@ export const Timeline: React.FC<timelineProps> = ({ years, data }) => {
           {data?.allProjectsNotPaginated.map((proj, i) => {
             return (
               <ProjectAsTimelineEvent
+                setSelectedProject={setSelectedProject}
                 key={proj.title}
                 proj={proj}
-                index={i}
                 oneMonthLengthInPixels={oneMonthLengthInPixels}
                 firstYearInTimeline={years[0]}
                 gridRowPos={gridRowPos}
@@ -76,12 +89,17 @@ export const Timeline: React.FC<timelineProps> = ({ years, data }) => {
             );
           })}
 
-          {years.map((year, i) => {
+          {years.map((year: number, i) => {
             return (
               <Box
                 //the specificity locks these elements to the defined grid;
                 //prevents them from being pushed around
                 //now you can overlay anything over them
+                ref={
+                  year === 2019
+                    ? yearElemToSetInitialScrollToRef
+                    : (null as any)
+                }
                 className="year-borders"
                 w="1px"
                 borderLeft="1px solid #828282"

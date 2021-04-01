@@ -55,7 +55,7 @@ function checkCurrentTranslateX() {
 }
 
 function moveBlock(xOffset: number) {
-  xOffset = handleEdgeOffset(xOffset);
+  xOffset = handleEdgeOffset(xOffset) as number;
   if (block) {
     block.style.transform = `translateX(${xOffset}px)`;
   }
