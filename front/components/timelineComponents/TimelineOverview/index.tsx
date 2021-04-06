@@ -1,27 +1,25 @@
-import { Box, Button, Flex, Grid, Heading, Stack } from "@chakra-ui/react";
-import React, { useEffect } from "react";
+import { Box, Flex, Grid, Stack } from "@chakra-ui/react";
+import React from "react";
 import { ProjectEntity } from "../../../generated/graphql";
+import { readFromParamOrStorageAndSet } from "../../../utils/generics/readFromParamOrStorageAndSet";
 import Links from "../../shared/Links";
 import { ProjectDetails } from "../../shared/ProjectDetails";
 
 const TimelineOverview: React.FC<{
   selectedProject: ProjectEntity | null;
   defaultSelection: ProjectEntity | undefined;
-  dataFetching: boolean;
   setSelectedProject: React.Dispatch<
-    React.SetStateAction<ProjectEntity | null>
+    React.SetStateAction<ProjectEntity | undefined>
   >;
-}> = ({
-  dataFetching,
-  selectedProject,
-  setSelectedProject,
-  defaultSelection,
-}) => {
-  useEffect(() => {
-    if (!selectedProject && defaultSelection) {
-      setSelectedProject(defaultSelection);
-    }
-  }, [dataFetching]);
+  selection: string | undefined;
+}> = ({ selectedProject, setSelectedProject, selection, defaultSelection }) => {
+  readFromParamOrStorageAndSet(
+    setSelectedProject,
+    selection,
+    selectedProject?.title,
+    "/tech",
+    defaultSelection
+  );
 
   return (
     <Grid

@@ -112,10 +112,15 @@ export class ProjectsResolver {
     return allProjects;
   }
 
+  /*
+    Current use case for loading previously//cached selection,
+    prioritizing the data for snappy first load. 
+  */
   @Query(() => ProjResponse)
   async getSingleProjectByTitle(
     @Arg("title", () => String) title: string
   ): Promise<ProjResponse | undefined> {
+    console.log("from project resolver", title);
     const project = await ProjectEntity.findOne({
       where: { title },
       relations: [
@@ -125,6 +130,7 @@ export class ProjectsResolver {
         "hostingServices",
       ],
     });
+
     if (!project) {
       return {
         errors: [

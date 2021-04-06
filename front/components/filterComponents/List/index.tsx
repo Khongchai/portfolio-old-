@@ -1,12 +1,7 @@
 import { Grid } from "@chakra-ui/react";
-import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
-import {
-  ProjectEntity,
-  ProjectsQuery,
-  useGetSingleProjectByTitleQuery,
-} from "../../../generated/graphql";
-import setQueryParam from "../../../utils/generics/setQueryParam";
+import React from "react";
+import { ProjectEntity, ProjectsQuery } from "../../../generated/graphql";
+import { readFromParamOrStorageAndSet } from "../../../utils/generics/readFromParamOrStorageAndSet";
 import HighlightList from "./highlightList";
 import ProjList from "./projList";
 
@@ -29,42 +24,12 @@ const List: React.FC<ListProps> = ({
   paginateForward,
   paginateBackward,
 }) => {
-  const [runOnceAlready, setRunOnceAlready] = useState<boolean>(false);
-  const [singleFetchParam, setSingleFetchParam] = useState<string | undefined>(
-    undefined
+  readFromParamOrStorageAndSet(
+    setDetails,
+    selection,
+    details?.title,
+    "/tech/filter"
   );
-  const [{ data: singleProject, fetching }] = useGetSingleProjectByTitleQuery({
-    variables: { title: singleFetchParam } as any,
-  });
-
-  const router = useRouter();
-
-  //refactor to multiple useEffect
-  useEffect(() => {
-    if (!runOnceAlready) {
-      if (selection) {
-        //a selection is specified in the url param; a single query will be made
-        setSingleFetchParam(selection);
-        if (!fetching) {
-          setDetails(singleProject?.getSingleProjectByTitle.proj!);
-          setRunOnceAlready(true);
-        }
-      } else if (!fetching) {
-        //a selection is not specified in the url param, load from localStorage instead, if exists
-        loadFromLocalStorage();
-        setRunOnceAlready(true);
-      }
-    }
-
-    if (details?.title) {
-      setQueryParam(details.title, "/tech/filter");
-    }
-  }, [details, fetching]);
-
-  function loadFromLocalStorage() {
-    const savedSelection = localStorage.getItem("savedSelection");
-    if (savedSelection) setDetails(JSON.parse(savedSelection));
-  }
 
   return (
     <Grid

@@ -9,13 +9,13 @@ import {
 import removeDuplicatesFromArray from "../../utils/generics/removeDuplicatesFromArray";
 import setFirstHeightToSecondPadding from "../../utils/generics/setFirstHeightToSecondPadding";
 import setEventsYearsBorderPosition from "../../utils/timeline/setEventsYearsBorderPosition";
-import setQueryParam from "../../utils/generics/setQueryParam";
+import { GetServerSideProps } from "next";
 
-export default function Tech() {
+const Tech: React.FC<{ selection: string | undefined }> = ({ selection }) => {
   const [selectedProject, setSelectedProject] = useState<ProjectEntity | null>(
     null
   );
-  const [{ data, fetching: dataFetching }] = useAllProjectsNotPaginatedQuery();
+  const [{ data }] = useAllProjectsNotPaginatedQuery();
   const [years, setYears] = useState<number[]>([]);
   //this useeffect gets all the necessary data
 
@@ -25,12 +25,6 @@ export default function Tech() {
       window.removeEventListener("resize", setEventsYearsBorderPosition);
     };
   }, []);
-
-  useEffect(() => {
-    if (selectedProject?.title) {
-      setQueryParam(selectedProject.title, "/tech");
-    }
-  }, [selectedProject]);
 
   useEffect(() => {
     if (data) {
@@ -51,7 +45,7 @@ export default function Tech() {
     }
   }, [data]);
 
-  //set timeline size
+  /* Set timeline size */
   useEffect(() => {
     const timelinePage = document.getElementById("tech-timeline");
     const navbar = document.getElementById("navbar");
@@ -63,9 +57,9 @@ export default function Tech() {
   return (
     <Flex id="tech-timeline" overflowX="hidden" flexDir="column" height="100vh">
       <TimelineOverview
-        dataFetching={dataFetching}
+        selection={selection}
         selectedProject={selectedProject}
-        setSelectedProject={setSelectedProject}
+        setSelectedProject={setSelectedProject as any}
         defaultSelection={data?.allProjectsNotPaginated[0]}
       />
       <Grid
@@ -89,4 +83,16 @@ export default function Tech() {
       </Grid>
     </Flex>
   );
-}
+};
+
+export default Tech;
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const parsedQuery = context.query;
+  const { selection } = parsedQuery;
+  return {
+    props: {
+      selection: selection || null,
+    },
+  };
+};

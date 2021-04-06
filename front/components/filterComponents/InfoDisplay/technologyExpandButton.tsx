@@ -159,10 +159,6 @@ const ExpandedContent: React.FC<{
     }
   }, [hoverComponentName]);
 
-  useEffect(() => {
-    removeAllAlternateDescriptions();
-  }, []);
-
   return (
     <>
       {hoverComponentName ? <InfoCard>{hoverComponentName}</InfoCard> : null}
@@ -211,9 +207,6 @@ const Logo: React.FC<{
         className="logo-container"
         w="100%"
         align="center"
-        onLoad={() => {
-          //removeAllAlternateDescriptions();
-        }}
       >
         {tech?.map((front) => {
           const nameOriginal = front.title;
@@ -233,19 +226,34 @@ const Logo: React.FC<{
                   e.stopPropagation();
                 }}
                 onError={(e: any) => {
-                  //prevent infinite loop by checking if "svg" is already checked
+                  /* prevent infinite loop by checking if "svg" is already checked */
                   if (e.target.src.slice(-3) !== `svg`) {
                     e.target.src = `/logos/${nameNoSpace}.svg`;
                   } else {
-                    //If get to this point, 1. tech does not have a logo OR 2. error loading
-                    //fix by just replacing with a text
-                    const textContainer = document.createElement("div");
-                    textContainer.innerHTML = `<p>${nameOriginal}</p>`;
-                    textContainer.style.height = "fit-content";
-                    e.target.parentNode.insertBefore(textContainer, e.target);
+                    /*
+                      If get to this point, 1. tech does not have a logo OR 2. error loading
+                      fix by just replacing with a text
+                    */
+                    const textContainer = document.createElement("p");
+                    /*
+                       hide the default placeholder image
+                    */
                     (e.target as HTMLImageElement).style.display = "none";
-                    textContainer.className = "alternate-text-as-logo";
-                    textContainer.style.color = "white";
+
+                    const prevTextContainer = document.getElementById(
+                      `${nameOriginal}-text-as-logo`
+                    );
+                    /*
+                      Only perform the following if the prev container does not
+                      have the following text already
+                    */
+                    if (!prevTextContainer) {
+                      textContainer.id = `${nameOriginal}-text-as-logo`;
+                      textContainer.innerHTML = `<p>${nameOriginal}</p>`;
+                      textContainer.style.height = "fit-content";
+                      e.target.parentNode.insertBefore(textContainer, e.target);
+                      textContainer.style.color = "white";
+                    }
                   }
                 }}
                 _hover={{

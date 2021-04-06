@@ -30,7 +30,6 @@ export function removeProjectAndIndicatorFocusColor(projId: string) {
 export function setElementAsFocused(elemId: string, elemIndicatorId: string) {
   //remove previously seledcted element(s)
   const prevSelected = document.getElementsByClassName("is-selected-proj");
-  console.log(prevSelected);
   const length = prevSelected.length;
   if (length > 0) {
     for (let i = 0; i < length; i++) {
@@ -40,7 +39,6 @@ export function setElementAsFocused(elemId: string, elemIndicatorId: string) {
       prevSelected[0].classList.remove("is-selected-proj");
     }
   }
-  //add classname to element
   const elem = document.getElementById(elemId);
   const elemIndicator = document.getElementById(elemIndicatorId);
   if (elem && elemIndicator) {

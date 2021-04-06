@@ -15,14 +15,24 @@ why does search value reset when navbar is collapsed and reopened?
 in "See all" mode, make it so that it is possible to look up by name as well.
 the sorting by date and asc should all be moved to "see all" page only
 
+removeAllAlternateDescriptions does not remove all alternate descriptions...
+
 Timeline:
 
 
 Home/timeline page --------------------------------------------------------------------------
 
 Manage timeline move
-move 2018 off screen so that 2019 becomes the first year 
 
-use date to offset the position of each event by a percentage
+continue writing the throttle function
+
+take care of the setSCrollPositionTOYearX. Right now it's moving without taking into account the 
+current position of the moved elements. Can cause offset in a really big screen. Change it so that it
+really moves the elements to the actual postiion OR move it to the translateX position where the user begins grabbing. <<< If there is a throttling, this won't be necessary; user won't be able to scroll very far anyway.
+
+
+manage the projectAsEvent bottom padding
+refactor readFromParamOrStorageAndSet (look for TODO in the function) and make the first selection colored.
+
 
 

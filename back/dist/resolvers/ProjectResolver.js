@@ -120,6 +120,7 @@ let ProjectsResolver = class ProjectsResolver {
     }
     getSingleProjectByTitle(title) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log("from project resolver", title);
             const project = yield ProjectEntity_1.ProjectEntity.findOne({
                 where: { title },
                 relations: [
