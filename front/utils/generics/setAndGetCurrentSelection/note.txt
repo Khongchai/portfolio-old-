@@ -1,0 +1,6 @@
+This set of utils is responsible for passing on and reading the currently selected value to/from localStorage, queryParam, and the reactState.
+
+Put readFrromParamOrStargeAndSet() and updateQueryParamOnChange() in the responsible component and call setToLocalStorageAndSelectedState() to
+set the change. The value will propagate to all the required places.
+
+updatequeryParamOnChange is in useEffect because it needs to wait until projTitle finishes loading to perform the required action.

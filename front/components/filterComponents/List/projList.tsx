@@ -1,7 +1,7 @@
 import { Box, Flex, Grid, Heading, Img, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { ProjectEntity, ProjectsQuery } from "../../../generated/graphql";
-import removeAllAlternateDescriptions from "../../../utils/filter/removeAlternateDescription";
+import { setToLocalStorageAndSelectedState } from "../../../utils/generics/setAndGetCurrentSelection/setToLocalStorageAndSelectedState";
 
 interface ProjListProps {
   data: ProjectsQuery | undefined;
@@ -69,11 +69,7 @@ export const ProjList: React.FC<ProjListProps> = ({
                 pb={2}
                 onClick={() => {
                   const project = proj as ProjectEntity;
-                  localStorage.setItem(
-                    "savedSelection",
-                    JSON.stringify(project)
-                  );
-                  setDetails(project);
+                  setToLocalStorageAndSelectedState(project, setDetails);
                 }}
                 className="project-container projects"
                 flexDir="column"

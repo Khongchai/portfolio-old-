@@ -2,17 +2,14 @@ import { useEffect, useState } from "react";
 import {
   ProjectEntity,
   useGetSingleProjectByTitleQuery,
-} from "../../generated/graphql";
-import setQueryParam from "./setQueryParam";
+} from "../../../generated/graphql";
+import { setToLocalStorageAndSelectedState } from "./setToLocalStorageAndSelectedState";
 
-//TODO rename to something more descriptive of what this function does
-export function readFromParamOrStorageAndSet(
+export function readFromParamOrStorage(
   setStateFunction: React.Dispatch<
     React.SetStateAction<ProjectEntity | undefined>
   >,
   queryFromURL: string | undefined,
-  projTitle: string | undefined,
-  currentPageRelativePath: string,
   fallbackValue?: ProjectEntity
 ) {
   const [runOnceAlready, setRunOnceAlready] = useState<boolean>(false);
@@ -23,42 +20,39 @@ export function readFromParamOrStorageAndSet(
     variables: { title: singleFetchParam } as any,
   });
 
-  //refactor to multiple useEffect
   useEffect(() => {
     if (!runOnceAlready) {
       if (queryFromURL) {
         //a queryFromURL is specified in the url param; a single query will be made
         setSingleFetchParam(queryFromURL);
         if (!fetching) {
-          setStateFunction(singleProject?.getSingleProjectByTitle.proj!);
+          setToLocalStorageAndSelectedState(
+            singleProject?.getSingleProjectByTitle.proj!,
+            setStateFunction
+          );
           setRunOnceAlready(true);
         }
       } else if (!fetching) {
         //a queryFromURL is not specified in the url param, load from localStorage instead, if exists
-        loadFromLocalStorage(setStateFunction);
-        setRunOnceAlready(true);
+        //if not, check to see if there is a provided fallbackValue
+        if (!loadFromLocalStorage(setStateFunction) && fallbackValue) {
+          setToLocalStorageAndSelectedState(fallbackValue, setStateFunction);
+          setRunOnceAlready(true);
+        }
       }
-    }
-  }, [fetching]);
-
-  useEffect(() => {
-    if (projTitle) {
-      setQueryParam(projTitle, currentPageRelativePath);
-    }
-  }, [projTitle]);
-
-  useEffect(() => {
-    if (fallbackValue && !fetching) {
-      setStateFunction(fallbackValue);
     }
   }, [fetching, fallbackValue]);
 }
 
-export function loadFromLocalStorage(
+function loadFromLocalStorage(
   setStateFunction: React.Dispatch<
     React.SetStateAction<ProjectEntity | undefined>
   >
-) {
+): boolean {
   const savedSelection = localStorage.getItem("savedSelection");
-  if (savedSelection) setStateFunction(JSON.parse(savedSelection));
+  if (savedSelection) {
+    setStateFunction(JSON.parse(savedSelection));
+    return true;
+  }
+  return false;
 }

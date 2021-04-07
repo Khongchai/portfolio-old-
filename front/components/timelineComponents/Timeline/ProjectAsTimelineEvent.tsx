@@ -1,16 +1,17 @@
-import { Box, Grid, Text, Flex, transition } from "@chakra-ui/react";
-import React, { useEffect } from "react";
+import { Box, Flex, Text } from "@chakra-ui/react";
+import React from "react";
 import { ProjectEntity } from "../../../generated/graphql";
 import { GridRowPos } from "../../../types/GridRowPos";
+import { setToLocalStorageAndSelectedState } from "../../../utils/generics/setAndGetCurrentSelection/setToLocalStorageAndSelectedState";
 import { getGridColumnLength } from "../../../utils/timeline/getGridColumnLength";
 import { getGridRow } from "../../../utils/timeline/getGridRow";
 import {
   getExtraDayOffset,
-  setProjectAndIndicatorFocusColor,
-  revealTitleIfWidthLessThanTitle,
   removeProjectAndIndicatorFocusColor,
   resetWidthIfWidthNotOriginal,
+  revealTitleIfWidthLessThanTitle,
   setElementAsFocused,
+  setProjectAndIndicatorFocusColor,
 } from "../../../utils/timeline/projectTimelineAsEventUtils";
 
 const ProjectAsTimelineEvent: React.FC<{
@@ -90,7 +91,7 @@ const ProjectAsTimelineEvent: React.FC<{
         }}
         onClick={(e) => {
           e.stopPropagation();
-          setSelectedProject(proj);
+          setToLocalStorageAndSelectedState(proj, setSelectedProject as any);
           setElementAsFocused(
             projIdAsString,
             `${projIdAsString}-time-indicator`

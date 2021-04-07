@@ -1,7 +1,8 @@
 import { Grid } from "@chakra-ui/react";
 import React from "react";
 import { ProjectEntity, ProjectsQuery } from "../../../generated/graphql";
-import { readFromParamOrStorageAndSet } from "../../../utils/generics/readFromParamOrStorageAndSet";
+import { readFromParamOrStorage } from "../../../utils/generics/setAndGetCurrentSelection/readFromParamOrStorageAndSet";
+import { updateQueryParamOnChange } from "../../../utils/generics/setAndGetCurrentSelection/updateQueryParamOnChange";
 import HighlightList from "./highlightList";
 import ProjList from "./projList";
 
@@ -24,12 +25,8 @@ const List: React.FC<ListProps> = ({
   paginateForward,
   paginateBackward,
 }) => {
-  readFromParamOrStorageAndSet(
-    setDetails,
-    selection,
-    details?.title,
-    "/tech/filter"
-  );
+  readFromParamOrStorage(setDetails, selection);
+  updateQueryParamOnChange(details?.title, "/tech/filter");
 
   return (
     <Grid

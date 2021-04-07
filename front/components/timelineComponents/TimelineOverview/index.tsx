@@ -1,7 +1,8 @@
 import { Box, Flex, Grid, Stack } from "@chakra-ui/react";
 import React from "react";
 import { ProjectEntity } from "../../../generated/graphql";
-import { readFromParamOrStorageAndSet } from "../../../utils/generics/readFromParamOrStorageAndSet";
+import { readFromParamOrStorage } from "../../../utils/generics/setAndGetCurrentSelection/readFromParamOrStorageAndSet";
+import { updateQueryParamOnChange } from "../../../utils/generics/setAndGetCurrentSelection/updateQueryParamOnChange";
 import Links from "../../shared/Links";
 import { ProjectDetails } from "../../shared/ProjectDetails";
 
@@ -13,13 +14,8 @@ const TimelineOverview: React.FC<{
   >;
   selection: string | undefined;
 }> = ({ selectedProject, setSelectedProject, selection, defaultSelection }) => {
-  readFromParamOrStorageAndSet(
-    setSelectedProject,
-    selection,
-    selectedProject?.title,
-    "/tech",
-    defaultSelection
-  );
+  readFromParamOrStorage(setSelectedProject, selection, defaultSelection);
+  updateQueryParamOnChange(selectedProject?.title, "/tech");
 
   return (
     <Grid
