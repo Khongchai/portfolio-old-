@@ -35,6 +35,14 @@ export class ProjectEntity extends BaseEntity {
   @Column({ nullable: true })
   websiteLink: string;
 
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  imgLink: string;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  tinyImgLink: string;
+
   @Field(() => [TechnologyEntity], { nullable: true })
   @ManyToMany(() => TechnologyEntity, (tech) => tech.frontEndIn)
   frontEndTechnologies: TechnologyEntity[];

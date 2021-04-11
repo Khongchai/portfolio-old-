@@ -32,7 +32,11 @@ really moves the elements to the actual postiion OR move it to the translateX po
 
 
 manage the projectAsEvent bottom padding
-refactor readFromParamOrStorageAndSet (look for TODO in the function) and make the first selection colored.
 
+Pictures....deal with it, there's no running now.
 
+find images
+write new initialMigraiton for typeORM
+combine home and filter to same section in a dropdown: view as "timeline" && "filter"
 
+timeline redesign => screenshot to left, description to right

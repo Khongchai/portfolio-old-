@@ -41,6 +41,12 @@ export class ProjectCreationInput {
   @Field({ nullable: true })
   websiteLink: string;
 
+  @Field({ nullable: true })
+  imgLink: string;
+
+  @Field({ nullable: true })
+  tinyImgLink: string;
+
   @Field(() => TechnologyProperties, { nullable: true })
   techProps: TechnologyProperties;
 

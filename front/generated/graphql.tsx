@@ -48,12 +48,14 @@ export type ProjectEntity = {
   shortDescription: Scalars['String'];
   githubLink: Scalars['String'];
   websiteLink?: Maybe<Scalars['String']>;
+  imgLink?: Maybe<Scalars['String']>;
+  tinyImgLink?: Maybe<Scalars['String']>;
   frontEndTechnologies?: Maybe<Array<TechnologyEntity>>;
   backEndTechnologies?: Maybe<Array<TechnologyEntity>>;
   languages?: Maybe<Array<TechnologyEntity>>;
   hostingServices?: Maybe<Array<TechnologyEntity>>;
   startDate: Scalars['String'];
-  endDate: Scalars['String'];
+  endDate?: Maybe<Scalars['String']>;
   isHighlight?: Maybe<Scalars['Boolean']>;
 };
 
@@ -134,12 +136,14 @@ export type MutationDeleteTechnolgyArgs = {
 
 export type ProjectCreationInput = {
   startDate: Scalars['String'];
-  endDate: Scalars['String'];
+  endDate?: Maybe<Scalars['String']>;
   title: Scalars['String'];
   description: Scalars['String'];
   shortDescription: Scalars['String'];
   githubLink: Scalars['String'];
   websiteLink?: Maybe<Scalars['String']>;
+  imgLink?: Maybe<Scalars['String']>;
+  tinyImgLink?: Maybe<Scalars['String']>;
   techProps?: Maybe<TechnologyProperties>;
   isHighlight?: Maybe<Scalars['Boolean']>;
 };
@@ -152,13 +156,13 @@ export type TechnologyProperties = {
 };
 
 export type AddTechInput = {
-  projName: Scalars['String'];
+  projTitle: Scalars['String'];
   techProps?: Maybe<TechnologyProperties>;
 };
 
 export type ProjectFieldsFragment = (
   { __typename?: 'ProjectEntity' }
-  & Pick<ProjectEntity, 'id' | 'title' | 'isHighlight' | 'endDate' | 'startDate' | 'description' | 'githubLink' | 'websiteLink' | 'shortDescription'>
+  & Pick<ProjectEntity, 'id' | 'title' | 'isHighlight' | 'endDate' | 'startDate' | 'description' | 'githubLink' | 'websiteLink' | 'imgLink' | 'tinyImgLink' | 'shortDescription'>
   & { frontEndTechnologies?: Maybe<Array<(
     { __typename?: 'TechnologyEntity' }
     & Pick<TechnologyEntity, 'title' | 'id'>
@@ -287,6 +291,8 @@ export const ProjectFieldsFragmentDoc = gql`
   description
   githubLink
   websiteLink
+  imgLink
+  tinyImgLink
   shortDescription
 }
     `;

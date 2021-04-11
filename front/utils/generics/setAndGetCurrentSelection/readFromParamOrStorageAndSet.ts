@@ -50,9 +50,13 @@ function loadFromLocalStorage(
   >
 ): boolean {
   const savedSelection = localStorage.getItem("savedSelection");
-  if (savedSelection) {
+  /**
+   * Undefined will be stored in local storage as string
+   */
+  if (savedSelection && savedSelection !== "undefined") {
     setStateFunction(JSON.parse(savedSelection));
     return true;
   }
+  console.log("savedSelection does not exist");
   return false;
 }

@@ -23,5 +23,7 @@ fragment ProjectFields on ProjectEntity {
   description
   githubLink
   websiteLink
+  imgLink
+  tinyImgLink
   shortDescription
 }
