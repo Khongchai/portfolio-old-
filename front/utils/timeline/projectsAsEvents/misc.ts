@@ -9,44 +9,6 @@ export function getExtraDayOffset(
   return `${Math.floor(offsetRight)}px`;
 }
 
-export function setProjectAndIndicatorFocusColor(projTitle: string) {
-  const proj = document.getElementById(projTitle);
-  const projIndicator = document.getElementById(`${projTitle}-time-indicator`);
-  if (proj && projIndicator) {
-    proj.classList.add("is-hovered-proj");
-    projIndicator.classList.add("is-hovered-proj");
-  }
-}
-
-export function removeProjectAndIndicatorFocusColor(projId: string) {
-  const proj = document.getElementById(projId);
-  const projIndicator = document.getElementById(`${projId}-time-indicator`);
-  if (proj && projIndicator) {
-    proj.classList.remove("is-hovered-proj");
-    projIndicator.classList.remove("is-hovered-proj");
-  }
-}
-
-export function setElementAsFocused(elemId: string, elemIndicatorId: string) {
-  //remove previously seledcted element(s)
-  const prevSelected = document.getElementsByClassName("is-selected-proj");
-  const length = prevSelected.length;
-  if (length > 0) {
-    for (let i = 0; i < length; i++) {
-      /*
-        After removing an element from a class, the second element gets pushed to the first position "0" 
-      */
-      prevSelected[0].classList.remove("is-selected-proj");
-    }
-  }
-  const elem = document.getElementById(elemId);
-  const elemIndicator = document.getElementById(elemIndicatorId);
-  if (elem && elemIndicator) {
-    elem.classList.add("is-selected-proj");
-    elemIndicator.classList.add("is-selected-proj");
-  }
-}
-
 export function revealTitleIfWidthLessThanTitle(projId: string) {
   const proj = document.getElementById(projId);
   const projTitle = document.getElementById(`${projId}-title`);

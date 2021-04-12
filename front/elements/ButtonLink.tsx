@@ -16,6 +16,7 @@ export const ButtonLink: React.FC<{
         bgColor="mainOrange"
         width="fit-content"
         isExternal={true}
+        textShadow="none"
         href={link}
         filter={link ? "" : "grayscale(100%)"}
         pointerEvents={link ? "auto" : "none"}

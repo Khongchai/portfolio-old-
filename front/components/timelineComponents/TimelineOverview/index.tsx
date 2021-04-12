@@ -1,4 +1,4 @@
-import { Box, Flex, Grid, Stack } from "@chakra-ui/react";
+import { Box, Flex, Stack, Text } from "@chakra-ui/react";
 import React from "react";
 import { ProjectEntity } from "../../../generated/graphql";
 import { readFromParamOrStorage } from "../../../utils/generics/setAndGetCurrentSelection/readFromParamOrStorageAndSet";
@@ -16,41 +16,25 @@ const TimelineOverview: React.FC<{
 }> = ({ selectedProject, setSelectedProject, selection, defaultSelection }) => {
   readFromParamOrStorage(setSelectedProject, selection, defaultSelection);
   updateQueryParamOnChange(selectedProject?.title, "/tech");
-
   return (
-    <Grid
+    <Flex
       flex="0.60"
-      width="100%"
+      height="min(100%, 500px)"
       bgColor="#444057"
       id="wallpaper-container"
       placeItems="center"
+      p="20px 10% 20px 10%"
     >
       {selectedProject ? (
         <>
-          <Flex
-            borderRadius="8px"
-            bgColor="black"
-            width="83%"
-            height="85%"
-            id="wallpaper"
+          <Stack
+            as={Flex}
+            flex="0.50"
+            spacing="2em"
             p="1rem 1rem 1rem 1rem"
-            justify="center"
-            align="center"
-            backgroundImage="url('https://res.cloudinary.com/dmmhsq8ti/image/upload/v1618160846/Screenshot_105_anpxok.png')"
-            backgroundRepeat="no-repeat"
-            backgroundSize="cover;"
-            backgroundPosition="center center"
+            textShadow="black 0px 2px 5px"
           >
-            <Box className="left-padding" flex="0.10" />
-            <Stack
-              as={Flex}
-              flex="0.50"
-              spacing="2em"
-              p="1rem 1rem 1rem 1rem"
-              textShadow="black 0px 2px 5px"
-            >
-              <ProjectDetails details={selectedProject} />
-            </Stack>
+            <ProjectDetails details={selectedProject} />
             <Flex
               ml="auto"
               flex="0.25"
@@ -63,13 +47,38 @@ const TimelineOverview: React.FC<{
                 webLink={selectedProject.websiteLink}
               />
             </Flex>
-            <Box className="left-padding" flex="0.10" />
-          </Flex>
+          </Stack>
+          <Box flex="0.5">
+            {selectedProject.imgLink ? (
+              <Flex
+                borderRadius="20px"
+                id="wallpaper"
+                width="clamp(360px, 100%, calc(360px * 1.5))"
+                pt="clamp(256px, 70%, calc(256px * 1.5))"
+                backgroundImage={`url(${selectedProject.imgLink})`}
+                backgroundRepeat="no-repeat"
+                backgroundSize="cover"
+                backgroundPosition="center"
+                boxShadow="dark-lg"
+                placeItems="center"
+              />
+            ) : (
+              <Text
+                display="block"
+                textAlign="center"
+                transform="rotate(20deg)"
+                fontSize="1.5em"
+                letterSpacing="1.7"
+              >
+                Preview Image Not Available
+              </Text>
+            )}
+          </Box>
         </>
       ) : (
         <div>loading...</div>
       )}
-    </Grid>
+    </Flex>
   );
 };
 

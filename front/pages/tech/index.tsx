@@ -76,6 +76,7 @@ const Tech: React.FC<{ selection: string | undefined }> = ({ selection }) => {
         flex="0.40"
       >
         <Timeline
+          selectedProject={selectedProject}
           setSelectedProject={setSelectedProject}
           years={years}
           data={data}

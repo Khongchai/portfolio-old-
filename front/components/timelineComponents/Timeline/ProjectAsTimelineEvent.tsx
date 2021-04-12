@@ -7,12 +7,13 @@ import { getGridColumnLength } from "../../../utils/timeline/getGridColumnLength
 import { getGridRow } from "../../../utils/timeline/getGridRow";
 import {
   getExtraDayOffset,
-  removeProjectAndIndicatorFocusColor,
   resetWidthIfWidthNotOriginal,
   revealTitleIfWidthLessThanTitle,
-  setElementAsFocused,
+} from "../../../utils/timeline/projectsAsEvents/misc";
+import {
+  removeProjectAndIndicatorFocusColor,
   setProjectAndIndicatorFocusColor,
-} from "../../../utils/timeline/projectTimelineAsEventUtils";
+} from "../../../utils/timeline/projectsAsEvents/setFocusOnHover";
 
 const ProjectAsTimelineEvent: React.FC<{
   proj: ProjectEntity;
@@ -92,10 +93,6 @@ const ProjectAsTimelineEvent: React.FC<{
         onClick={(e) => {
           e.stopPropagation();
           setToLocalStorageAndSelectedState(proj, setSelectedProject as any);
-          setElementAsFocused(
-            projIdAsString,
-            `${projIdAsString}-time-indicator`
-          );
         }}
         zIndex="2"
         transform={`translateX(${extraDayOffsetInPixels})`}

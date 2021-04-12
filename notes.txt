@@ -17,6 +17,9 @@ the sorting by date and asc should all be moved to "see all" page only
 
 removeAllAlternateDescriptions does not remove all alternate descriptions...
 
+
+optimize search regex
+
 Timeline:
 
 
@@ -39,4 +42,4 @@ find images
 write new initialMigraiton for typeORM
 combine home and filter to same section in a dropdown: view as "timeline" && "filter"
 
-timeline redesign => screenshot to left, description to right
+Look for TODO in timeline/index.tsx

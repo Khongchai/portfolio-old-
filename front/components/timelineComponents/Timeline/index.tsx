@@ -5,6 +5,7 @@ import {
   ProjectEntity,
 } from "../../../generated/graphql";
 import manageBlockMove from "../../../utils/timeline/manageBlockMove/manageBlockMove";
+import setFocusOnChange from "../../../utils/timeline/projectsAsEvents/setFocusOnChange";
 import setEventsYearsBorderPosition from "../../../utils/timeline/setEventsYearsBorderPosition";
 import setScrollPositionToYearX from "../../../utils/timeline/setScrollPositionToYearX";
 import Years from "../Years";
@@ -17,12 +18,14 @@ interface timelineProps {
   setSelectedProject: React.Dispatch<
     React.SetStateAction<ProjectEntity | null>
   >;
+  selectedProject: ProjectEntity | null;
 }
 
 export const Timeline: React.FC<timelineProps> = ({
   years,
   data,
   setSelectedProject,
+  selectedProject,
 }) => {
   const gridRowPos = {
     first: 0,
@@ -49,6 +52,16 @@ export const Timeline: React.FC<timelineProps> = ({
       manageBlockMove("timeline", "de-monitor");
     };
   }, []);
+
+  //use useState and set the state as true when the last elements of the projectEvent finished loading.
+  //when true, run this focusOnChange
+  //this is for loading the currently selected event when loading value from get query
+  useEffect(() => {
+    setFocusOnChange(
+      String(selectedProject?.id),
+      `${selectedProject?.id}-time-indicator`
+    );
+  }, [selectedProject]);
 
   useEffect(() => {
     const timeline = document.getElementById("timeline");

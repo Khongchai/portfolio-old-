@@ -37,8 +37,8 @@ export function readFromParamOrStorage(
         //if not, check to see if there is a provided fallbackValue
         if (!loadFromLocalStorage(setStateFunction) && fallbackValue) {
           setToLocalStorageAndSelectedState(fallbackValue, setStateFunction);
-          setRunOnceAlready(true);
         }
+        setRunOnceAlready(true);
       }
     }
   }, [fetching, fallbackValue]);
@@ -54,9 +54,14 @@ function loadFromLocalStorage(
    * Undefined will be stored in local storage as string
    */
   if (savedSelection && savedSelection !== "undefined") {
+    //Only set state because selection already in local storage
+    setToLocalStorageAndSelectedState(
+      JSON.parse(savedSelection),
+      setStateFunction,
+      true
+    );
     setStateFunction(JSON.parse(savedSelection));
     return true;
   }
-  console.log("savedSelection does not exist");
   return false;
 }

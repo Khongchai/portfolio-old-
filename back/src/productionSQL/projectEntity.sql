@@ -1,5 +1,5 @@
       alter sequence project_entity_id_seq restart with 1;
-      insert into project_entity (title, description, "shortDescription", "githubLink", "websiteLink", "startDate", "endDate", "isHighlight") 
+      insert into project_entity (title, description, "shortDescription", "githubLink", "websiteLink", "startDate", "endDate", "isHighlight", "imgLink", "tinyImgLink") 
            values ('ASTRUM', 'The artistic project ASTRUM is an interdisciplinary project combining different 
            aspects of music, music production, and technology to help tell the story about our relationship with the solar system. 
            The outcomes of this projects are a website that, with the help of the NASA''s Eyes, explore our relationship 
@@ -8,7 +8,9 @@
            '99% pure HTML/CSS/Javascript', 
            'https://github.com/Khongchai/ASTRUM-2020', 
            'https://khongchai.github.io/ASTRUM-2020/', 
-           '2019-06-15', '2020-07-25', 'true');
+           '2019-06-15', '2020-07-25', 'true', 
+           'https://res.cloudinary.com/dmmhsq8ti/image/upload/v1618208180/Screen_Shot_2021-04-13_at_12.47.03-fullpage_farusu.png', 
+           'https://res.cloudinary.com/dmmhsq8ti/image/upload/v1618208325/webicontransparent_nruh6b.png');
            
            insert into technology_entity_front_end_in_project_entity ("technologyEntityId", "projectEntityId") values 
               ((select id from technology_entity where title='jQuery'), (select id from project_entity where title = 'ASTRUM')),
@@ -20,12 +22,14 @@
                ((select id from technology_entity where title in ('Java')), (select id from project_entity where title = 'ASTRUM'));
 
 
-      insert into project_entity (title, description, "shortDescription", "githubLink", "websiteLink", "startDate", "endDate", "isHighlight") 
+      insert into project_entity (title, description, "shortDescription", "githubLink", "websiteLink", "startDate", "endDate", "isHighlight", "imgLink", "tinyImgLink") 
            values ('Journeys', 'A simple blog with custom-made navigation bar and timeline based on provided mdx data. This project makes a heavy use of css grid.', 
            'A simple blog with Gatsby', 
            'https://github.com/Khongchai/journeys', 
            'https://khongchai.github.io/journeys', 
-           '2020-12-23', '2021-04-30', 'true');
+           '2020-12-23', '2021-04-30', 'true',
+           'https://res.cloudinary.com/dmmhsq8ti/image/upload/v1618208183/Screen_Shot_2021-04-13_at_12.48.04-fullpage_wndync.png',
+           'https://res.cloudinary.com/dmmhsq8ti/image/upload/v1618208450/Journeys_fancct.png');
            
            insert into technology_entity_front_end_in_project_entity ("technologyEntityId", "projectEntityId") values 
               ((select id from technology_entity where title='Gatsby'), (select id from project_entity where title = 'Journeys')),
@@ -36,12 +40,14 @@
            ((select id from technology_entity where title = 'Javascript'), (select id from project_entity where title = 'Journeys')), 
            ((select id from technology_entity where title = 'TypeScript'), (select id from project_entity where title = 'Journeys')); 
 
-      insert into project_entity (title, description, "shortDescription", "githubLink", "websiteLink", "startDate", "endDate", "isHighlight") 
+      insert into project_entity (title, description, "shortDescription", "githubLink", "websiteLink", "startDate", "endDate", "isHighlight", "imgLink", "tinyImgLink") 
            values ('WordMem', 'A vocab memorization application, allows for simple CRUD operation, auth (login, logout, register), and dictionary scraping with beautiful soup.', 
            'CRUD + Webscraping', 
            'https://github.com/Khongchai/WordMem', 
            'https://vocab-mem-front.herokuapp.com/', 
-           '2020-10-11', '2021-02-16', 'false');
+           '2020-10-11', '2021-02-16', 'false',
+           'https://res.cloudinary.com/dmmhsq8ti/image/upload/v1618208180/vocabmem_ghkfrx.png',
+           'https://res.cloudinary.com/dmmhsq8ti/image/upload/v1618208642/WordMem_nuur0x.png');
            
            insert into technology_entity_front_end_in_project_entity ("technologyEntityId", "projectEntityId") values 
               ((select id from technology_entity where title='React'), (select id from project_entity where title = 'WordMem')),
