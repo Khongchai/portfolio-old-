@@ -1,5 +1,5 @@
 import { Box, Grid } from "@chakra-ui/react";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   AllProjectsNotPaginatedQuery,
   ProjectEntity,
@@ -35,6 +35,7 @@ export const Timeline: React.FC<timelineProps> = ({
     fifth: 0,
   };
 
+  const [lastEventRendered, setLastEventRendered] = useState<boolean>(false);
   const oneMonthLengthInPixels = "55px";
   const twelveMonths = 12;
   const gridTemplateColumns = `repeat(${
@@ -53,15 +54,14 @@ export const Timeline: React.FC<timelineProps> = ({
     };
   }, []);
 
-  //use useState and set the state as true when the last elements of the projectEvent finished loading.
-  //when true, run this focusOnChange
-  //this is for loading the currently selected event when loading value from get query
   useEffect(() => {
-    setFocusOnChange(
-      String(selectedProject?.id),
-      `${selectedProject?.id}-time-indicator`
-    );
-  }, [selectedProject]);
+    if (lastEventRendered) {
+      setFocusOnChange(
+        String(selectedProject?.id),
+        `${selectedProject?.id}-time-indicator`
+      );
+    }
+  }, [lastEventRendered, selectedProject]);
 
   useEffect(() => {
     const timeline = document.getElementById("timeline");
@@ -92,12 +92,16 @@ export const Timeline: React.FC<timelineProps> = ({
           {data?.allProjectsNotPaginated.map((proj, i) => {
             return (
               <ProjectAsTimelineEvent
+                setLastEventRendered={setLastEventRendered}
                 setSelectedProject={setSelectedProject}
-                key={proj.title}
                 proj={proj}
+                isLastProj={
+                  data.allProjectsNotPaginated.length - 1 === i ? true : false
+                }
                 oneMonthLengthInPixels={oneMonthLengthInPixels}
                 firstYearInTimeline={years[0]}
                 gridRowPos={gridRowPos}
+                key={proj.title}
               />
             );
           })}

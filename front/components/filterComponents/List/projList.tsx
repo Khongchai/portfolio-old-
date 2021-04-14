@@ -2,6 +2,7 @@ import { Box, Flex, Grid, Heading, Img, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { ProjectEntity, ProjectsQuery } from "../../../generated/graphql";
 import { setToLocalStorageAndSelectedState } from "../../../utils/generics/setAndGetCurrentSelection/setToLocalStorageAndSelectedState";
+import { TinyImg } from "./ProjectList/TinyImg";
 
 interface ProjListProps {
   data: ProjectsQuery | undefined;
@@ -80,13 +81,7 @@ export const ProjList: React.FC<ProjListProps> = ({
                   },
                 }}
               >
-                <Box
-                  w="200px"
-                  flex="0.8"
-                  margin={2}
-                  bgColor="mainGrey"
-                  borderRadius="22px"
-                />
+                <TinyImg />
                 <Heading as="h2" size="md" flex="0.1">
                   {proj.title}
                 </Heading>

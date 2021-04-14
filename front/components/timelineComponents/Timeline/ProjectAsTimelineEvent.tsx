@@ -1,5 +1,5 @@
 import { Box, Flex, Text } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect } from "react";
 import { ProjectEntity } from "../../../generated/graphql";
 import { GridRowPos } from "../../../types/GridRowPos";
 import { setToLocalStorageAndSelectedState } from "../../../utils/generics/setAndGetCurrentSelection/setToLocalStorageAndSelectedState";
@@ -23,18 +23,28 @@ const ProjectAsTimelineEvent: React.FC<{
   setSelectedProject: React.Dispatch<
     React.SetStateAction<ProjectEntity | null>
   >;
+  setLastEventRendered: React.Dispatch<React.SetStateAction<boolean>>;
+  isLastProj: boolean;
 }> = ({
   firstYearInTimeline,
   oneMonthLengthInPixels,
   proj,
   gridRowPos,
   setSelectedProject,
+  setLastEventRendered,
+  isLastProj,
 }) => {
   const transitionTime = ".2s";
 
+  useEffect(() => {
+    if (isLastProj) {
+      setLastEventRendered(true);
+    }
+  }, []);
+
   const projectEndDate = {
-    month: parseInt(proj.endDate?.split("-")[1]),
-    year: parseInt(proj.endDate?.split("-")[0]),
+    month: parseInt(proj.endDate?.split("-")[1] as any),
+    year: parseInt(proj.endDate?.split("-")[0] as any),
   };
   const projectBeginDate = {
     month: parseInt(proj.startDate.split("-")[1]),

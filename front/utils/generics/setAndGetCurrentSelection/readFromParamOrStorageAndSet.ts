@@ -37,8 +37,8 @@ export function readFromParamOrStorage(
         //if not, check to see if there is a provided fallbackValue
         if (!loadFromLocalStorage(setStateFunction) && fallbackValue) {
           setToLocalStorageAndSelectedState(fallbackValue, setStateFunction);
+          setRunOnceAlready(true);
         }
-        setRunOnceAlready(true);
       }
     }
   }, [fetching, fallbackValue]);
