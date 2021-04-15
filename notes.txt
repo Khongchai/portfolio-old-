@@ -18,9 +18,13 @@ the sorting by date and asc should all be moved to "see all" page only
 removeAllAlternateDescriptions does not remove all alternate descriptions...
 
 
-optimize search regex
+write function that retrieves the dominant color of an image
+
+optimize search regex << maybe
 
 Timeline:
+
+put technologies used in this project in timeline as well
 
 
 Home/timeline page --------------------------------------------------------------------------
@@ -36,10 +40,4 @@ really moves the elements to the actual postiion OR move it to the translateX po
 
 manage the projectAsEvent bottom padding
 
-Pictures....deal with it, there's no running now.
-
-find images
-write new initialMigraiton for typeORM
-combine home and filter to same section in a dropdown: view as "timeline" && "filter"
-
-Look for TODO in timeline/index.tsx
+make the dropdown dynamic.then(() => {ensure that the correct drop down is selected on page refresh})

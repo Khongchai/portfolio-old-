@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 //This file is .js because webpack import error; too lazy to deal with that again.
 //to get type, just import navbarTopics
-//Put Home: {name} for pages that are a subset of home.
+//Any page with a prefix {groupName}: {pageName} will be put into a dropdown
 export const navbarTopics = {
   home: {
     url: "/tech",
