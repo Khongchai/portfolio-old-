@@ -26,6 +26,8 @@ Timeline:
 
 put technologies used in this project in timeline as well
 
+look for TODO in navbar
+
 
 Home/timeline page --------------------------------------------------------------------------
 
@@ -41,3 +43,5 @@ really moves the elements to the actual postiion OR move it to the translateX po
 manage the projectAsEvent bottom padding
 
 make the dropdown dynamic.then(() => {ensure that the correct drop down is selected on page refresh})
+
+style dropdown: change css, elements, whatever

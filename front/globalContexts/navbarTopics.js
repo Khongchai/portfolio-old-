@@ -12,7 +12,7 @@ export const navbarTopics = {
     url: "/tech/filter",
     pageName: "Home: Filter",
   },
-  about: { url: "/tech/about", pageName: "About" },
+  about: { url: "/tech/about", pageName: "Bio" },
 };
 
 export const TopicsContext = React.createContext();

@@ -19,16 +19,15 @@ import {
 } from "../../globalContexts/navbarTopics.js";
 import { ExtraElemContext } from "../../globalContexts/extraNavbarElem";
 import { useRouter } from "next/router";
-
-interface page {
-  url: string;
-  pageName: string;
-}
+import { filterPages } from "../../utils/navbar/filterpages";
+import { page } from "../../types/page";
 
 export const Navbar: React.FC<{}> = () => {
   const defaultNavbarTopics: typeof navbarTopics = useContext(TopicsContext);
-  //Take out all the stuff that belongs the home page.
-  const mainPages = filterOutHomePages(defaultNavbarTopics);
+  const pages = filterPages(defaultNavbarTopics);
+  const pagesWithDropDowns = Object.values(pages.pagesGroup).map(
+    (page) => page
+  );
   const router = useRouter();
   return (
     <Flex
@@ -38,21 +37,25 @@ export const Navbar: React.FC<{}> = () => {
       p={["2.3em 3em 1.3em 3em", null, "1.3em 3em 1.3em 3em"]}
       width={["100%", null, "50%"]}
     >
-      <Select
-        display={["none", null, "block"]}
-        fontFamily="Selawik Light"
-        p="1em"
-        width="fit-content"
-        variant="flushed"
-        onChange={(e) => {
-          router.push(e.target.value);
-        }}
-      >
-        {mainPages.homePages.map((page) => (
-          <LinkButton key={page.pageName} page={page} isDropdown={true} />
-        ))}
-      </Select>
-      {mainPages.otherPages.map((page) => (
+      {pagesWithDropDowns.map((pageWithDropDown) => (
+        <Select
+          appearance="none"
+          display={["none", null, "block"]}
+          fontFamily="Selawik Light"
+          p="1em"
+          width="fit-content"
+          variant="flushed"
+          onChange={(e) => {
+            router.push(e.target.value);
+          }}
+        >
+          {pageWithDropDown.map((page) => (
+            <LinkButton key={page.pageName} page={page} isDropdown={true} />
+          ))}
+        </Select>
+      ))}
+
+      {pages.pagesWithNoDropdowns.map((page) => (
         <LinkButton key={page.pageName} page={page} />
       ))}
       <HamburgerMenu />
@@ -66,7 +69,7 @@ const LinkButton: React.FC<{ page: page; isDropdown?: boolean }> = ({
   isDropdown,
 }) => {
   const { pageName, url } = page;
-  //change from onclick to parse values from URL instead << wth?
+  //TODO change from onclick to parse values from URL instead?
   function setButtonAsActive(clickedButton: HTMLElement) {
     const navButtons = document.getElementsByClassName(
       "nav-buttons"
@@ -110,8 +113,12 @@ const LinkButton: React.FC<{ page: page; isDropdown?: boolean }> = ({
 const HamburgerMenu: React.FC<{}> = ({}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const ExtraNavbarElems: any = useContext(ExtraElemContext);
+  const defaultNavbarTopics: typeof navbarTopics = useContext(TopicsContext);
+  const pages = filterPages(defaultNavbarTopics);
+  const pagesWithDropDowns = Object.values(pages.pagesGroup).map(
+    (page) => page
+  );
   const router = useRouter();
-  const mainPages = filterOutHomePages(navbarTopics);
   return (
     <Flex
       zIndex="100"
@@ -137,22 +144,27 @@ const HamburgerMenu: React.FC<{}> = ({}) => {
             css={{ "> *": { marginTop: "1em", padding: "1em" } }}
             color="mainGrey"
           >
-            <Select
-              width="fit-content"
-              variant="flushed"
-              onChange={(e) => {
-                router.push(e.target.value);
-              }}
-            >
-              {mainPages.homePages.map((page) => (
-                <LinkButtonMobile
-                  key={page.pageName}
-                  page={page}
-                  isDropdown={true}
-                />
-              ))}
-            </Select>
-            {mainPages.otherPages.map((page) => (
+            {pagesWithDropDowns.map((pageWithDropDown) => (
+              <Select
+                fontFamily="Selawik Light"
+                p="1em"
+                width="fit-content"
+                variant="flushed"
+                onChange={(e) => {
+                  router.push(e.target.value);
+                }}
+              >
+                {pageWithDropDown.map((page) => (
+                  <LinkButtonMobile
+                    key={page.pageName}
+                    page={page}
+                    isDropdown={true}
+                  />
+                ))}
+              </Select>
+            ))}
+
+            {pages.pagesWithNoDropdowns.map((page) => (
               <LinkButtonMobile key={page.pageName} page={page} />
             ))}
             <Box borderTop="1px solid" color="mainGrey" mt={10} />
@@ -184,19 +196,3 @@ const LinkButtonMobile: React.FC<{ page: page; isDropdown?: true }> = ({
     </option>
   );
 };
-
-function filterOutHomePages(objectToBeFiltered: typeof navbarTopics) {
-  let homePages: page[] = [];
-  let otherPages: page[] = [];
-  //When other pages are added, modify this function such that
-  //any prefix {somename}: {pagename} will be made into a dropdown group
-  Object.values(objectToBeFiltered).map((page) => {
-    const prefix = page.pageName.split(":")[0];
-    if (prefix === "Home") {
-      homePages.push(page);
-    } else {
-      otherPages.push(page);
-    }
-  });
-  return { homePages, otherPages };
-}
