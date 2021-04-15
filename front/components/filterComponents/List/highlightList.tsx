@@ -3,27 +3,25 @@ import {
   ProjectEntity,
   useGetHighlightedProjectsQuery,
 } from "../../../generated/graphql";
-import ProjectList from "./ProjectList";
+import { ProjectList } from "./ProjectList/index";
 
 interface HighlightListProps {
   setDetails: React.Dispatch<React.SetStateAction<ProjectEntity | undefined>>;
 }
 
 const HighlightList: React.FC<HighlightListProps> = ({ setDetails }) => {
-  const [{ data }] = useGetHighlightedProjectsQuery();
+  const [{ data, fetching }] = useGetHighlightedProjectsQuery();
   //bad naming; getHighlightedProjects is not a function, but a list of objects
   const highlightedProjects = data?.getHighlightedProjects;
 
   return (
-    <ProjectList projects={highlightedProjects} setStateFunction={setDetails} />
+    <ProjectList
+      sectionTitle="Highlights"
+      projects={highlightedProjects}
+      setStateFunction={setDetails}
+      gridRow={"Top"}
+      fetching={fetching}
+    />
   );
 };
 export default HighlightList;
-
-/*
-{highlightedProjects
-        ? highlightedProjects.map((proj) => (
-            <div onClick={() => setDetails(proj)}>{proj.title}</div>
-          ))
-        : null}
-*/

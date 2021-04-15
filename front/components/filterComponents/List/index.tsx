@@ -4,7 +4,7 @@ import { ProjectEntity, ProjectsQuery } from "../../../generated/graphql";
 import { readFromParamOrStorage } from "../../../utils/generics/setAndGetCurrentSelection/readFromParamOrStorageAndSet";
 import { updateQueryParamOnChange } from "../../../utils/generics/setAndGetCurrentSelection/updateQueryParamOnChange";
 import HighlightList from "./highlightList";
-import ProjList from "./projList";
+import AllProjects from "./AllProjects";
 
 interface ListProps {
   data: ProjectsQuery | undefined;
@@ -13,7 +13,7 @@ interface ListProps {
   details: ProjectEntity | undefined;
   paginateForward: () => void;
   paginateBackward: () => void;
-  searchFetching: Boolean;
+  searchFetching: boolean;
 }
 
 const List: React.FC<ListProps> = ({
@@ -45,7 +45,7 @@ const List: React.FC<ListProps> = ({
       id="list-container"
     >
       <HighlightList setDetails={setDetails} />
-      <ProjList
+      <AllProjects
         searchFetching={searchFetching}
         paginateForward={paginateForward}
         paginateBackward={paginateBackward}

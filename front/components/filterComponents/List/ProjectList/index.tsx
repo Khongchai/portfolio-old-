@@ -1,4 +1,4 @@
-import { Flex, Heading, Text } from "@chakra-ui/react";
+import { Flex, Grid, Heading, Text } from "@chakra-ui/react";
 import React from "react";
 import { ProjectEntity } from "../../../../generated/graphql";
 import { setToLocalStorageAndSelectedState } from "../../../../utils/generics/setAndGetCurrentSelection/setToLocalStorageAndSelectedState";
@@ -9,9 +9,20 @@ interface IndexProps {
   setStateFunction: React.Dispatch<
     React.SetStateAction<ProjectEntity | undefined>
   >;
+  sectionTitle: string;
+  fetching: boolean;
+  gridRow: "Top" | "Bottom";
+  extension?: any;
 }
 
-const ProjectList: React.FC<IndexProps> = ({ projects, setStateFunction }) => {
+export const ProjectList: React.FC<IndexProps> = ({
+  sectionTitle,
+  projects,
+  setStateFunction,
+  fetching,
+  gridRow,
+  extension,
+}) => {
   return (
     <Flex
       gridColumn="left-padding-end / right-padding-end"
@@ -22,11 +33,11 @@ const ProjectList: React.FC<IndexProps> = ({ projects, setStateFunction }) => {
       overflow="auto"
       flexDir="column"
       pos="relative"
-      gridRow="1"
+      gridRow={gridRow === "Top" ? "1" : "3"}
     >
       <Flex placeItems="center">
         <Heading size="lg" mb={2}>
-          Highlights
+          {sectionTitle}
         </Heading>
       </Flex>
       <Flex
@@ -46,37 +57,42 @@ const ProjectList: React.FC<IndexProps> = ({ projects, setStateFunction }) => {
           },
         }}
       >
-        {projects?.map((proj) => (
-          <Flex
-            cursor="pointer"
-            id={proj.title}
-            key={proj.id}
-            minW="220px"
-            minH="220px"
-            pb={2}
-            onClick={() => {
-              const project = proj as ProjectEntity;
-              setToLocalStorageAndSelectedState(project, setStateFunction);
-            }}
-            className="project-container projects"
-            flexDir="column"
-            placeItems="center"
-            css={{
-              "* + *": {
-                marginTop: "0.5em",
-              },
-            }}
-          >
-            <TinyImg />
-            <Heading size="md" flex="0.1">
-              {proj.title}
-            </Heading>
-            <Text flex="0.1">{proj.shortDescription}</Text>
-          </Flex>
-        ))}
+        {fetching ? (
+          <Grid w="100%" h="100%" placeItems="center">
+            Loading...
+          </Grid>
+        ) : (
+          projects?.map((proj) => (
+            <Flex
+              cursor="pointer"
+              id={proj.title}
+              key={proj.id}
+              minW="220px"
+              minH="220px"
+              pb={2}
+              onClick={() => {
+                const project = proj as ProjectEntity;
+                setToLocalStorageAndSelectedState(project, setStateFunction);
+              }}
+              className="project-container projects"
+              flexDir="column"
+              placeItems="center"
+              css={{
+                "* + *": {
+                  marginTop: "0.5em",
+                },
+              }}
+            >
+              <TinyImg tinyImgLink={proj.tinyImgLink} />
+              <Heading size="md" flex="0.1">
+                {proj.title}
+              </Heading>
+              <Text flex="0.1">{proj.shortDescription}</Text>
+            </Flex>
+          ))
+        )}
       </Flex>
+      {extension}
     </Flex>
   );
 };
-
-export default ProjectList;
