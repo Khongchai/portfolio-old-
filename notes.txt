@@ -8,12 +8,9 @@ add auth system so that only superuser can edit page // technologies should be a
 CRUD for both project and technology resolvers.
 
 use the trick from the card thing to reduce the opacity of all the things that are not hovered
-in the projects bar.
+in the projects bar. <<<<<<<<<<
 
-why does search value reset when navbar is collapsed and reopened?
 
-in "See all" mode, make it so that it is possible to look up by name as well.
-the sorting by date and asc should all be moved to "see all" page only
 
 removeAllAlternateDescriptions does not remove all alternate descriptions...
 
@@ -42,6 +39,8 @@ really moves the elements to the actual postiion OR move it to the translateX po
 
 manage the projectAsEvent bottom padding
 
-make the dropdown dynamic.then(() => {ensure that the correct drop down is selected on page refresh})
+ensure that the correct drop down is selected on page refresh
 
 style dropdown: change css, elements, whatever
+
+refactor navbar, not yet DRY
