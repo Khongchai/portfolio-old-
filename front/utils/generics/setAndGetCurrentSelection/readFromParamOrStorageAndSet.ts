@@ -26,11 +26,13 @@ export function readFromParamOrStorage(
         //a queryFromURL is specified in the url param; a single query will be made
         setSingleFetchParam(queryFromURL);
         if (!fetching) {
-          setToLocalStorageAndSelectedState(
-            singleProject?.getSingleProjectByTitle.proj!,
-            setStateFunction
-          );
-          setRunOnceAlready(true);
+          if (singleProject) {
+            setToLocalStorageAndSelectedState(
+              singleProject.getSingleProjectByTitle.proj!,
+              setStateFunction
+            );
+            setRunOnceAlready(true);
+          }
         }
       } else if (!fetching) {
         //a queryFromURL is not specified in the url param, load from localStorage instead, if exists
@@ -54,7 +56,9 @@ function loadFromLocalStorage(
    * Undefined will be stored in local storage as string
    */
   if (savedSelection && savedSelection !== "undefined") {
-    //Only set state because selection already in local storage
+    /**
+     *  Only set state because selection already in local storage
+     */
     setToLocalStorageAndSelectedState(
       JSON.parse(savedSelection),
       setStateFunction,

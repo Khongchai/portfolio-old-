@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Drawer,
   DrawerBody,
   DrawerContent,
@@ -7,8 +8,15 @@ import {
   DrawerOverlay,
   Flex,
   Img,
+  List,
+  ListItem,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Select,
   Text,
+  UnorderedList,
   useDisclosure,
 } from "@chakra-ui/react";
 import React, { useContext } from "react";
@@ -38,21 +46,33 @@ export const Navbar: React.FC<{}> = () => {
       width={["100%", null, "50%"]}
     >
       {pagesWithDropDowns.map((pageWithDropDown) => (
-        <Select
-          appearance="none"
-          display={["none", null, "block"]}
-          fontFamily="Selawik Light"
-          p="1em"
-          width="fit-content"
-          variant="flushed"
-          onChange={(e) => {
-            router.push(e.target.value);
-          }}
-        >
-          {pageWithDropDown.map((page) => (
-            <LinkButton key={page.pageName} page={page} isDropdown={true} />
-          ))}
-        </Select>
+        <>
+          <Menu>
+            <MenuButton
+              fontWeight="normal"
+              p="0 6em 0 1em"
+              borderRight="solid white 1px"
+              width="fit-content"
+              display={["none", null, "block"]}
+              _hover={{ cursor: "pointer", color: "mainOrange" }}
+            >
+              {pageWithDropDown[0].pageName.split(":")[0]}
+            </MenuButton>
+            <MenuList
+              onClick={(e: any) => {
+                router.push(e.target.value);
+              }}
+            >
+              {pageWithDropDown.map((subPage) => (
+                <LinkButton
+                  key={subPage.pageName}
+                  page={subPage}
+                  isDropdown={true}
+                />
+              ))}
+            </MenuList>
+          </Menu>
+        </>
       ))}
 
       {pages.pagesWithNoDropdowns.map((page) => (
@@ -69,19 +89,6 @@ const LinkButton: React.FC<{ page: page; isDropdown?: boolean }> = ({
   isDropdown,
 }) => {
   const { pageName, url } = page;
-  //TODO change from onclick to parse values from URL instead?
-  function setButtonAsActive(clickedButton: HTMLElement) {
-    const navButtons = document.getElementsByClassName(
-      "nav-buttons"
-    ) as HTMLCollectionOf<HTMLElement>;
-    for (let i = 0; i < navButtons.length; i++) {
-      if (navButtons[i] !== clickedButton) {
-        navButtons[i].style.borderBottom = "";
-      } else {
-        navButtons[i].style.borderBottom = "1px solid white";
-      }
-    }
-  }
   if (!isDropdown) {
     return (
       <NextLink href={url}>
@@ -89,12 +96,11 @@ const LinkButton: React.FC<{ page: page; isDropdown?: boolean }> = ({
           <Text
             display={["none", null, "block"]}
             className="nav-buttons"
-            fontFamily="Selawik Light"
+            fontFamily="Selawik"
             borderBottom="1px solid transparent"
-            _hover={{ cursor: "pointer", borderBottom: "1px solid white" }}
+            _hover={{ cursor: "pointer", color: "mainOrange" }}
             p="1em"
             mr="5em"
-            onClick={(e) => setButtonAsActive(e.target as HTMLElement)}
           >
             {pageName}
           </Text>
@@ -104,9 +110,14 @@ const LinkButton: React.FC<{ page: page; isDropdown?: boolean }> = ({
   }
 
   return (
-    <option style={{ color: "black" }} className="nav-buttons" value={url}>
-      {pageName}
-    </option>
+    <MenuItem
+      color="black"
+      className="nav-buttons"
+      value={url}
+      fontFamily="Selawik"
+    >
+      {pageName.split(":")[1]}
+    </MenuItem>
   );
 };
 

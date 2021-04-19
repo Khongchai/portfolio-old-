@@ -39,7 +39,7 @@ really moves the elements to the actual postiion OR move it to the translateX po
 
 manage the projectAsEvent bottom padding
 
-ensure that the correct drop down is selected on page refresh
+apply the new navbar dropdown to other components 
 
 style dropdown: change css, elements, whatever
 

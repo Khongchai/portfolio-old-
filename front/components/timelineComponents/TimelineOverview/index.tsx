@@ -27,28 +27,7 @@ const TimelineOverview: React.FC<{
     >
       {selectedProject ? (
         <>
-          <Stack
-            as={Flex}
-            flex="0.50"
-            spacing="2em"
-            p="1rem 1rem 1rem 1rem"
-            textShadow="black 0px 2px 5px"
-          >
-            <ProjectDetails details={selectedProject} />
-            <Flex
-              ml="auto"
-              flex="0.25"
-              align="center"
-              justify="center"
-              p="1rem 1rem 1rem 1rem"
-            >
-              <Links
-                githubLink={selectedProject.githubLink}
-                webLink={selectedProject.websiteLink}
-              />
-            </Flex>
-          </Stack>
-          <Box flex="0.5">
+          <Box flex="0.4">
             {selectedProject.imgLink ? (
               <Flex
                 borderRadius="20px"
@@ -74,6 +53,27 @@ const TimelineOverview: React.FC<{
               </Text>
             )}
           </Box>
+          <Stack
+            as={Flex}
+            flex="0.50"
+            spacing="2em"
+            p="1rem 1rem 1rem 1rem"
+            textShadow="black 0px 2px 5px"
+          >
+            <ProjectDetails details={selectedProject} />
+            <Flex
+              ml="auto"
+              flex="0.25"
+              align="center"
+              justify="center"
+              p="1rem 1rem 1rem 1rem"
+            >
+              <Links
+                githubLink={selectedProject.githubLink}
+                webLink={selectedProject.websiteLink}
+              />
+            </Flex>
+          </Stack>
         </>
       ) : (
         <div>loading...</div>
