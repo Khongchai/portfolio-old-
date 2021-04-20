@@ -9,6 +9,7 @@ import { Navbar } from "../components/Navbar/Navbar";
 import { useRouter } from "next/router";
 import AllContextProvider from "../globalContexts/allContextProvider";
 import "../css/timeline-extra-stylings.css";
+import "../css/animations.css";
 
 function MyApp({ Component, pageProps }: any) {
   const router = useRouter;

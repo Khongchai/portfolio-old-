@@ -59,6 +59,7 @@ export const Navbar: React.FC<{}> = () => {
               {pageWithDropDown[0].pageName.split(":")[0]}
             </MenuButton>
             <MenuList
+              bgColor="mainGrey"
               onClick={(e: any) => {
                 router.push(e.target.value);
               }}
@@ -111,7 +112,7 @@ const LinkButton: React.FC<{ page: page; isDropdown?: boolean }> = ({
 
   return (
     <MenuItem
-      color="black"
+      color="white"
       className="nav-buttons"
       value={url}
       fontFamily="Selawik"
