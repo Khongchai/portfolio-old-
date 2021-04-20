@@ -6,7 +6,7 @@ import { TechDetails } from "../../types/TechDetails";
 export const TechnologiesDetails: React.FC<{
   techDetails: TechDetails;
   expansion: {
-    expansionStat: string;
+    expansionStat: "expanded" | "notExpanded";
     manageExpansion?: () => void;
   };
   transition: number;
@@ -28,15 +28,16 @@ export const TechnologiesDetails: React.FC<{
       overflow={expansionStat === "expanded" ? "scroll" : "hidden"}
       fontWeight="bold"
       css={{
-        "&::-webkit-scrollbar": {
+        "::-webkit-scrollbar": {
+          width: "0.5rem",
+          marginLeft: "1rem",
+        },
+        "::-webkit-scrollbar-track": {
           display: "none",
         },
-
-        "&::-webkit-scrollbar-track": {
-          display: "none",
-        },
-        "&::-webkit-scrollbar-thumb": {
-          display: "none",
+        "::-webkit-scrollbar-thumb": {
+          backgroundColor: "#545161",
+          border: "3px solid transparent",
         },
       }}
       transition={`.${transition}s`}
@@ -53,16 +54,23 @@ export const TechnologiesDetails: React.FC<{
 };
 
 //Manage component
-const ExpandedContent: React.FC<{
+export const ExpandedContent: React.FC<{
   techDetails: TechDetails;
   expansionStat: string;
+  hideTopDescription?: boolean;
 }> = ({
   techDetails: { backEnd, hostingServices, languages, frontEnd },
   expansionStat,
+  hideTopDescription,
 }) => {
   const [hoverComponentName, setHoverComponentName] = useState<
     string | undefined
   >();
+  //TODO
+  //for keeping track of what to delete
+  const [idsOfTextAsLogo, setIdsOfTextAsLogo] = useState<string[] | []>([]);
+  useEffect(() => {}, [idsOfTextAsLogo]);
+  //setHoverComponent
   useEffect(() => {
     let logo: HTMLElement;
     if (hoverComponentName) {
@@ -84,7 +92,11 @@ const ExpandedContent: React.FC<{
   return (
     <>
       {hoverComponentName ? <InfoCard>{hoverComponentName}</InfoCard> : null}
-      <Text pb={3}>Technologies used in this project.</Text>
+      {hideTopDescription ? (
+        ""
+      ) : (
+        <Text pb={3}>Technologies used in this project.</Text>
+      )}
       {expansionStat === "expanded" ? (
         <>
           <Logo
@@ -120,8 +132,12 @@ const Logo: React.FC<{
   tech: TechnologyEntity[] | null | undefined;
   desc: string;
 }> = ({ tech, desc, setHoverComponentName }) => {
+  if (!tech || tech.length === 0) {
+    return <></>;
+  }
+
   return (
-    <Flex flex="auto" align="center">
+    <Flex flex="auto" align="center" borderBottom="1px groove grey">
       <Text>{desc}: </Text>
       <Flex
         justifyContent="space-evenly"
@@ -171,7 +187,7 @@ const Logo: React.FC<{
                     */
                     if (!prevTextContainer) {
                       textContainer.id = `${nameOriginal}-text-as-logo`;
-                      textContainer.innerHTML = `<p>${nameOriginal}</p>`;
+                      textContainer.innerHTML = `${nameOriginal}`;
                       textContainer.style.height = "fit-content";
                       e.target.parentNode.insertBefore(textContainer, e.target);
                       textContainer.style.color = "white";
@@ -213,6 +229,8 @@ const InfoCard: React.FC = ({ children }) => {
       boxSizing="content-box"
       pointerEvents="none"
       transform="translateX(-50%)"
+      color="mainOrange"
+      fontWeight="bold"
     >
       {children}
     </Box>

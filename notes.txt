@@ -44,3 +44,7 @@ apply the new navbar dropdown to other components
 style dropdown: change css, elements, whatever
 
 refactor navbar, not yet DRY
+
+work on transition between technologies and website image => todo in timelineOverview
+
+text in technologies button stuck again... (look for TODO in technologies details)

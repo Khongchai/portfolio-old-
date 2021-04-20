@@ -6,6 +6,10 @@ import { TechDetails } from "../../../types/TechDetails";
 import { readFromParamOrStorage } from "../../../utils/generics/setAndGetCurrentSelection/readFromParamOrStorageAndSet";
 import { updateQueryParamOnChange } from "../../../utils/generics/setAndGetCurrentSelection/updateQueryParamOnChange";
 import { ProjectDescription } from "../../shared/ProjectDescription";
+import {
+  ExpandedContent,
+  TechnologiesDetails,
+} from "../../shared/TechnologiesDetails";
 
 const TimelineOverview: React.FC<{
   selectedProject: ProjectEntity | null;
@@ -110,12 +114,30 @@ const Technologies: React.FC<{ techDetails: TechDetails }> = ({
 }) => {
   return (
     <Flex
-      borderRadius="20px"
-      id="wallpaper"
       width="clamp(360px, 100%, calc(360px * 1.5))"
-      pt="clamp(256px, 70%, calc(256px * 1.5))"
+      height="auto"
+      maxHeight="280px"
+      overflowY="scroll"
+      flexDir="column"
+      css={{
+        "::-webkit-scrollbar": {
+          width: "0.5rem",
+          marginLeft: "1rem",
+        },
+        "::-webkit-scrollbar-track": {
+          display: "none",
+        },
+        "::-webkit-scrollbar-thumb": {
+          backgroundColor: "#545161",
+          border: "3px solid transparent",
+        },
+      }}
     >
-      {/* TODO: put TechnologiesComponents here */}
+      <ExpandedContent
+        hideTopDescription={true}
+        techDetails={techDetails}
+        expansionStat="expanded"
+      />
     </Flex>
   );
 };

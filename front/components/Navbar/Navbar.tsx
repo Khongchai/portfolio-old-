@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Drawer,
   DrawerBody,
   DrawerContent,
@@ -8,27 +7,24 @@ import {
   DrawerOverlay,
   Flex,
   Img,
-  List,
-  ListItem,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
   Select,
   Text,
-  UnorderedList,
   useDisclosure,
 } from "@chakra-ui/react";
-import React, { useContext } from "react";
 import NextLink from "next/link";
-import {
-  TopicsContext,
-  navbarTopics,
-} from "../../globalContexts/navbarTopics.js";
-import { ExtraElemContext } from "../../globalContexts/extraNavbarElem";
 import { useRouter } from "next/router";
-import { filterPages } from "../../utils/navbar/filterpages";
+import React, { useContext } from "react";
+import { ExtraElemContext } from "../../globalContexts/extraNavbarElem";
+import {
+  navbarTopics,
+  TopicsContext,
+} from "../../globalContexts/navbarTopics.js";
 import { page } from "../../types/page";
+import { filterPages } from "../../utils/navbar/filterpages";
 
 export const Navbar: React.FC<{}> = () => {
   const defaultNavbarTopics: typeof navbarTopics = useContext(TopicsContext);
@@ -45,9 +41,9 @@ export const Navbar: React.FC<{}> = () => {
       p={["2.3em 3em 1.3em 3em", null, "1.3em 3em 1.3em 3em"]}
       width={["100%", null, "50%"]}
     >
-      {pagesWithDropDowns.map((pageWithDropDown) => (
+      {pagesWithDropDowns.map((pageWithDropDown, i) => (
         <>
-          <Menu>
+          <Menu key={i}>
             <MenuButton
               fontWeight="normal"
               p="0 6em 0 1em"
@@ -156,8 +152,9 @@ const HamburgerMenu: React.FC<{}> = ({}) => {
             css={{ "> *": { marginTop: "1em", padding: "1em" } }}
             color="mainGrey"
           >
-            {pagesWithDropDowns.map((pageWithDropDown) => (
+            {pagesWithDropDowns.map((pageWithDropDown, i) => (
               <Select
+                key={i}
                 fontFamily="Selawik Light"
                 p="1em"
                 width="fit-content"
