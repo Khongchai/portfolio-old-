@@ -66,10 +66,11 @@ export const ExpandedContent: React.FC<{
   const [hoverComponentName, setHoverComponentName] = useState<
     string | undefined
   >();
-  //TODO
-  //for keeping track of what to delete
-  const [idsOfTextAsLogo, setIdsOfTextAsLogo] = useState<string[] | []>([]);
-  useEffect(() => {}, [idsOfTextAsLogo]);
+  const [forceUpdate, setForceUpdate] = useState(false);
+  useEffect(() => {
+    setForceUpdate(!forceUpdate);
+  }, [backEnd, hostingServices, languages, frontEnd]);
+
   //setHoverComponent
   useEffect(() => {
     let logo: HTMLElement;
@@ -103,21 +104,25 @@ export const ExpandedContent: React.FC<{
             setHoverComponentName={setHoverComponentName}
             tech={frontEnd}
             desc="Front"
+            forceUpdate={forceUpdate}
           />
           <Logo
             setHoverComponentName={setHoverComponentName}
             tech={backEnd}
             desc="Back"
+            forceUpdate={forceUpdate}
           />
           <Logo
             setHoverComponentName={setHoverComponentName}
             tech={languages}
             desc="Language"
+            forceUpdate={forceUpdate}
           />
           <Logo
             setHoverComponentName={setHoverComponentName}
             tech={hostingServices}
             desc="Hosting"
+            forceUpdate={forceUpdate}
           />
         </>
       ) : null}
@@ -131,13 +136,22 @@ const Logo: React.FC<{
   >;
   tech: TechnologyEntity[] | null | undefined;
   desc: string;
-}> = ({ tech, desc, setHoverComponentName }) => {
+  forceUpdate: boolean;
+}> = ({ tech, desc, setHoverComponentName, forceUpdate }) => {
   if (!tech || tech.length === 0) {
     return <></>;
   }
+  const [textsAsLogos, setTextsAsLogos] = useState<string[]>([]);
+  const [update, setUpdate] = useState(true);
+  useEffect(() => {
+    if (update !== forceUpdate) {
+      setTextsAsLogos([]);
+    }
+    setUpdate(forceUpdate);
+  }, [forceUpdate]);
 
   return (
-    <Flex flex="auto" align="center" borderBottom="1px groove grey">
+    <Flex flex="auto" align="center" pb={"6px"} borderBottom="1px groove grey">
       <Text>{desc}: </Text>
       <Flex
         justifyContent="space-evenly"
@@ -168,30 +182,31 @@ const Logo: React.FC<{
                   if (e.target.src.slice(-3) !== `svg`) {
                     e.target.src = `/logos/${nameNoSpace}.svg`;
                   } else {
+                    setTextsAsLogos([...textsAsLogos, nameOriginal]);
                     /*
                       If get to this point, 1. tech does not have a logo OR 2. error loading
                       fix by just replacing with a text
                     */
-                    const textContainer = document.createElement("p");
-                    /*
-                       hide the default placeholder image
-                    */
-                    (e.target as HTMLImageElement).style.display = "none";
+                    /*    const textContainer = document.createElement("p"); */
 
+                    //hide the default placeholder image
+
+                    (e.target as HTMLImageElement).style.display = "none";
+                    /*
                     const prevTextContainer = document.getElementById(
                       `${nameOriginal}-text-as-logo`
-                    );
+                    ); 
                     /*
                       Only perform the following if the prev container does not
                       have the following text already
                     */
-                    if (!prevTextContainer) {
-                      textContainer.id = `${nameOriginal}-text-as-logo`;
-                      textContainer.innerHTML = `${nameOriginal}`;
-                      textContainer.style.height = "fit-content";
-                      e.target.parentNode.insertBefore(textContainer, e.target);
-                      textContainer.style.color = "white";
-                    }
+                    // if (!prevTextContainer) {
+                    //   textContainer.id = `${nameOriginal}-text-as-logo`;
+                    //   textContainer.innerHTML = `${nameOriginal}`;
+                    //   textContainer.style.height = "fit-content";
+                    //   e.target.parentNode.insertBefore(textContainer, e.target);
+                    //   textContainer.style.color = "white";
+                    // }
                   }
                 }}
                 _hover={{
@@ -211,6 +226,9 @@ const Logo: React.FC<{
 
           return img;
         })}
+        {textsAsLogos.map((text) => (
+          <Text>{text}</Text>
+        ))}
       </Flex>
     </Flex>
   );

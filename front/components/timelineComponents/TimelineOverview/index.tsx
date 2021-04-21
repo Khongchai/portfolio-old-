@@ -118,7 +118,11 @@ const Technologies: React.FC<{ techDetails: TechDetails }> = ({
       height="auto"
       maxHeight="280px"
       overflowY="scroll"
+      overflowX="hidden"
       flexDir="column"
+      bgColor="grey2"
+      padding={4}
+      borderRadius="5px"
       css={{
         "::-webkit-scrollbar": {
           width: "0.5rem",

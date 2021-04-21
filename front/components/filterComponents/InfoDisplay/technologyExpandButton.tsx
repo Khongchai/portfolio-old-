@@ -4,7 +4,9 @@ import { TechDetails } from "../../../types/TechDetails";
 import { TechnologiesDetails } from "../../shared/TechnologiesDetails";
 
 const ExpandButton: React.FC<TechDetails> = (techDetails) => {
-  const [expansionStat, setExpansionStat] = useState("notExpanded");
+  const [expansionStat, setExpansionStat] = useState<
+    "expanded" | "notExpanded"
+  >("notExpanded");
   const transition = 3;
   function manageExpansion() {
     const techContainerContainer = document.getElementById(

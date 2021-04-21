@@ -28,3 +28,4 @@ insert into technology_entity (title) values ('Node');
 insert into technology_entity (title) values ('TypeGraphQL');
 insert into technology_entity (title) values ('GraphQL'); 
 insert into technology_entity (title) values ('SQL');
+insert into technology_entity (title) values ('Google Play');
