@@ -38,5 +38,6 @@ apply the new dropdown design to mobile navbar as well
 
 continue working on responsive design for both pages
 - Which includes finding out how you got it to work for your recital.
+- The events timeline shouldn't have a fixed height, it should extends down automatically, creating as many rows as needed + should always attach itself to the bottom of the top part in all screen sizes
 
 find out how to get the localhost thing to work on your phone.
