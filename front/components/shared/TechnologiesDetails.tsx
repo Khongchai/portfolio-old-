@@ -183,30 +183,7 @@ const Logo: React.FC<{
                     e.target.src = `/logos/${nameNoSpace}.svg`;
                   } else {
                     setTextsAsLogos([...textsAsLogos, nameOriginal]);
-                    /*
-                      If get to this point, 1. tech does not have a logo OR 2. error loading
-                      fix by just replacing with a text
-                    */
-                    /*    const textContainer = document.createElement("p"); */
-
-                    //hide the default placeholder image
-
                     (e.target as HTMLImageElement).style.display = "none";
-                    /*
-                    const prevTextContainer = document.getElementById(
-                      `${nameOriginal}-text-as-logo`
-                    ); 
-                    /*
-                      Only perform the following if the prev container does not
-                      have the following text already
-                    */
-                    // if (!prevTextContainer) {
-                    //   textContainer.id = `${nameOriginal}-text-as-logo`;
-                    //   textContainer.innerHTML = `${nameOriginal}`;
-                    //   textContainer.style.height = "fit-content";
-                    //   e.target.parentNode.insertBefore(textContainer, e.target);
-                    //   textContainer.style.color = "white";
-                    // }
                   }
                 }}
                 _hover={{
