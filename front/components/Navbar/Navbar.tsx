@@ -145,12 +145,12 @@ const HamburgerMenu: React.FC<{}> = ({}) => {
       <Drawer placement="left" onClose={onClose} isOpen={isOpen}>
         <DrawerOverlay />
         <DrawerContent>
-          <DrawerHeader color="mainGrey" borderBottomWidth="1px">
+          <DrawerHeader color="white" borderBottomWidth="1px">
             Go to
           </DrawerHeader>
           <DrawerBody
             css={{ "> *": { marginTop: "1em", padding: "1em" } }}
-            color="mainGrey"
+            color="white"
           >
             {pagesWithDropDowns.map((pageWithDropDown, i) => (
               <Select

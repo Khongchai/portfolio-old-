@@ -23,68 +23,24 @@ const TimelineOverview: React.FC<{
   updateQueryParamOnChange(selectedProject?.title, "/tech");
   const [showTech, setShowTech] = useState(false);
 
-  //switch display mode between none and box between ProjectImage and Technologies after the fade transition is finished
-  useEffect(() => {
-    //TODO => might need to ditch css entirely and manage with js instead
-  }, [showTech]);
-
   return (
     <Flex
       flex="0.60"
       height="min(100%, 500px)"
       bgColor="#444057"
       id="info-container"
-      placeItems="center"
+      placeItems={["flex-start", null, null, "center"]}
       p="20px 10% 20px 10%"
+      flexDir={["column", null, null, "row"]}
     >
       {selectedProject ? (
         <>
-          <Box flex="0.4">
-            <>
-              <Box className={showTech ? "fadeOut" : "fadeIn"}>
-                {selectedProject.imgLink ? (
-                  <ProjectImage imgLink={selectedProject.imgLink} />
-                ) : (
-                  <Text
-                    display="block"
-                    textAlign="center"
-                    transform="rotate(20deg)"
-                    fontSize="1.5em"
-                    letterSpacing="1.7"
-                  >
-                    Preview Image Not Available
-                  </Text>
-                )}
-              </Box>
-              {showTech ? (
-                <Technologies
-                  techDetails={{
-                    backEnd: selectedProject.backEndTechnologies,
-                    frontEnd: selectedProject.frontEndTechnologies,
-                    hostingServices: selectedProject.hostingServices,
-                    languages: selectedProject.languages,
-                  }}
-                />
-              ) : null}
-            </>
-          </Box>
-          <Stack
-            as={Flex}
-            flex="0.50"
-            spacing="2em"
-            p="1rem 1rem 1rem 1rem"
-            textShadow="black 0px 2px 5px"
-            ml={2}
-          >
-            <ProjectDescription
-              extraToggleButton={{
-                text: showTech ? "Hide Technologies" : "Show Technologies",
-                setStateFunction: setShowTech,
-                state: showTech,
-              }}
-              project={selectedProject}
-            />
-          </Stack>
+          <LeftSection selectedProject={selectedProject} showTech={showTech} />
+          <RightSection
+            selectedProject={selectedProject}
+            showTech={showTech}
+            setShowTech={setShowTech}
+          />
         </>
       ) : (
         <div>loading...</div>
@@ -93,18 +49,82 @@ const TimelineOverview: React.FC<{
   );
 };
 
+const LeftSection: React.FC<{
+  showTech: boolean;
+  selectedProject: ProjectEntity;
+}> = ({ showTech, selectedProject }) => {
+  return (
+    <Box flex="0.4">
+      {showTech ? (
+        <Technologies
+          techDetails={{
+            backEnd: selectedProject.backEndTechnologies,
+            frontEnd: selectedProject.frontEndTechnologies,
+            hostingServices: selectedProject.hostingServices,
+            languages: selectedProject.languages,
+          }}
+        />
+      ) : (
+        <Box>
+          {selectedProject.imgLink ? (
+            <ProjectImage imgLink={selectedProject.imgLink} />
+          ) : (
+            <Text
+              display="block"
+              textAlign="center"
+              transform="rotate(20deg)"
+              fontSize="1.5em"
+              letterSpacing="1.7"
+              className="fadein"
+            >
+              Preview Image Not Available
+            </Text>
+          )}
+        </Box>
+      )}
+    </Box>
+  );
+};
+
+const RightSection: React.FC<{
+  showTech: boolean;
+  setShowTech: React.Dispatch<React.SetStateAction<boolean>>;
+  selectedProject: ProjectEntity;
+}> = ({ showTech, setShowTech, selectedProject }) => {
+  return (
+    <Stack
+      as={Flex}
+      flex="0.50"
+      spacing="2em"
+      p="1rem 1rem 1rem 1rem"
+      textShadow="black 0px 2px 5px"
+      ml={2}
+    >
+      <ProjectDescription
+        extraToggleButton={{
+          text: showTech ? "Hide Technologies" : "Show Technologies",
+          setStateFunction: setShowTech,
+          state: showTech,
+        }}
+        project={selectedProject}
+      />
+    </Stack>
+  );
+};
+
 const ProjectImage: React.FC<{ imgLink: Maybe<string> }> = ({ imgLink }) => {
   return (
     <Flex
       borderRadius="20px"
       id="wallpaper"
-      width="clamp(360px, 100%, calc(360px * 1.5))"
-      pt="clamp(256px, 70%, calc(256px * 1.5))"
+      width={"clamp(360px * 0.8, 100%, calc(360px * 1.5))"}
+      pt="clamp(256px * 0.8, 70%, calc(256px * 1.5))"
       backgroundImage={`url(${imgLink})`}
       backgroundRepeat="no-repeat"
       backgroundSize="cover"
       backgroundPosition="center"
       boxShadow="dark-lg"
+      className="fadein"
     />
   );
 };
@@ -114,6 +134,7 @@ const Technologies: React.FC<{ techDetails: TechDetails }> = ({
 }) => {
   return (
     <Flex
+      className="fadein"
       width="clamp(360px, 100%, calc(360px * 1.5))"
       height="auto"
       maxHeight="280px"

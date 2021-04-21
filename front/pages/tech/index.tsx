@@ -55,7 +55,12 @@ const Tech: React.FC<{ selection: string | undefined }> = ({ selection }) => {
   }, []);
 
   return (
-    <Flex id="tech-timeline" overflowX="hidden" flexDir="column" height="100vh">
+    <Flex
+      id="tech-timeline"
+      overflowX="hidden"
+      flexDir="column"
+      height={["auto", null, null, "100vh"]}
+    >
       <TimelineOverview
         selection={selection}
         selectedProject={selectedProject}

@@ -13,15 +13,21 @@ const Links: React.FC<{
   };
 }> = ({ webLink, githubLink, extraToggleButton }) => {
   return (
-    <Stack as={Flex} spacing="1.2rem" StackDir="column" align="center">
-      <Box>
+    <Stack
+      as={Flex}
+      spacing="1.2rem"
+      StackDir="column"
+      align={["flex-start", null, null, "center"]}
+    >
+      <Flex flexDir={["column", null, null, "row"]}>
         <ButtonLink link={webLink} text="View Website" />
         {extraToggleButton ? (
           <Button
             _hover={{ textDecor: "none", color: "mainGrey", bgColor: "white" }}
             color="white"
             bgColor="mainGrey"
-            ml={4}
+            mt={["1rem", null, null, "0"]}
+            ml={[null, null, null, "1rem"]}
             onClick={() => {
               const { setStateFunction, state } = extraToggleButton;
               setStateFunction(!state);
@@ -32,7 +38,7 @@ const Links: React.FC<{
         ) : (
           ""
         )}
-      </Box>
+      </Flex>
       <GithubLink githubLink={githubLink} />
     </Stack>
   );

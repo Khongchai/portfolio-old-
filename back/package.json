@@ -24,6 +24,7 @@
     "graphql": "^15.5.0",
     "mikro-orm": "^4.4.1",
     "nodemon": "^2.0.7",
+    "pg": "^8.6.0",
     "type-graphql": "^1.1.1",
     "typeorm": "^0.2.31"
   },

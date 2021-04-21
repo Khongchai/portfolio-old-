@@ -1,31 +1,22 @@
-
-Filter page-----------------------------------------------------------------------------------------
+backend stuff ------------------------------------------------------------------
 TODO: 
 add auth system so that only superuser can edit page // technologies should be able to add projects as well // add fields for github link, website link, and short description
  add more data to backend so that you can begin implementing the relay pagination. >>> Basically a system that allows only one user
 
 
+
+Filter page-----------------------------------------------------------------------------------------
 CRUD for both project and technology resolvers.
 
 use the trick from the card thing to reduce the opacity of all the things that are not hovered
 in the projects bar. <<<<<<<<<<
-
-
-
 removeAllAlternateDescriptions does not remove all alternate descriptions...
 
 
 write function that retrieves the dominant color of an image
 
-optimize search regex << maybe
 
 Timeline:
-
-put technologies used in this project in timeline as well
-
-look for TODO in navbar
-
-
 Home/timeline page --------------------------------------------------------------------------
 
 Manage timeline move
@@ -39,12 +30,13 @@ really moves the elements to the actual postiion OR move it to the translateX po
 
 manage the projectAsEvent bottom padding
 
-apply the new navbar dropdown to other components 
 
-style dropdown: change css, elements, whatever
 
 refactor navbar, not yet DRY
 
-work on transition between technologies and website image => todo in timelineOverview
+apply the new dropdown design to mobile navbar as well
 
-text in technologies button stuck again... (look for TODO in technologies details)
+continue working on responsive design for both pages
+- Which includes finding out how you got it to work for your recital.
+
+find out how to get the localhost thing to work on your phone.

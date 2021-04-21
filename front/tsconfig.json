@@ -28,7 +28,8 @@
     "**/*.ts",
     "**/*.tsx",
     "components/Navbar/Navbar.tsx",
-    "globalContexts/navbarTopics.js"
+    "globalContexts/navbarTopics.js",
+    "tests/getAllPosts.test.js"
   ],
   "exclude": ["node_modules"]
 }
