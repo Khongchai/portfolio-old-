@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Stack } from "@chakra-ui/react";
+import { Button, Flex, Stack } from "@chakra-ui/react";
 import React from "react";
 import { ButtonLink } from "../../elements/ButtonLink";
 import GithubLink from "../../elements/GithubLink";
@@ -19,15 +19,15 @@ const Links: React.FC<{
       StackDir="column"
       align={["flex-start", null, null, "center"]}
     >
-      <Flex flexDir={["column", null, null, "row"]}>
+      <Flex>
         <ButtonLink link={webLink} text="View Website" />
         {extraToggleButton ? (
           <Button
             _hover={{ textDecor: "none", color: "mainGrey", bgColor: "white" }}
             color="white"
             bgColor="mainGrey"
-            mt={["1rem", null, null, "0"]}
-            ml={[null, null, null, "1rem"]}
+            ml={"1rem"}
+            display={["none", null, "block"]}
             onClick={() => {
               const { setStateFunction, state } = extraToggleButton;
               setStateFunction(!state);

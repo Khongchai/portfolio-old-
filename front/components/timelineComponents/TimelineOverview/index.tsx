@@ -1,15 +1,12 @@
 import { Box, Flex, Stack, Text } from "@chakra-ui/react";
 import { Maybe } from "graphql/jsutils/Maybe";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { ProjectEntity } from "../../../generated/graphql";
 import { TechDetails } from "../../../types/TechDetails";
 import { readFromParamOrStorage } from "../../../utils/generics/setAndGetCurrentSelection/readFromParamOrStorageAndSet";
 import { updateQueryParamOnChange } from "../../../utils/generics/setAndGetCurrentSelection/updateQueryParamOnChange";
 import { ProjectDescription } from "../../shared/ProjectDescription";
-import {
-  ExpandedContent,
-  TechnologiesDetails,
-} from "../../shared/TechnologiesDetails";
+import { ExpandedContent } from "../../shared/TechnologiesDetails";
 
 const TimelineOverview: React.FC<{
   selectedProject: ProjectEntity | null;

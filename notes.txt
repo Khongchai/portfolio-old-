@@ -19,7 +19,9 @@ write function that retrieves the dominant color of an image
 Timeline:
 Home/timeline page --------------------------------------------------------------------------
 
-Manage timeline move
+Look for TODO in index.tsx of Timeline
+
+Manage timeline move for touch screen
 
 continue writing the throttle function
 

@@ -45,6 +45,12 @@ export const Timeline: React.FC<timelineProps> = ({
 
   useEffect(() => {
     setEventsYearsBorderPosition();
+    //Debug: loads too fast and the position is wrong, load too slow causes delay
+    //possible fix: delayed load only the first time.
+    window.addEventListener("scroll", setEventsYearsBorderPosition);
+    return () => {
+      window.removeEventListener("scroll", setEventsYearsBorderPosition);
+    };
   }, []);
 
   useEffect(() => {

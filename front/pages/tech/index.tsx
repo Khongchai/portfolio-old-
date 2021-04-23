@@ -1,4 +1,5 @@
 import { Flex, Grid } from "@chakra-ui/react";
+import { GetServerSideProps } from "next";
 import React, { useEffect, useState } from "react";
 import Timeline from "../../components/timelineComponents/Timeline";
 import TimelineOverview from "../../components/timelineComponents/TimelineOverview";
@@ -9,7 +10,6 @@ import {
 import removeDuplicatesFromArray from "../../utils/generics/removeDuplicatesFromArray";
 import setFirstHeightToSecondPadding from "../../utils/generics/setFirstHeightToSecondPadding";
 import setEventsYearsBorderPosition from "../../utils/timeline/setEventsYearsBorderPosition";
-import { GetServerSideProps } from "next";
 
 const Tech: React.FC<{ selection: string | undefined }> = ({ selection }) => {
   const [selectedProject, setSelectedProject] = useState<ProjectEntity | null>(
@@ -76,8 +76,8 @@ const Tech: React.FC<{ selection: string | undefined }> = ({ selection }) => {
           e.target.style.cursor = "grab";
         }}
         minWidth="1200px"
+        minHeight={["300px", null, "320px"]}
         id="timeline-container"
-        maxHeight="100%"
         flex="0.40"
       >
         <Timeline

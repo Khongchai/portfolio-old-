@@ -4,11 +4,9 @@ export default function setEventsYearsBorderPosition() {
     const yearsContainer = document.getElementById("years-container");
 
     if (border && yearsContainer) {
-      setTimeout(() => {
-        const yearsContainerTop = yearsContainer?.getBoundingClientRect().top;
-        border.style.top = `${yearsContainerTop}px`;
-        border.style.width = "100vw";
-      }, 400);
+      const yearsContainerTop = yearsContainer?.getBoundingClientRect().top;
+      border.style.top = `${yearsContainerTop}px`;
+      border.style.width = "100vw";
     }
   }
 }
