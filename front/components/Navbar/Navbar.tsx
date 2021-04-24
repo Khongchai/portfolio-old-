@@ -149,28 +149,37 @@ const HamburgerMenu: React.FC<{}> = ({}) => {
             Go to
           </DrawerHeader>
           <DrawerBody
-            css={{ "> *": { marginTop: "1em", padding: "1em" } }}
+            pt="2em"
+            css={{ "> *": { marginBottom: "2em" } }}
             color="white"
           >
             {pagesWithDropDowns.map((pageWithDropDown, i) => (
-              <Select
-                key={i}
-                fontFamily="Selawik Light"
-                p="1em"
-                width="fit-content"
-                variant="flushed"
-                onChange={(e) => {
-                  router.push(e.target.value);
-                }}
-              >
-                {pageWithDropDown.map((page) => (
-                  <LinkButtonMobile
-                    key={page.pageName}
-                    page={page}
-                    isDropdown={true}
-                  />
-                ))}
-              </Select>
+              <Menu isLazy key={i}>
+                <MenuButton
+                  fontWeight="bold"
+                  fontFamily="Selawik light"
+                  width="fit-content"
+                  display={["block", null, "none"]}
+                >
+                  {pageWithDropDown[0].pageName.split(":")[0]}
+                </MenuButton>
+                <MenuList
+                  className="menu-list-mobile"
+                  p="2px 0 0 auto"
+                  bgColor="mainGrey"
+                  onClick={(e: any) => {
+                    router.push(e.target.value);
+                  }}
+                >
+                  {pageWithDropDown.map((subPage) => (
+                    <LinkButtonMobile
+                      key={subPage.pageName}
+                      page={subPage}
+                      isDropdown={true}
+                    />
+                  ))}
+                </MenuList>
+              </Menu>
             ))}
 
             {pages.pagesWithNoDropdowns.map((page) => (
@@ -185,7 +194,8 @@ const HamburgerMenu: React.FC<{}> = ({}) => {
   );
 };
 
-const LinkButtonMobile: React.FC<{ page: page; isDropdown?: true }> = ({
+//Handles dropdowns a little differently
+const LinkButtonMobile: React.FC<{ page: page; isDropdown?: boolean }> = ({
   page,
   isDropdown,
 }) => {
@@ -193,15 +203,27 @@ const LinkButtonMobile: React.FC<{ page: page; isDropdown?: true }> = ({
   if (!isDropdown) {
     return (
       <NextLink href={url}>
-        <Text fontFamily="Selawik Light" cursor="pointer">
-          {pageName}
-        </Text>
+        <Flex placeItems="center">
+          <Text
+            display={["block", null, "none"]}
+            className="nav-buttons"
+            fontFamily="Selawik"
+          >
+            {pageName}
+          </Text>
+        </Flex>
       </NextLink>
     );
   }
+
   return (
-    <option style={{ color: "black" }} className="nav-buttons" value={url}>
-      {pageName}
-    </option>
+    <MenuItem
+      color="white"
+      className="nav-buttons"
+      value={url}
+      fontFamily="Selawik"
+    >
+      {pageName.split(":")[1]}
+    </MenuItem>
   );
 };
