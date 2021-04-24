@@ -25,6 +25,8 @@ Each projectAsTimelineEvent still interferes with timeline navigation
 
 Change style of technology descriptions and possibly remove border between each tech section.
 
+Tweak the timeline scroll value
+
 Look for TODO in index.tsx of Timeline
 
 Manage timeline move for touch screen
