@@ -151,7 +151,12 @@ const Logo: React.FC<{
   }, [forceUpdate]);
 
   return (
-    <Flex flex="auto" align="center" pb={"6px"} borderBottom="1px groove grey">
+    <Flex
+      flex="auto"
+      align="center"
+      pb={"6px"}
+      borderBottom="1px groove #444057"
+    >
       <Text>{desc}: </Text>
       <Flex
         justifyContent="space-evenly"

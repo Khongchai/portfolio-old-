@@ -6,6 +6,9 @@ let block: HTMLElement | null;
 let initialX = 0;
 let currTranslateXVal = 0;
 let newTranslateXVal = 0;
+let intervalFunction: any;
+let animationFrame: any;
+let firstResult = 0;
 const inertia = new Inertia();
 
 export default function manageBlockMove(blockId: string, operation: string) {
@@ -14,11 +17,8 @@ export default function manageBlockMove(blockId: string, operation: string) {
   if (operation === "monitor") {
     block?.addEventListener("mousedown", down);
     block?.addEventListener("mouseup", up);
-    block?.addEventListener("mousemove", drag);
-
     block?.addEventListener("touchstart", down);
     block?.addEventListener("touchend", up);
-    block?.addEventListener("touchmove", drag);
   } else {
     //remove eventlisteners
     block?.removeEventListener("mousedown", down);
@@ -33,18 +33,32 @@ export default function manageBlockMove(blockId: string, operation: string) {
 
 function down(e: MouseEvent | TouchEvent) {
   checkCurrentTranslateX();
+  firstResult = 0;
   dragSwitch = true;
-  initialX =
-    e.type === "mousedown"
-      ? (e as MouseEvent).clientX
-      : (e as TouchEvent).touches[0].clientX;
+  if (e.type === "mousedown") {
+    initialX = (e as MouseEvent).clientX;
+    block?.addEventListener("mousemove", drag);
+  } else {
+    initialX = (e as TouchEvent).touches[0].clientX;
+    block?.addEventListener("touchmove", drag);
+  }
   if (block) {
     block.style.transition = "";
+  }
+  //set once immediately
+  inertia.setdydx(currTranslateXVal);
+
+  intervalFunction = setInterval(() => {
+    inertia.setdydx(newTranslateXVal);
+  }, 200);
+
+  if (animationFrame) {
+    cancelAnimationFrame(animationFrame);
   }
 }
 
 function drag(e: MouseEvent | TouchEvent) {
-  e.preventDefault();
+  e.stopPropagation();
   if (dragSwitch) {
     const clientX =
       e.type === "mousemove"
@@ -52,20 +66,27 @@ function drag(e: MouseEvent | TouchEvent) {
         : (e as TouchEvent).touches[0].clientX;
     newTranslateXVal = clientX - initialX + currTranslateXVal;
     moveBlock(newTranslateXVal);
-
-    inertia.setPoints(clientX);
   }
 }
 
-function up() {
+function up(e: MouseEvent | TouchEvent) {
+  if (e.type === "mouseup") {
+    block?.removeEventListener("mousemove", drag);
+  } else {
+    block?.removeEventListener("touchmove", drag);
+  }
+
+  inertia.setdydx(newTranslateXVal);
   currTranslateXVal = newTranslateXVal;
   dragSwitch = false;
   if (block) {
-    block.style.transition = "transform .5s";
-    handleEdgeOffset(undefined, true);
+    //this causes backward movement TODO
+    // block.style.transition = "transform .5s";
+    // handleEdgeOffset(undefined, true);
   }
 
-  inertia.setDelta();
+  clearInterval(intervalFunction);
+  //set once immediately after release
   slowDownUntil0();
 }
 
@@ -77,31 +98,54 @@ function checkCurrentTranslateX() {
   }
 }
 
-function moveBlock(xOffset: number) {
+function moveBlock(xOffset: number, triggerDebug?: boolean) {
+  if (triggerDebug) {
+    console.log(xOffset);
+  }
   xOffset = handleEdgeOffset(xOffset) as number;
+
   if (block) {
-    block.style.transform = `translateX(${xOffset.toFixed(2)}px)`;
+    block.style.transform = `translateX(${xOffset}px)`;
   }
 }
 
-let time = Date.now();
+//turn this into a class later TODO
+let initialBeforeThrottle: number | undefined = undefined;
+let timeStart: number = Date.now();
+
+/**
+ * Formula = initialVelocity/decelerationFactor(time)^2 + 1
+ * https://www.desmos.com/calculator/s6lzhsggwq
+ */
 function slowDownUntil0() {
-  const currentDeltaAsString = inertia.getDelta().toFixed(2);
-  if (
-    currentDeltaAsString == "0.00" ||
-    currentDeltaAsString == "0.01" ||
-    currentDeltaAsString == "-0.01"
-  ) {
-    return;
+  if (initialBeforeThrottle !== inertia.getDifference()) {
+    initialBeforeThrottle = inertia.getDifference();
+    timeStart = Date.now();
   }
 
-  const newTranslateVal = currTranslateXVal - inertia.getDelta();
-  currTranslateXVal = newTranslateXVal;
+  const initialVelocity = initialBeforeThrottle;
+  const deceleration = {
+    /**
+     * Lower value = longer decay duration
+     */
+    decay: 0.00305,
+    instantReduction: 1.04,
+  };
+  const timeDifference = Date.now() - timeStart;
+  const preventZeroDivision = 1;
+  let result =
+    initialVelocity /
+    (deceleration.decay * (timeDifference ^ deceleration.instantReduction) +
+      preventZeroDivision);
 
-  moveBlock(-newTranslateVal);
-  console.log("still moving");
+  //TODO, if result is 20% of initialVAlue, just stop
 
-  inertia.slowDown();
+  let resultRounded = Math.round(result * 10) / 10;
+  firstResult = firstResult ? firstResult : resultRounded;
 
-  requestAnimationFrame(slowDownUntil0);
+  let deceleratedTranslate = newTranslateXVal - resultRounded + firstResult;
+
+  moveBlock(deceleratedTranslate, undefined);
+
+  animationFrame = requestAnimationFrame(slowDownUntil0);
 }

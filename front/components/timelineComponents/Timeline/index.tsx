@@ -54,6 +54,12 @@ export const Timeline: React.FC<timelineProps> = ({
   }, []);
 
   useEffect(() => {
+    //Dear my future self
+    //Why not just use GSAP, you may ask?
+    //Gsap was not working properly and I couldn't figure out why
+    //So I wrote the move function myself.
+    //Turns out, it was the god damn css transition...
+    //This took you 1 whole fucking day.
     manageBlockMove("timeline", "monitor");
     return () => {
       manageBlockMove("timeline", "de-monitor");

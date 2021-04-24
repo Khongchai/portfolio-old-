@@ -1,56 +1,41 @@
+/**
+ * Representing time, we have a function that logs new cursor position every x seconds
+ * The "instantaneous" rate of change will be the difference from new and old position
+ */
 export class Inertia {
-  init: number;
   cur: number;
   prev: number;
   delta: number | undefined = undefined;
-  rotation = 0;
 
   constructor() {
-    this.init = 0;
-    this.cur = this.init;
+    this.cur = 0;
     this.prev = this.cur;
   }
 
-  setPoints(currentPos: number) {
-    this.rotation++;
-    //compare to 2 points away
-    if (this.rotation == 2) {
-      this.prev = this.cur;
-      this.rotation = 0;
-    }
+  setdydx(currentPos: number) {
+    //will have to be called every x seconds
+    this.prev = this.cur;
     this.cur = currentPos;
   }
 
-  resetDelta() {
-    this.delta = 0;
-  }
-
-  setDelta() {
+  getDifference() {
     this.delta = this.cur - this.prev;
-  }
-
-  getDelta() {
-    /**
-     * get current delta, value of delta must first be defined
-     */
-    this.handleDeltaUndefined();
-    return this.delta!;
-  }
-
-  slowDown() {
-    this.handleDeltaUndefined();
-    let delta = this.delta!;
-    if (delta > 0) {
-      delta -= 0.01;
-    } else {
-      delta += 0.01;
-    }
-    this.delta = delta;
+    return this.delta;
   }
 
   handleDeltaUndefined() {
-    if (!this.delta) {
+    if (this.delta == null) {
       throw "Rate of change 'delta' not set";
     }
+  }
+}
+
+/**
+ * Manages inertial throttling
+ */
+export class InertiaThrottle {
+  init: number;
+  constructor(initial: number) {
+    this.init = initial;
   }
 }
