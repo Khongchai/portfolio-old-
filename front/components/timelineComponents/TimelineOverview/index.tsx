@@ -51,7 +51,7 @@ const LeftSection: React.FC<{
   selectedProject: ProjectEntity;
 }> = ({ showTech, selectedProject }) => {
   return (
-    <Box flex="0.4">
+    <Box flex="0.4" id="technologies-container">
       {showTech ? (
         <Technologies
           techDetails={{
@@ -134,7 +134,6 @@ const Technologies: React.FC<{ techDetails: TechDetails }> = ({
       className="fadein"
       width="clamp(360px, 100%, calc(360px * 1.5))"
       height="auto"
-      maxHeight="280px"
       overflowY="scroll"
       overflowX="hidden"
       flexDir="column"

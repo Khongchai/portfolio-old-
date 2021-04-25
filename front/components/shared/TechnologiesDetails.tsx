@@ -155,9 +155,11 @@ const Logo: React.FC<{
       flex="auto"
       align="center"
       pb={"6px"}
-      borderBottom="1px groove #444057"
+      // borderBottom="1px groove #444057"
     >
-      <Text>{desc}: </Text>
+      <Box height="100%">
+        <Text>{desc}: </Text>
+      </Box>
       <Flex
         justifyContent="space-evenly"
         flexWrap="wrap"

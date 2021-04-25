@@ -21,7 +21,7 @@ Home/timeline page -------------------------------------------------------------
 turn throttle thing into a class
 Look for TODO in manage block move
 
-Each projectAsTimelineEvent still interferes with timeline navigation
+If you accidentally drag your cursor over one of the events, it fucks up the entire timeline animation
 
 Change style of technology descriptions and possibly remove border between each tech section.
 

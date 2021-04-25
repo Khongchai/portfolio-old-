@@ -60,11 +60,8 @@ function down(e: MouseEvent | TouchEvent) {
 function drag(e: MouseEvent | TouchEvent) {
   e.stopPropagation();
   if (dragSwitch) {
-    const clientX =
-      e.type === "mousemove"
-        ? (e as MouseEvent).clientX
-        : (e as TouchEvent).touches[0].clientX;
-    newTranslateXVal = clientX - initialX + currTranslateXVal;
+    const currentClientX = getCurrentXFromMouseOrTouch(e, "mousemove");
+    newTranslateXVal = currentClientX - initialX + currTranslateXVal;
     moveBlock(newTranslateXVal);
   }
 }
@@ -75,6 +72,10 @@ function up(e: MouseEvent | TouchEvent) {
   } else {
     block?.removeEventListener("touchmove", drag);
   }
+
+  const currentClientX = getCurrentXFromMouseOrTouch(e, "mouseup");
+  //User has not dragged,
+  const hasDragged = currentClientX === initialX ? false : true;
 
   inertia.setdydx(newTranslateXVal);
   currTranslateXVal = newTranslateXVal;
@@ -87,7 +88,7 @@ function up(e: MouseEvent | TouchEvent) {
 
   clearInterval(intervalFunction);
   //set once immediately after release
-  slowDownUntil0();
+  slowDownUntil0(hasDragged);
 }
 
 function checkCurrentTranslateX() {
@@ -117,7 +118,8 @@ let timeStart: number = Date.now();
  * Formula = initialVelocity/decelerationFactor(time)^2 + 1
  * https://www.desmos.com/calculator/s6lzhsggwq
  */
-function slowDownUntil0() {
+function slowDownUntil0(hasDragged: boolean) {
+  if (!hasDragged) return;
   if (initialBeforeThrottle !== inertia.getDifference()) {
     initialBeforeThrottle = inertia.getDifference();
     timeStart = Date.now();
@@ -128,8 +130,8 @@ function slowDownUntil0() {
     /**
      * Lower value = longer decay duration
      */
-    decay: 0.00305,
-    instantReduction: 1.04,
+    decay: 0.0305,
+    instantReduction: 2,
   };
   const timeDifference = Date.now() - timeStart;
   const preventZeroDivision = 1;
@@ -147,5 +149,15 @@ function slowDownUntil0() {
 
   moveBlock(deceleratedTranslate, undefined);
 
-  animationFrame = requestAnimationFrame(slowDownUntil0);
+  animationFrame = requestAnimationFrame(() => {
+    slowDownUntil0(hasDragged);
+  });
+}
+
+function getCurrentXFromMouseOrTouch(e: MouseEvent | TouchEvent, type: string) {
+  const clientX =
+    e.type === type
+      ? (e as MouseEvent).clientX
+      : (e as TouchEvent).touches[0].clientX;
+  return clientX;
 }
