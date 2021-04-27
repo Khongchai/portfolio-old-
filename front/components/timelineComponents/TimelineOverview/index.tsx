@@ -51,7 +51,25 @@ const LeftSection: React.FC<{
   selectedProject: ProjectEntity;
 }> = ({ showTech, selectedProject }) => {
   return (
-    <Box flex="0.4" id="technologies-container">
+    <Box
+      flex="0.4"
+      id="technologies-container"
+      transition="width .3s"
+      overflow-x={showTech ? "scroll" : "auto"}
+      css={{
+        "::-webkit-scrollbar": {
+          width: "0.5rem",
+          marginLeft: "1rem",
+        },
+        "::-webkit-scrollbar-track": {
+          display: "none",
+        },
+        "::-webkit-scrollbar-thumb": {
+          backgroundColor: "#545161",
+          border: "3px solid transparent",
+        },
+      }}
+    >
       {showTech ? (
         <Technologies
           techDetails={{

@@ -29,9 +29,7 @@ Tweak the timeline scroll value
 
 Look for TODO in index.tsx of Timeline
 
-Manage timeline move for touch screen
 
-continue writing the throttle function
 
 take care of the setSCrollPositionTOYearX. Right now it's moving without taking into account the 
 current position of the moved elements. Can cause offset in a really big screen. Change it so that it

@@ -200,7 +200,7 @@ const Logo: React.FC<{
                 filter="drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))"
                 padding={"1px"}
                 key={nameOriginal}
-                h={["25px", null, "40px"]}
+                h={["27px", null, "29px", "32px", "40px"]}
                 src={src}
                 id={nameOriginal}
                 transition=".2s"

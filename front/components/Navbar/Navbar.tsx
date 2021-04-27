@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Drawer,
   DrawerBody,
   DrawerContent,
@@ -39,7 +40,7 @@ export const Navbar: React.FC<{}> = () => {
       position="absolute"
       top="0"
       p={["2.3em 3em 1.3em 3em", null, "1.3em 3em 1.3em 3em"]}
-      width={["100%", null, "50%"]}
+      width={["100%"]}
     >
       {pagesWithDropDowns.map((pageWithDropDown, i) => (
         <>
@@ -75,6 +76,11 @@ export const Navbar: React.FC<{}> = () => {
       {pages.pagesWithNoDropdowns.map((page) => (
         <LinkButton key={page.pageName} page={page} />
       ))}
+      <NextLink href="/tech/admin/">
+        <Flex ml="auto" placeItems="center">
+          <Button>Admin Login</Button>
+        </Flex>
+      </NextLink>
       <HamburgerMenu />
     </Flex>
   );

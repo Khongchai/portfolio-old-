@@ -60,7 +60,7 @@ function down(e: MouseEvent | TouchEvent) {
 function drag(e: MouseEvent | TouchEvent) {
   e.stopPropagation();
   if (dragSwitch) {
-    const currentClientX = getCurrentXFromMouseOrTouch(e, "mousemove");
+    const currentClientX = getCurrentXFromMouseOrTouch(e as any);
     newTranslateXVal = currentClientX - initialX + currTranslateXVal;
     moveBlock(newTranslateXVal);
   }
@@ -73,7 +73,10 @@ function up(e: MouseEvent | TouchEvent) {
     block?.removeEventListener("touchmove", drag);
   }
 
-  const currentClientX = getCurrentXFromMouseOrTouch(e, "mouseup");
+  const currentClientX = getCurrentXFromMouseOrTouch(
+    e as any,
+    newTranslateXVal
+  );
   //User has not dragged,
   const hasDragged = currentClientX === initialX ? false : true;
 
@@ -154,10 +157,16 @@ function slowDownUntil0(hasDragged: boolean) {
   });
 }
 
-function getCurrentXFromMouseOrTouch(e: MouseEvent | TouchEvent, type: string) {
-  const clientX =
-    e.type === type
-      ? (e as MouseEvent).clientX
-      : (e as TouchEvent).touches[0].clientX;
+function getCurrentXFromMouseOrTouch(
+  e: MouseEvent & TouchEvent,
+  currentVal?: number
+): number {
+  if (e.type === "touchend") {
+    if (!currentVal) {
+      throw "Include currentVal for touchend event";
+    }
+    return currentVal as number;
+  }
+  const clientX = e.clientX ? e.clientX : e.touches[0].clientX;
   return clientX;
 }
