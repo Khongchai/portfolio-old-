@@ -20,8 +20,14 @@ const TechnologyResolver_1 = require("./resolvers/TechnologyResolver");
 const typeorm_1 = require("typeorm");
 const ProjectEntity_1 = require("./entities/ProjectEntity");
 const TechnologyEntity_1 = require("./entities/TechnologyEntity");
+const redis_1 = __importDefault(require("redis"));
+const express_session_1 = __importDefault(require("express-session"));
+const connect_redis_1 = __importDefault(require("connect-redis"));
 const cors_1 = __importDefault(require("cors"));
 const path_1 = __importDefault(require("path"));
+const constants_1 = require("./constants");
+const AdminEntity_1 = require("./entities/AdminEntity");
+const AdminResolver_1 = require("./resolvers/AdminResolver");
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     const conn = yield typeorm_1.createConnection({
         type: "postgres",
@@ -29,22 +35,39 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         username: "postgres",
         password: "postgres",
         migrations: [path_1.default.join(__dirname, "/migrations/*")],
-        logging: false,
+        logging: true,
         synchronize: true,
         migrationsRun: true,
-        entities: [ProjectEntity_1.ProjectEntity, TechnologyEntity_1.TechnologyEntity],
+        entities: [ProjectEntity_1.ProjectEntity, TechnologyEntity_1.TechnologyEntity, AdminEntity_1.AdminEntity],
     });
     const app = express_1.default();
+    const RedisStore = connect_redis_1.default(express_session_1.default);
+    const redisClient = redis_1.default.createClient();
+    app.use(express_session_1.default({
+        name: constants_1.COOKIE_NAME,
+        store: new RedisStore({
+            client: redisClient,
+            disableTTL: true,
+        }),
+        cookie: {
+            httpOnly: true,
+            secure: constants_1.IN_PRODUCTION,
+            sameSite: "lax",
+        },
+        saveUninitialized: false,
+        secret: "lskdj)(*$)#@*(kj4lskdj",
+        resave: false,
+    }));
     app.use(cors_1.default({
         origin: "http://localhost:3000",
         credentials: true,
     }));
     const apolloServer = new apollo_server_express_1.ApolloServer({
         schema: yield type_graphql_1.buildSchema({
-            resolvers: [ProjectResolver_1.ProjectsResolver, TechnologyResolver_1.TechnologyResolver],
+            resolvers: [ProjectResolver_1.ProjectsResolver, TechnologyResolver_1.TechnologyResolver, AdminResolver_1.AdminResolver],
             validate: false,
         }),
-        context: ({ req, res }) => ({ req, res }),
+        context: ({ req, res }) => ({ req, res, redis: redisClient }),
     });
     apolloServer.applyMiddleware({
         app,

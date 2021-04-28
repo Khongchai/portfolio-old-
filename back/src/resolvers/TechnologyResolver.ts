@@ -1,4 +1,4 @@
-import { Context } from "src/types";
+import { Context } from "../types";
 import {
   Arg,
   Ctx,
