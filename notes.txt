@@ -2,6 +2,7 @@ backend stuff ------------------------------------------------------------------
 TODO: 
 add auth system so that only superuser can edit page // technologies should be able to add projects as well // add fields for github link, website link, and short description
  add more data to backend so that you can begin implementing the relay pagination. >>> Basically a system that allows only one user
+ - implement the validation middleware for all the mutations
 
 Shared components ------------------------------------------------------------------------
 If technologies are in two places, the hover descriptions will stay only on the first one (look at Apollo in VocabMem, for example);
@@ -14,9 +15,14 @@ in the projects bar. <<<<<<<<<<
 
 write function that retrieves the dominant color of an image
 
+Admin login button is being blokced!
+
+
 
 Timeline:
 Home/timeline page --------------------------------------------------------------------------
+
+Write responsive image load for cloudinary.
 
 turn throttle thing into a class
 Look for TODO in manage block move
@@ -39,3 +45,4 @@ continue working on responsive design for both pages
 - Which includes finding out how you got it to work for your recital.
 - The events timeline shouldn't have a fixed height, it should extends down automatically, creating as many rows as needed + should always attach itself to the bottom of the top part in all screen sizes
 
+Hamburgerbar's menu in mobile mode covers entire screen, blocks navigation.

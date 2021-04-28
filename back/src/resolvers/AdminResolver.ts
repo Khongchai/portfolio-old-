@@ -14,7 +14,6 @@ import { destroySession } from "../utils/destroySession";
 export class AdminResolver {
   /**
    * Allows only 1 instance of Admin
-   *
    */
   @Mutation(() => AdminResponse)
   async createAdmin(
@@ -45,6 +44,7 @@ export class AdminResolver {
     @Ctx() { req, res }: Context
   ): Promise<AdminDeletionResponse> {
     const { error, admin } = await validateAdminEmailAndPassword(input);
+
     if (error || !admin) return { error };
 
     await AdminEntity.remove(admin);

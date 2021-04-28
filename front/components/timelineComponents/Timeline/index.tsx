@@ -6,10 +6,8 @@ import {
 } from "../../../generated/graphql";
 import manageBlockMove from "../../../utils/timeline/manageBlockMove/manageBlockMove";
 import setFocusOnChange from "../../../utils/timeline/projectsAsEvents/setFocusOnChange";
-import setEventsYearsBorderPosition from "../../../utils/timeline/setEventsYearsBorderPosition";
 import setScrollPositionToYearX from "../../../utils/timeline/setScrollPositionToYearX";
 import Years from "../Years";
-import EventsYearsBorder from "./EventsYearsBorder";
 import ProjectAsTimelineEvent from "./ProjectAsTimelineEvent";
 
 interface timelineProps {
@@ -42,16 +40,6 @@ export const Timeline: React.FC<timelineProps> = ({
     years.length * twelveMonths
   }, ${oneMonthLengthInPixels})`;
   const yearElemToSetInitialScrollToRef = useRef<null | HTMLElement>(null);
-
-  useEffect(() => {
-    setEventsYearsBorderPosition();
-    //Debug: loads too fast and the position is wrong, load too slow causes delay
-    //possible fix: delayed load only the first time.
-    window.addEventListener("scroll", setEventsYearsBorderPosition);
-    return () => {
-      window.removeEventListener("scroll", setEventsYearsBorderPosition);
-    };
-  }, []);
 
   useEffect(() => {
     //Dear my future self
@@ -87,12 +75,12 @@ export const Timeline: React.FC<timelineProps> = ({
 
   return (
     <>
-      <EventsYearsBorder />
       <Grid
         id="timeline"
         gridTemplateRows="[timeline-top] 0.78fr [timeline-bottom] 0.22fr [timeline-padding-bottom]"
       >
         <Grid
+          borderBottom="1px solid black"
           id="events-container"
           gridRow="timeline-top / timeline-bottom"
           flexDir="row"

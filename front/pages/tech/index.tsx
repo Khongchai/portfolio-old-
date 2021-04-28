@@ -9,7 +9,6 @@ import {
 } from "../../generated/graphql";
 import removeDuplicatesFromArray from "../../utils/generics/removeDuplicatesFromArray";
 import setFirstHeightToSecondPadding from "../../utils/generics/setFirstHeightToSecondPadding";
-import setEventsYearsBorderPosition from "../../utils/timeline/setEventsYearsBorderPosition";
 
 const Tech: React.FC<{ selection: string | undefined }> = ({ selection }) => {
   const [selectedProject, setSelectedProject] = useState<ProjectEntity | null>(
@@ -18,13 +17,6 @@ const Tech: React.FC<{ selection: string | undefined }> = ({ selection }) => {
   const [{ data }] = useAllProjectsNotPaginatedQuery();
   const [years, setYears] = useState<number[]>([]);
   //this useeffect gets all the necessary data
-
-  useEffect(() => {
-    window.addEventListener("resize", setEventsYearsBorderPosition);
-    return () => {
-      window.removeEventListener("resize", setEventsYearsBorderPosition);
-    };
-  }, []);
 
   useEffect(() => {
     if (data) {

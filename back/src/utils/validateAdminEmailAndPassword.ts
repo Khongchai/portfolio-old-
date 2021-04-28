@@ -6,7 +6,7 @@ import {
 import argon2 from "argon2";
 
 /**
- * Does not inform whether an email is invalid because provided email is wrong or if no admin exists.
+ * For security reasons, it does not inform whether an email is invalid because provided email is wrong or if no admin exists.
  */
 export async function validateAdminEmailAndPassword(
   input: EmailPasswordInput
