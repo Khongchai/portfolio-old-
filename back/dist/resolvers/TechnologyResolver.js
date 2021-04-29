@@ -24,6 +24,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.TechnologyResolver = exports.ErrorField = void 0;
 const type_graphql_1 = require("type-graphql");
 const TechnologyEntity_1 = require("../entities/TechnologyEntity");
+const isAuth_1 = require("../middleware/isAuth");
 let ErrorField = class ErrorField {
 };
 __decorate([
@@ -90,6 +91,7 @@ __decorate([
 ], TechnologyResolver.prototype, "technologies", null);
 __decorate([
     type_graphql_1.Mutation(() => TechnologyEntity_1.TechnologyEntity, { nullable: true }),
+    type_graphql_1.UseMiddleware(isAuth_1.isAuth),
     __param(0, type_graphql_1.Arg("title")),
     __param(1, type_graphql_1.Arg("projectName", () => [String], { nullable: true })),
     __metadata("design:type", Function),
@@ -98,6 +100,7 @@ __decorate([
 ], TechnologyResolver.prototype, "createTechnology", null);
 __decorate([
     type_graphql_1.Mutation(() => String),
+    type_graphql_1.UseMiddleware(isAuth_1.isAuth),
     __param(0, type_graphql_1.Ctx()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -105,6 +108,7 @@ __decorate([
 ], TechnologyResolver.prototype, "deleteAllTechnologies", null);
 __decorate([
     type_graphql_1.Mutation(() => String),
+    type_graphql_1.UseMiddleware(isAuth_1.isAuth),
     __param(0, type_graphql_1.Arg("title")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),

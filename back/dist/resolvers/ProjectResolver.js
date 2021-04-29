@@ -25,6 +25,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProjectsResolver = void 0;
+const isAuth_1 = require("../middleware/isAuth");
 const type_graphql_1 = require("type-graphql");
 const typeorm_1 = require("typeorm");
 const ProjectEntity_1 = require("../entities/ProjectEntity");
@@ -309,6 +310,7 @@ __decorate([
 ], ProjectsResolver.prototype, "getHighlightedProjects", null);
 __decorate([
     type_graphql_1.Mutation(() => ProjectResolver_1.ProjResponse, { nullable: true }),
+    type_graphql_1.UseMiddleware(isAuth_1.isAuth),
     __param(0, type_graphql_1.Arg("projectData")),
     __param(1, type_graphql_1.Ctx()),
     __metadata("design:type", Function),
@@ -317,6 +319,7 @@ __decorate([
 ], ProjectsResolver.prototype, "createProject", null);
 __decorate([
     type_graphql_1.Mutation(() => ProjectResolver_1.ProjResponse, { nullable: true }),
+    type_graphql_1.UseMiddleware(isAuth_1.isAuth),
     __param(0, type_graphql_1.Arg("projectData")),
     __param(1, type_graphql_1.Arg("operation")),
     __metadata("design:type", Function),
@@ -325,6 +328,7 @@ __decorate([
 ], ProjectsResolver.prototype, "addOrRemoveTechnologies", null);
 __decorate([
     type_graphql_1.Mutation(() => ProjectResolver_1.ProjResponse),
+    type_graphql_1.UseMiddleware(isAuth_1.isAuth),
     __param(0, type_graphql_1.Arg("title")),
     __param(1, type_graphql_1.Arg("operation")),
     __metadata("design:type", Function),
@@ -333,12 +337,14 @@ __decorate([
 ], ProjectsResolver.prototype, "setProjectHighlight", null);
 __decorate([
     type_graphql_1.Mutation(() => String),
+    type_graphql_1.UseMiddleware(isAuth_1.isAuth),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], ProjectsResolver.prototype, "deleteAllProjects", null);
 __decorate([
     type_graphql_1.Mutation(() => Boolean),
+    type_graphql_1.UseMiddleware(isAuth_1.isAuth),
     __param(0, type_graphql_1.Arg("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),

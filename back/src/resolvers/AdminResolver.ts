@@ -4,11 +4,19 @@ import {
   AdminResponse,
   EmailPasswordInput,
 } from "../inputAndObjectTypes/AdminResolver";
-import { Resolver, Query, Mutation, Arg, Ctx } from "type-graphql";
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Arg,
+  Ctx,
+  UseMiddleware,
+} from "type-graphql";
 import { Context } from "../types";
 import argon2 from "argon2";
 import { validateAdminEmailAndPassword } from "../utils/validateAdminEmailAndPassword";
 import { destroySession } from "../utils/destroySession";
+import { isAuth } from "../middleware/isAuth";
 
 @Resolver()
 export class AdminResolver {
@@ -39,6 +47,7 @@ export class AdminResolver {
 
   //Only the admin can delete itself
   @Mutation(() => AdminDeletionResponse)
+  @UseMiddleware(isAuth)
   async deleteAdmin(
     @Arg("input") input: EmailPasswordInput,
     @Ctx() { req, res }: Context
@@ -68,6 +77,7 @@ export class AdminResolver {
   }
 
   @Mutation(() => Boolean)
+  @UseMiddleware(isAuth)
   async logout(@Ctx() { req, res }: Context) {
     return destroySession({ req, res });
   }

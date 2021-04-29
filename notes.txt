@@ -11,11 +11,11 @@ If technologies are in two places, the hover descriptions will stay only on the 
 Filter page-----------------------------------------------------------------------------------------
 
 use the trick from the card thing to reduce the opacity of all the things that are not hovered
-in the projects bar. <<<<<<<<<<
+in the projects bar. <<<<<<<<<bl
 
 write function that retrieves the dominant color of an image
 
-Admin login button is being blokced!
+Admin login button is being blocked!
 
 
 

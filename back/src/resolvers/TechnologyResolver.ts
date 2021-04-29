@@ -7,8 +7,10 @@ import {
   ObjectType,
   Query,
   Resolver,
+  UseMiddleware,
 } from "type-graphql";
 import { TechnologyEntity } from "../entities/TechnologyEntity";
+import { isAuth } from "../middleware/isAuth";
 
 @ObjectType()
 export class ErrorField {
@@ -30,6 +32,7 @@ export class TechnologyResolver {
   }
 
   @Mutation(() => TechnologyEntity, { nullable: true })
+  @UseMiddleware(isAuth)
   async createTechnology(
     @Arg("title") title: string,
     @Arg("projectName", () => [String], { nullable: true }) projName?: string[]
@@ -44,6 +47,7 @@ export class TechnologyResolver {
   }
 
   @Mutation(() => String)
+  @UseMiddleware(isAuth)
   async deleteAllTechnologies(@Ctx() {}: Context): Promise<string> {
     const techToBeDeleted = await TechnologyEntity.find({});
     if (techToBeDeleted.length === 0) {
@@ -55,6 +59,7 @@ export class TechnologyResolver {
   }
 
   @Mutation(() => String)
+  @UseMiddleware(isAuth)
   async deleteTechnolgy(@Arg("title") title: string): Promise<string> {
     const techToBeDeleted = await TechnologyEntity.findOne({
       where: { title },
