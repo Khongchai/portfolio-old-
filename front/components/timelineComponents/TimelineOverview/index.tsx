@@ -1,10 +1,11 @@
 import { Box, Flex, Stack, Text } from "@chakra-ui/react";
 import { Maybe } from "graphql/jsutils/Maybe";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ProjectEntity } from "../../../generated/graphql";
 import { TechDetails } from "../../../types/TechDetails";
 import { readFromParamOrStorage } from "../../../utils/generics/setAndGetCurrentSelection/readFromParamOrStorageAndSet";
 import { updateQueryParamOnChange } from "../../../utils/generics/setAndGetCurrentSelection/updateQueryParamOnChange";
+import { getCloudinaryResponsiveUrl } from "../../../utils/timeline/getCloudinaryResponsiveUrl";
 import { ProjectDescription } from "../../shared/ProjectDescription";
 import { ExpandedContent } from "../../shared/TechnologiesDetails";
 
@@ -127,14 +128,36 @@ const RightSection: React.FC<{
   );
 };
 
-const ProjectImage: React.FC<{ imgLink: Maybe<string> }> = ({ imgLink }) => {
+const ProjectImage: React.FC<{ imgLink: string }> = ({ imgLink }) => {
+  const id = "wallpaper";
+  const [responsiveImageUrl, setResponsiveImageUrl] = useState(
+    getCloudinaryResponsiveUrl(imgLink, id)
+  );
+
+  useEffect(() => {
+    setResponsiveImageUrl(getCloudinaryResponsiveUrl(imgLink, id));
+  }, [imgLink]);
+
+  useEffect(() => {
+    let timeoutHandler: any;
+    function handleResize() {
+      clearTimeout(timeoutHandler);
+      timeoutHandler = setTimeout(() => {
+        setResponsiveImageUrl(getCloudinaryResponsiveUrl(imgLink, id));
+      }, 100);
+    }
+    addEventListener("resize", handleResize);
+    return () => {
+      removeEventListener("resize", handleResize);
+    };
+  }, []);
   return (
     <Flex
       borderRadius="20px"
-      id="wallpaper"
+      id={id}
       width={"clamp(360px * 0.8, 100%, calc(360px * 1.5))"}
       pt="clamp(256px * 0.8, 70%, calc(256px * 1.5))"
-      backgroundImage={`url(${imgLink})`}
+      backgroundImage={`url(${responsiveImageUrl})`}
       backgroundRepeat="no-repeat"
       backgroundSize="cover"
       backgroundPosition="center"
