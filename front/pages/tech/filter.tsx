@@ -44,13 +44,22 @@ export const Filter: React.FC<{ selection: string | undefined }> = ({
   }, []);
 
   useEffect(() => {
-    updateTopics(
-      <SearchAndFindWrapper
-        mode="mobile"
-        setSearchParams={setSearchParams}
-        searchParams={searchParams}
-      />
-    );
+    updateTopics({
+      mobile: (
+        <SearchAndFindWrapper
+          mode="mobile"
+          setSearchParams={setSearchParams}
+          searchParams={searchParams}
+        />
+      ),
+      desktop: (
+        <SearchAndFindWrapper
+          mode="desktop"
+          setSearchParams={setSearchParams}
+          searchParams={searchParams}
+        />
+      ),
+    });
     return () => updateTopics(undefined);
   }, [searchParams]);
 
@@ -75,30 +84,32 @@ export const Filter: React.FC<{ selection: string | undefined }> = ({
     });
   }
 
-  function paginateBackWard() {
+  function paginateBackward() {
     setQueryVariables({
-      limit: queryVariables.limit,
+      ...queryVariables,
       skip: queryVariables.skip - queryVariables.limit,
-      order: queryVariables.order,
-      sortBy: queryVariables.sortBy,
-      search: queryVariables.search,
-      field: queryVariables.field,
     });
   }
+  // function paginateBackWard() {
+  //   setQueryVariables({
+  //     limit: queryVariables.limit,
+  //     skip: queryVariables.skip - queryVariables.limit,
+  //     order: queryVariables.order,
+  //     sortBy: queryVariables.sortBy,
+  //     search: queryVariables.search,
+  //     field: queryVariables.field,
+  //   });
+  // }
 
   return (
     <Flex
       id="filter-page"
       flexDir={["column", "column", "column", "column", "row", "row"]}
       w={"100%"}
-      h={["auto", null, "100vh"]}
+      h={["auto", null, "max(100vh, 1000px)"]}
       pb="1.5rem"
+      className="filter-page-container"
     >
-      <SearchAndFindWrapper
-        mode="desktop"
-        setSearchParams={setSearchParams}
-        searchParams={searchParams}
-      />
       <InfoDisplay details={details} />
       <List
         searchFetching={fetching}
@@ -107,7 +118,7 @@ export const Filter: React.FC<{ selection: string | undefined }> = ({
         selection={selection}
         setDetails={setDetails}
         paginateForward={paginateForward}
-        paginateBackward={paginateBackWard}
+        paginateBackward={paginateBackward}
       />
     </Flex>
   );

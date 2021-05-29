@@ -28,7 +28,8 @@ const TimelineOverview: React.FC<{
       bgColor="#444057"
       id="info-container"
       placeItems={["flex-start", null, null, "center"]}
-      p="20px 10% 20px 10%"
+      p="0 10% 20px 10%"
+      pt={["5rem", null, null, "20px"]}
       flexDir={["column", null, null, "row"]}
     >
       {selectedProject ? (
@@ -90,6 +91,7 @@ const LeftSection: React.FC<{
               textAlign="center"
               transform="rotate(20deg)"
               fontSize="1.5em"
+              p="6rem 0"
               letterSpacing="1.7"
               className="fadein"
             >
@@ -112,9 +114,9 @@ const RightSection: React.FC<{
       as={Flex}
       flex="0.50"
       spacing="2em"
-      p="1rem 1rem 1rem 1rem"
+      p="1rem 0"
       textShadow="black 0px 2px 5px"
-      ml={2}
+      ml={[0, null, null, 5]}
     >
       <ProjectDescription
         extraToggleButton={{
@@ -135,22 +137,20 @@ const ProjectImage: React.FC<{ imgLink: string }> = ({ imgLink }) => {
   );
 
   useEffect(() => {
+    //set current wallpaper
     setResponsiveImageUrl(getCloudinaryResponsiveUrl(imgLink, id));
-  }, [imgLink]);
 
-  useEffect(() => {
+    //fetch new image if screenresolution increases
     let timeoutHandler: any;
     function handleResize() {
       clearTimeout(timeoutHandler);
       timeoutHandler = setTimeout(() => {
         setResponsiveImageUrl(getCloudinaryResponsiveUrl(imgLink, id));
+        removeEventListener("resize", handleResize);
       }, 100);
     }
     addEventListener("resize", handleResize);
-    return () => {
-      removeEventListener("resize", handleResize);
-    };
-  }, []);
+  }, [imgLink]);
   return (
     <Flex
       borderRadius="20px"

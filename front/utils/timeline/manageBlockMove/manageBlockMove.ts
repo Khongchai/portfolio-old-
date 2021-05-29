@@ -58,7 +58,7 @@ function down(e: MouseEvent | TouchEvent) {
 }
 
 function drag(e: MouseEvent | TouchEvent) {
-  e.stopPropagation();
+  e.preventDefault();
   if (dragSwitch) {
     const currentClientX = getCurrentXFromMouseOrTouch(e as any);
     newTranslateXVal = currentClientX - initialX + currTranslateXVal;

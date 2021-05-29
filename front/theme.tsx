@@ -23,6 +23,7 @@ const theme = extendTheme({
       "html, body": {
         background: "mainGradientGrey",
         color: "white",
+        overflowX: "hidden",
       },
     },
   },

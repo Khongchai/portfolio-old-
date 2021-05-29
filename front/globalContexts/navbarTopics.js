@@ -15,6 +15,9 @@ export const navbarTopics = {
   about: { url: "/tech/about", pageName: "Bio" },
 };
 
+//Two context, each for different purposes.
+//One is to store the value context,
+//the other is for the function that sets the value of that context.
 export const TopicsContext = React.createContext();
 export const TopicsUpdateContext = React.createContext();
 

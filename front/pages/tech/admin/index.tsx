@@ -20,7 +20,7 @@ const Admin: React.FC<indexProps> = ({}) => {
       placeItems="center"
       className="form-container"
     >
-      <Box width="400px" height="400px" className="form">
+      <Box width="400px" height="400px" className="form" padding="1rem">
         <Formik
           initialValues={{ email: "", password: "" }}
           onSubmit={(values, actions) => {
@@ -31,7 +31,7 @@ const Admin: React.FC<indexProps> = ({}) => {
           }}
         >
           {(props) => (
-            <Form>
+            <Form className="login-form">
               <Field name="email">
                 {({ field, form }: any) => (
                   <FormControl
@@ -64,7 +64,7 @@ const Admin: React.FC<indexProps> = ({}) => {
                 )}
               </Field>
               <Button
-                mt={4}
+                mt={10}
                 colorScheme="teal"
                 isLoading={props.isSubmitting}
                 type="submit"

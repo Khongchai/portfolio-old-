@@ -31,36 +31,28 @@ export const SearchAndFindWrapper: React.FC<searchQueryParams> = ({
 }) => {
   function setSearch(value: string) {
     setSearchParams({
-      order: searchParams.order,
-      sortBy: searchParams.sortBy,
+      ...searchParams,
       search: value,
-      field: searchParams.field,
     });
   }
 
   function setOrder(value: orderType) {
     setSearchParams({
+      ...searchParams,
       order: value,
-      sortBy: searchParams.sortBy,
-      search: searchParams.search,
-      field: searchParams.field,
     });
   }
 
   function setSort(value: sortType) {
     setSearchParams({
-      order: searchParams.order,
+      ...searchParams,
       sortBy: value,
-      search: searchParams.search,
-      field: searchParams.field,
     });
   }
 
   function setField(value: fieldType) {
     setSearchParams({
-      order: searchParams.order,
-      sortBy: searchParams.sortBy,
-      search: searchParams.search,
+      ...searchParams,
       field: value,
     });
   }
@@ -68,7 +60,7 @@ export const SearchAndFindWrapper: React.FC<searchQueryParams> = ({
   return (
     <>
       {mode === "desktop" ? (
-        <SearchAndFind
+        <SearchAndFindDesktop
           setSearch={setSearch}
           setSort={setSort}
           setOrder={setOrder}
@@ -96,7 +88,7 @@ interface setFunctions {
   searchParams: searchParams;
 }
 
-const SearchAndFind: React.FC<setFunctions> = ({
+const SearchAndFindDesktop: React.FC<setFunctions> = ({
   setOrder,
   setSort,
   setSearch,
@@ -106,14 +98,13 @@ const SearchAndFind: React.FC<setFunctions> = ({
   return (
     <Flex
       id="navbar"
-      position="absolute"
       top="0"
       right="0"
-      p="1.3em 3em 1.3em 3em"
-      width="50%"
+      ml="auto"
+      width="100%"
       justify="flex-end"
       align="center"
-      visibility={["hidden", null, "visible"]}
+      display={["none", null, null, "flex"]}
       css={{
         "> *": {
           marginLeft: "1em",
@@ -137,13 +128,12 @@ const SearchAndFind: React.FC<setFunctions> = ({
         onChange={(e) => {
           setSearch(e.target.value);
         }}
-        width={"20em"}
+        width={"10em"}
         border="none"
         bgColor="#636073"
       />
 
       {/* Determines the order in which the search queries gets returned. */}
-      <Text>Sort</Text>
       <Select
         onChange={(e) => {
           setSort(e.target.value as any);

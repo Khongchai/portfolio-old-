@@ -33,6 +33,7 @@ export const Navbar: React.FC<{}> = () => {
   const pagesWithDropDowns = Object.values(pages.pagesGroup).map(
     (page) => page
   );
+  const ExtraNavbarElems: any = useContext(ExtraElemContext);
   const router = useRouter();
   return (
     <Flex
@@ -50,7 +51,7 @@ export const Navbar: React.FC<{}> = () => {
               p="0 6em 0 1em"
               borderRight="solid white 1px"
               width="fit-content"
-              display={["none", null, "block"]}
+              display={["none", null, null, "block"]}
               _hover={{ cursor: "pointer", color: "mainOrange" }}
             >
               {pageWithDropDown[0].pageName.split(":")[0]}
@@ -76,11 +77,13 @@ export const Navbar: React.FC<{}> = () => {
       {pages.pagesWithNoDropdowns.map((page) => (
         <LinkButton key={page.pageName} page={page} />
       ))}
+
       <NextLink href="/tech/admin/">
-        <Flex ml="auto" placeItems="center">
+        <Flex mr="auto" placeItems="center">
           <Button>Admin Login</Button>
         </Flex>
       </NextLink>
+      {ExtraNavbarElems?.desktop ? ExtraNavbarElems.desktop : null}
       <HamburgerMenu />
     </Flex>
   );
@@ -97,7 +100,7 @@ const LinkButton: React.FC<{ page: page; isDropdown?: boolean }> = ({
       <NextLink href={url}>
         <Flex placeItems="center">
           <Text
-            display={["none", null, "block"]}
+            display={["none", null, null, "block"]}
             className="nav-buttons"
             fontFamily="Selawik"
             borderBottom="1px solid transparent"
@@ -124,6 +127,8 @@ const LinkButton: React.FC<{ page: page; isDropdown?: boolean }> = ({
   );
 };
 
+//////////////////////////Mobile///////////////////////////////////////////////////////////
+
 const HamburgerMenu: React.FC<{}> = ({}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const ExtraNavbarElems: any = useContext(ExtraElemContext);
@@ -136,7 +141,7 @@ const HamburgerMenu: React.FC<{}> = ({}) => {
   return (
     <Flex
       zIndex="100"
-      display={["flex", null, "none"]}
+      display={["flex", null, null, "none"]}
       width="100%"
       position="relative"
       onClick={onOpen}
@@ -165,7 +170,7 @@ const HamburgerMenu: React.FC<{}> = ({}) => {
                   fontWeight="bold"
                   fontFamily="Selawik light"
                   width="fit-content"
-                  display={["block", null, "none"]}
+                  display={["block", null, null, "none"]}
                 >
                   {pageWithDropDown[0].pageName.split(":")[0]}
                 </MenuButton>
@@ -192,7 +197,7 @@ const HamburgerMenu: React.FC<{}> = ({}) => {
               <LinkButtonMobile key={page.pageName} page={page} />
             ))}
             <Box borderTop="1px solid" color="mainGrey" mt={10} />
-            {ExtraNavbarElems ? ExtraNavbarElems : null}
+            {ExtraNavbarElems?.mobile ? ExtraNavbarElems.mobile : null}
           </DrawerBody>
         </DrawerContent>
       </Drawer>
