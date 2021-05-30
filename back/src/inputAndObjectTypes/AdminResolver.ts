@@ -15,7 +15,7 @@ export class AdminResponse {
   error?: string;
 
   @Field(() => AdminEntity, { nullable: true })
-  admin?: AdminEntity;
+  admin?: Partial<AdminEntity>;
 }
 
 @ObjectType()

@@ -21,7 +21,8 @@ import { isAuth } from "../middleware/isAuth";
 @Resolver()
 export class AdminResolver {
   /**
-   * Allows only 1 instance of Admin
+   * Allows only 1 instance of Admin.
+   * Currently not logging in after registration.
    */
   @Mutation(() => AdminResponse)
   async createAdmin(
@@ -42,7 +43,9 @@ export class AdminResolver {
       email,
       password: hashedPassword,
     }).save();
-    return { admin };
+
+    //Do not return the hasedpassword
+    return { admin: { email: admin.email } };
   }
 
   //Only the admin can delete itself
@@ -52,18 +55,19 @@ export class AdminResolver {
     @Arg("input") input: EmailPasswordInput,
     @Ctx() { req, res }: Context
   ): Promise<AdminDeletionResponse> {
+    destroySession({ req, res });
     const { error, admin } = await validateAdminEmailAndPassword(input);
 
     if (error || !admin) return { error };
 
-    await AdminEntity.remove(admin);
+    await AdminEntity.remove(admin as AdminEntity);
     destroySession({ req, res });
 
     return { message: "Deletion successful" };
   }
 
   @Mutation(() => AdminResponse)
-  async login(
+  async adminLogin(
     @Arg("input") input: EmailPasswordInput,
     @Ctx() { req }: Context
   ): Promise<AdminResponse> {
@@ -71,7 +75,7 @@ export class AdminResolver {
 
     if (error || !admin) return { error: error as string };
 
-    req.session.adminId = admin.id;
+    req.session.adminId = (admin as AdminEntity).id;
 
     return { admin };
   }
@@ -86,5 +90,12 @@ export class AdminResolver {
   async showAdmins(): Promise<AdminEntity[]> {
     const admins = await AdminEntity.find({});
     return admins;
+  }
+
+  @Query(() => Boolean)
+  async me(@Ctx() { req }: Context): Promise<Boolean> {
+    console.log(req.session.adminId);
+    if (req.session.adminId) return true;
+    return false;
   }
 }

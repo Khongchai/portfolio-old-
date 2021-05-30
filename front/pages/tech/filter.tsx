@@ -75,12 +75,8 @@ export const Filter: React.FC<{ selection: string | undefined }> = ({
 
   function paginateForward() {
     setQueryVariables({
-      limit: queryVariables.limit,
+      ...queryVariables,
       skip: queryVariables.skip + queryVariables.limit,
-      order: queryVariables.order,
-      sortBy: queryVariables.sortBy,
-      search: queryVariables.search,
-      field: queryVariables.field,
     });
   }
 
@@ -90,23 +86,13 @@ export const Filter: React.FC<{ selection: string | undefined }> = ({
       skip: queryVariables.skip - queryVariables.limit,
     });
   }
-  // function paginateBackWard() {
-  //   setQueryVariables({
-  //     limit: queryVariables.limit,
-  //     skip: queryVariables.skip - queryVariables.limit,
-  //     order: queryVariables.order,
-  //     sortBy: queryVariables.sortBy,
-  //     search: queryVariables.search,
-  //     field: queryVariables.field,
-  //   });
-  // }
 
   return (
     <Flex
       id="filter-page"
       flexDir={["column", "column", "column", "column", "row", "row"]}
       w={"100%"}
-      h={["auto", null, "max(100vh, 1000px)"]}
+      h={["auto", null, "max(100vh, 900px)"]}
       pb="1.5rem"
       className="filter-page-container"
     >

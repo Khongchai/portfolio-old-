@@ -18,7 +18,7 @@ export async function validateAdminEmailAndPassword(
       error: "Invalid admin email",
     };
   }
-  const validPassword = argon2.verify(admin?.password, password);
+  const validPassword = await argon2.verify(admin?.password, password);
   if (!validPassword) return { error: "Invalid admin password" };
   return { admin };
 }

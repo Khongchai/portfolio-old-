@@ -41,7 +41,7 @@ const List: React.FC<ListProps> = ({
         null,
         "0.3fr [left-padding-end] repeat(4, minmax(auto, 1fr)) [right-padding-end] 0.7fr",
       ]}
-      gridTemplateRows="1fr 0.1fr 1fr"
+      gridTemplateRows="auto 1fr auto"
       id="list-container"
     >
       <HighlightList setDetails={setDetails} />

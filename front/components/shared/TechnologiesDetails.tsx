@@ -63,9 +63,8 @@ export const ExpandedContent: React.FC<{
   expansionStat,
   hideTopDescription,
 }) => {
-  const [hoverComponentName, setHoverComponentName] = useState<
-    string | undefined
-  >();
+  const [hoverComponentName, setHoverComponentName] =
+    useState<string | undefined>();
   const [forceUpdate, setForceUpdate] = useState(false);
   useEffect(() => {
     setForceUpdate(!forceUpdate);
@@ -153,9 +152,10 @@ const Logo: React.FC<{
   return (
     <Flex
       flex="auto"
+      mb="1rem"
+      pb="1rem"
       align="center"
-      pb={"6px"}
-      // borderBottom="1px groove #444057"
+      borderBottom="1px groove #cfcae2"
     >
       <Box height="100%">
         <Text>{desc}: </Text>

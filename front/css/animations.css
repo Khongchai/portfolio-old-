@@ -1,3 +1,7 @@
+:root {
+  --border-size: 1px;
+}
+
 .fadein {
   transition: 0.2s;
   opacity: 1;
@@ -5,11 +9,74 @@
   animation: fadein 0.2s;
 }
 
-@keyframes fadein {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+.running-borders-bt::before,
+.running-borders-bt::after,
+.running-borders-lr::before,
+.running-borders-lr::after {
+  content: "";
+  position: absolute;
+  display: inline-block;
+  background: linear-gradient(
+    270deg,
+    #404040 5%,
+    hsla(44, 88%, 44%, 0.8) 10%,
+    hsla(27, 90%, 41%, 0.8) 95%,
+    #404040
+  );
+  transition: 0.4s;
+  pointer-events: none;
+}
+
+/* Bottom top */
+.running-borders-bt::before,
+.running-borders-bt::after {
+  width: 100%;
+}
+
+.running-borders-bt::before {
+  top: 0;
+  transform: translateX(-100%);
+}
+
+.running-borders-bt::after {
+  bottom: 0;
+  transform: translateX(100%);
+}
+
+.running-borders-bt:hover:before {
+  height: var(--border-size);
+  animation: expand-then-shrink-left 0.5s;
+}
+
+.running-borders-bt:hover:after {
+  height: var(--border-size);
+  animation: expand-then-shrink-right 0.5s;
+}
+
+/* left right */
+.running-borders-lr::before,
+.running-borders-lr::after {
+  height: 100%;
+}
+
+.running-borders-lr::before {
+  top: 0;
+  left: 0;
+  transform: translateY(-100%);
+}
+
+.running-borders-lr::after {
+  bottom: 0;
+  right: 0;
+  transform: translateY(100%);
+}
+
+.running-borders-lr:hover:before {
+  width: var(--border-size);
+  animation: expand-then-shrink-top 1s;
+}
+
+.running-borders-lr:hover:after {
+  width: var(--border-size);
+  animation: expand-then-shrink-bottom 1s;
 }

@@ -22,7 +22,6 @@ Admin login button is being blocked!
 Timeline:
 Home/timeline page --------------------------------------------------------------------------
 
-Write responsive image load for cloudinary.
 
 turn throttle thing into a class
 Look for TODO in manage block move
@@ -41,8 +40,7 @@ take care of the setSCrollPositionTOYearX. Right now it's moving without taking 
 current position of the moved elements. Can cause offset in a really big screen. Change it so that it
 really moves the elements to the actual postiion OR move it to the translateX position where the user begins grabbing. <<< If there is a throttling, this won't be necessary; user won't be able to scroll very far anyway.
 
-continue working on responsive design for both pages
-- Which includes finding out how you got it to work for your recital.
-- The events timeline shouldn't have a fixed height, it should extends down automatically, creating as many rows as needed + should always attach itself to the bottom of the top part in all screen sizes
 
-Hamburgerbar's menu in mobile mode covers entire screen, blocks navigation.
+
+Set up React context so that you can broadcast the current auth status. In case you need it + good for changing
+the admin login button to admin logout button.

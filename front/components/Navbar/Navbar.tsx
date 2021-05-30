@@ -216,7 +216,7 @@ const LinkButtonMobile: React.FC<{ page: page; isDropdown?: boolean }> = ({
       <NextLink href={url}>
         <Flex placeItems="center">
           <Text
-            display={["block", null, "none"]}
+            display={["block", null, null, "none"]}
             className="nav-buttons"
             fontFamily="Selawik"
           >

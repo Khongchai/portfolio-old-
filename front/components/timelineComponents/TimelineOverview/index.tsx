@@ -34,8 +34,11 @@ const TimelineOverview: React.FC<{
     >
       {selectedProject ? (
         <>
-          <LeftSection selectedProject={selectedProject} showTech={showTech} />
-          <RightSection
+          <PictureSection
+            selectedProject={selectedProject}
+            showTech={showTech}
+          />
+          <DescriptionSection
             selectedProject={selectedProject}
             showTech={showTech}
             setShowTech={setShowTech}
@@ -48,7 +51,7 @@ const TimelineOverview: React.FC<{
   );
 };
 
-const LeftSection: React.FC<{
+const PictureSection: React.FC<{
   showTech: boolean;
   selectedProject: ProjectEntity;
 }> = ({ showTech, selectedProject }) => {
@@ -57,6 +60,7 @@ const LeftSection: React.FC<{
       flex="0.4"
       id="technologies-container"
       transition="width .3s"
+      width="100%"
       overflow-x={showTech ? "scroll" : "auto"}
       css={{
         "::-webkit-scrollbar": {
@@ -95,7 +99,9 @@ const LeftSection: React.FC<{
               letterSpacing="1.7"
               className="fadein"
             >
-              Preview Image Not Available
+              {selectedProject.title === "Portfolio"
+                ? "You Are Looking At It"
+                : "Preview Image Not Available"}
             </Text>
           )}
         </Box>
@@ -104,7 +110,7 @@ const LeftSection: React.FC<{
   );
 };
 
-const RightSection: React.FC<{
+const DescriptionSection: React.FC<{
   showTech: boolean;
   setShowTech: React.Dispatch<React.SetStateAction<boolean>>;
   selectedProject: ProjectEntity;
@@ -173,7 +179,7 @@ const Technologies: React.FC<{ techDetails: TechDetails }> = ({
   return (
     <Flex
       className="fadein"
-      width="clamp(360px, 100%, calc(360px * 1.5))"
+      width="100%"
       height="auto"
       overflowY="scroll"
       overflowX="hidden"

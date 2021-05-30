@@ -1,0 +1,10 @@
+mutation AdminLogin($input: EmailPasswordInput!) {
+  adminLogin(input: $input) {
+    error
+    admin {
+      id
+      email
+      password
+    }
+  }
+}

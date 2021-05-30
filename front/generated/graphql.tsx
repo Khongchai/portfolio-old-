@@ -21,6 +21,8 @@ export type Query = {
   getSingleProjectByTitle: ProjResponse;
   getHighlightedProjects: Array<ProjectEntity>;
   technologies: Array<TechnologyEntity>;
+  showAdmins: Array<AdminEntity>;
+  me: Scalars['Boolean'];
 };
 
 
@@ -89,6 +91,13 @@ export type ErrorField = {
   message: Scalars['String'];
 };
 
+export type AdminEntity = {
+  __typename?: 'AdminEntity';
+  id: Scalars['Float'];
+  email: Scalars['String'];
+  password: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createProject?: Maybe<ProjResponse>;
@@ -99,6 +108,10 @@ export type Mutation = {
   createTechnology?: Maybe<TechnologyEntity>;
   deleteAllTechnologies: Scalars['String'];
   deleteTechnolgy: Scalars['String'];
+  createAdmin: AdminResponse;
+  deleteAdmin: AdminDeletionResponse;
+  adminLogin: AdminResponse;
+  logout: Scalars['Boolean'];
 };
 
 
@@ -134,6 +147,21 @@ export type MutationDeleteTechnolgyArgs = {
   title: Scalars['String'];
 };
 
+
+export type MutationCreateAdminArgs = {
+  input: EmailPasswordInput;
+};
+
+
+export type MutationDeleteAdminArgs = {
+  input: EmailPasswordInput;
+};
+
+
+export type MutationAdminLoginArgs = {
+  input: EmailPasswordInput;
+};
+
 export type ProjectCreationInput = {
   startDate: Scalars['String'];
   endDate?: Maybe<Scalars['String']>;
@@ -160,6 +188,23 @@ export type AddTechInput = {
   techProps?: Maybe<TechnologyProperties>;
 };
 
+export type AdminResponse = {
+  __typename?: 'AdminResponse';
+  error?: Maybe<Scalars['String']>;
+  admin?: Maybe<AdminEntity>;
+};
+
+export type EmailPasswordInput = {
+  email: Scalars['String'];
+  password: Scalars['String'];
+};
+
+export type AdminDeletionResponse = {
+  __typename?: 'AdminDeletionResponse';
+  error?: Maybe<Scalars['String']>;
+  message?: Maybe<Scalars['String']>;
+};
+
 export type ProjectFieldsFragment = (
   { __typename?: 'ProjectEntity' }
   & Pick<ProjectEntity, 'id' | 'title' | 'isHighlight' | 'endDate' | 'startDate' | 'description' | 'githubLink' | 'websiteLink' | 'imgLink' | 'tinyImgLink' | 'shortDescription'>
@@ -176,6 +221,23 @@ export type ProjectFieldsFragment = (
     { __typename?: 'TechnologyEntity' }
     & Pick<TechnologyEntity, 'title' | 'id'>
   )>> }
+);
+
+export type AdminLoginMutationVariables = Exact<{
+  input: EmailPasswordInput;
+}>;
+
+
+export type AdminLoginMutation = (
+  { __typename?: 'Mutation' }
+  & { adminLogin: (
+    { __typename?: 'AdminResponse' }
+    & Pick<AdminResponse, 'error'>
+    & { admin?: Maybe<(
+      { __typename?: 'AdminEntity' }
+      & Pick<AdminEntity, 'id' | 'email' | 'password'>
+    )> }
+  ) }
 );
 
 export type AllProjectsNotPaginatedQueryVariables = Exact<{ [key: string]: never; }>;
@@ -198,6 +260,14 @@ export type GetHighlightedProjectsQuery = (
     { __typename?: 'ProjectEntity' }
     & ProjectFieldsFragment
   )> }
+);
+
+export type MeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MeQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'me'>
 );
 
 export type ProjectsQueryVariables = Exact<{
@@ -296,6 +366,22 @@ export const ProjectFieldsFragmentDoc = gql`
   shortDescription
 }
     `;
+export const AdminLoginDocument = gql`
+    mutation AdminLogin($input: EmailPasswordInput!) {
+  adminLogin(input: $input) {
+    error
+    admin {
+      id
+      email
+      password
+    }
+  }
+}
+    `;
+
+export function useAdminLoginMutation() {
+  return Urql.useMutation<AdminLoginMutation, AdminLoginMutationVariables>(AdminLoginDocument);
+};
 export const AllProjectsNotPaginatedDocument = gql`
     query AllProjectsNotPaginated {
   allProjectsNotPaginated {
@@ -317,6 +403,15 @@ export const GetHighlightedProjectsDocument = gql`
 
 export function useGetHighlightedProjectsQuery(options: Omit<Urql.UseQueryArgs<GetHighlightedProjectsQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<GetHighlightedProjectsQuery>({ query: GetHighlightedProjectsDocument, ...options });
+};
+export const MeDocument = gql`
+    query Me {
+  me
+}
+    `;
+
+export function useMeQuery(options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<MeQuery>({ query: MeDocument, ...options });
 };
 export const ProjectsDocument = gql`
     query Projects($skip: Int!, $limit: Int!, $sortBy: String, $order: String, $search: String, $field: String) {

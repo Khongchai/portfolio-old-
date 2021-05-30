@@ -1,18 +1,19 @@
-import {
-  Box,
-  Button,
-  Grid,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Input,
-} from "@chakra-ui/react";
-import { Formik, Form, Field } from "formik";
+import { Box, Button, Grid } from "@chakra-ui/react";
+import { Form, Formik } from "formik";
+import { useRouter } from "next/router";
 import React from "react";
+import { CustomFormikInputField } from "../../../components/shared/CustomFormikInputField";
+import { useAdminLoginMutation } from "../../../generated/graphql";
+import { checkAuthAndRedirect } from "../../../utils/auth/checkAuthAndRedirect";
 
 interface indexProps {}
 
 const Admin: React.FC<indexProps> = ({}) => {
+  const [, login] = useAdminLoginMutation();
+  const router = useRouter();
+  const targetURL = "/tech/admin/create-project";
+  checkAuthAndRedirect("/tech/admin", targetURL);
+
   return (
     <Grid
       width="100%"
@@ -23,53 +24,36 @@ const Admin: React.FC<indexProps> = ({}) => {
       <Box width="400px" height="400px" className="form" padding="1rem">
         <Formik
           initialValues={{ email: "", password: "" }}
-          onSubmit={(values, actions) => {
-            setTimeout(() => {
-              alert(JSON.stringify(values, null, 2));
-              actions.setSubmitting(false);
-            }, 1000);
+          onSubmit={async (values, { setStatus }) => {
+            const loginResult = await login({ input: values });
+            if (loginResult.data?.adminLogin.error) {
+              setStatus(loginResult.data.adminLogin.error);
+            }
+            if (loginResult.data?.adminLogin.admin) {
+              router.replace(targetURL);
+            }
           }}
         >
           {(props) => (
-            <Form className="login-form">
-              <Field name="email">
-                {({ field, form }: any) => (
-                  <FormControl
-                    isInvalid={form.errors.name && form.touched.name}
-                  >
-                    <FormLabel htmlFor="email">Email</FormLabel>
-                    <Input
-                      {...field}
-                      id="email"
-                      placeholder="rick@rolled.com"
-                    />
-                    <FormErrorMessage>{form.errors.name}</FormErrorMessage>
-                  </FormControl>
-                )}
-              </Field>
-              <Field name="password">
-                {({ field, form }: any) => (
-                  <FormControl
-                    isInvalid={form.errors.name && form.touched.name}
-                  >
-                    <FormLabel htmlFor="password">Password</FormLabel>
-                    <Input
-                      {...field}
-                      id="password"
-                      type="password"
-                      placeholder="***"
-                    />
-                    <FormErrorMessage>{form.errors.name}</FormErrorMessage>
-                  </FormControl>
-                )}
-              </Field>
+            <Form className="admin-login-form">
+              <CustomFormikInputField
+                placeholder="rick@rolled.com"
+                name="email"
+                label="Email"
+              />
+              <CustomFormikInputField
+                placeholder="***"
+                name="password"
+                label="Password"
+              />
+              {props.status ? <ErrorMessage msg={props.status} /> : null}
               <Button
                 mt={10}
                 colorScheme="teal"
                 isLoading={props.isSubmitting}
                 type="submit"
               >
-                Submit
+                Login
               </Button>
             </Form>
           )}
@@ -77,6 +61,10 @@ const Admin: React.FC<indexProps> = ({}) => {
       </Box>
     </Grid>
   );
+};
+
+const ErrorMessage: React.FC<{ msg: string }> = ({ msg }) => {
+  return <Box color="pink">{msg}</Box>;
 };
 
 export default Admin;
