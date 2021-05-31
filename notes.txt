@@ -14,21 +14,15 @@ Home/timeline page -------------------------------------------------------------
 
 turn throttle thing into a class
 Look for TODO in manage block move
+reimplement handleEdgeOffset(undefined, true);
 
 If you accidentally drag your cursor over one of the events, it fucks up the entire timeline animation
-
-Change style of technology descriptions and possibly remove border between each tech section.
-
-Tweak the timeline scroll value
-
-Look for TODO in index.tsx of Timeline
-
 
 take care of the setSCrollPositionTOYearX. Right now it's moving without taking into account the 
 current position of the moved elements. Can cause offset in a really big screen. Change it so that it
 really moves the elements to the actual postiion OR move it to the translateX position where the user begins grabbing. <<< If there is a throttling, this won't be necessary; user won't be able to scroll very far anyway.
 
 
+Music page
 
-Set up React context so that you can broadcast the current auth status. In case you need it + good for changing
-the admin login button to admin logout button.
+- Decide on monolithic or microservice
