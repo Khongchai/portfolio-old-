@@ -12,29 +12,34 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
-  Select,
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
+import { AdminAuthButton } from "../../elements/AdminAuthButton";
+import { AdminLoginContext } from "../../globalContexts/adminLoginContext";
 import { ExtraElemContext } from "../../globalContexts/extraNavbarElem";
 import {
   navbarTopics,
   TopicsContext,
 } from "../../globalContexts/navbarTopics.js";
 import { page } from "../../types/page";
+import { checkAuthAndRedirect } from "../../utils/auth/checkAuthAndRedirect";
 import { filterPages } from "../../utils/navbar/filterpages";
 
 export const Navbar: React.FC<{}> = () => {
+  const router = useRouter();
   const defaultNavbarTopics: typeof navbarTopics = useContext(TopicsContext);
   const pages = filterPages(defaultNavbarTopics);
   const pagesWithDropDowns = Object.values(pages.pagesGroup).map(
     (page) => page
   );
   const ExtraNavbarElems: any = useContext(ExtraElemContext);
-  const router = useRouter();
+  const { adminLoginState } = useContext(AdminLoginContext);
+  checkAuthAndRedirect();
+
   return (
     <Flex
       id="navbar"
@@ -78,11 +83,7 @@ export const Navbar: React.FC<{}> = () => {
         <LinkButton key={page.pageName} page={page} />
       ))}
 
-      <NextLink href="/tech/admin/">
-        <Flex mr="auto" placeItems="center">
-          <Button>Admin Login</Button>
-        </Flex>
-      </NextLink>
+      <AdminAuthButton adminLoginState={adminLoginState} />
       {ExtraNavbarElems?.desktop ? ExtraNavbarElems.desktop : null}
       <HamburgerMenu />
     </Flex>
@@ -165,7 +166,7 @@ const HamburgerMenu: React.FC<{}> = ({}) => {
             color="white"
           >
             {pagesWithDropDowns.map((pageWithDropDown, i) => (
-              <Menu isLazy key={i}>
+              <Menu key={i}>
                 <MenuButton
                   fontWeight="bold"
                   fontFamily="Selawik light"

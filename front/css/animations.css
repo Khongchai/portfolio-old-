@@ -25,6 +25,9 @@
   );
   transition: 0.4s;
   pointer-events: none;
+  box-shadow: 0 0 10px #fff, 0 0 20px #fff, hsla(44, 88%, 44%, 0.8) 10%,
+    0 0 40px hsla(44, 88%, 44%, 0.8) 10%, 0 0 50px hsla(27, 90%, 41%, 0.8) 95%,
+    0 0 60px hsla(27, 90%, 41%, 0.8) 95%, 0 0 70px hsla(27, 90%, 41%, 0.8) 95%;
 }
 
 /* Bottom top */

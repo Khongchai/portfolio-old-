@@ -82,7 +82,7 @@ export class AdminResolver {
 
   @Mutation(() => Boolean)
   @UseMiddleware(isAuth)
-  async logout(@Ctx() { req, res }: Context) {
+  async adminLogout(@Ctx() { req, res }: Context) {
     return destroySession({ req, res });
   }
 
@@ -94,7 +94,6 @@ export class AdminResolver {
 
   @Query(() => Boolean)
   async me(@Ctx() { req }: Context): Promise<Boolean> {
-    console.log(req.session.adminId);
     if (req.session.adminId) return true;
     return false;
   }

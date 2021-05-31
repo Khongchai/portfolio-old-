@@ -61,6 +61,8 @@ const PictureSection: React.FC<{
       id="technologies-container"
       transition="width .3s"
       width="100%"
+      overflow-y="scroll"
+      max-height="100%"
       overflow-x={showTech ? "scroll" : "auto"}
       css={{
         "::-webkit-scrollbar": {

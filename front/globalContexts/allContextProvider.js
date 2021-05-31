@@ -1,10 +1,13 @@
 import { ExtraElemProvider } from "./extraNavbarElem";
 import { DefaultTopicsProvider } from "./navbarTopics";
+import { AdminLoginContextProvider } from "./adminLoginContext";
 
 export default function AllContextProvider({ children }) {
   return (
-    <ExtraElemProvider>
-      <DefaultTopicsProvider>{children}</DefaultTopicsProvider>
-    </ExtraElemProvider>
+    <AdminLoginContextProvider>
+      <ExtraElemProvider>
+        <DefaultTopicsProvider>{children}</DefaultTopicsProvider>
+      </ExtraElemProvider>
+    </AdminLoginContextProvider>
   );
 }

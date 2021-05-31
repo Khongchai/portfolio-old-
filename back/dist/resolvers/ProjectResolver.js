@@ -121,7 +121,6 @@ let ProjectsResolver = class ProjectsResolver {
     }
     getSingleProjectByTitle(title) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log("from project resolver", title);
             const project = yield ProjectEntity_1.ProjectEntity.findOne({
                 where: { title },
                 relations: [
@@ -160,8 +159,8 @@ let ProjectsResolver = class ProjectsResolver {
     createProject(projectData, {}) {
         return __awaiter(this, void 0, void 0, function* () {
             const { description, endDate, startDate, title, isHighlight, shortDescription, githubLink, websiteLink, } = projectData;
-            const { frontEndNames, backEndNames, languagesNames, hostingServiceNames, } = projectData.techProps;
-            const { backEnd, frontEnd, languages, hostingServices, error, } = yield getTechnologiesByTitle_1.getTechListForEachProp(frontEndNames, backEndNames, languagesNames, hostingServiceNames);
+            const { frontEndNames, backEndNames, languagesNames, hostingServiceNames } = projectData.techProps;
+            const { backEnd, frontEnd, languages, hostingServices, error } = yield getTechnologiesByTitle_1.getTechListForEachProp(frontEndNames, backEndNames, languagesNames, hostingServiceNames);
             if (error)
                 return {
                     errors: [
@@ -190,7 +189,7 @@ let ProjectsResolver = class ProjectsResolver {
     addOrRemoveTechnologies(input, operation) {
         return __awaiter(this, void 0, void 0, function* () {
             const { projTitle } = input;
-            const { backEndNames, frontEndNames, hostingServiceNames, languagesNames, } = input.techProps;
+            const { backEndNames, frontEndNames, hostingServiceNames, languagesNames } = input.techProps;
             const proj = yield ProjectEntity_1.ProjectEntity.findOne({
                 where: { title: projTitle },
                 relations: [
@@ -209,7 +208,7 @@ let ProjectsResolver = class ProjectsResolver {
                     ],
                 };
             }
-            const { backEnd, frontEnd, languages, hostingServices, error, } = yield getTechnologiesByTitle_1.getTechListForEachProp(frontEndNames, backEndNames, languagesNames, hostingServiceNames);
+            const { backEnd, frontEnd, languages, hostingServices, error } = yield getTechnologiesByTitle_1.getTechListForEachProp(frontEndNames, backEndNames, languagesNames, hostingServiceNames);
             if (error)
                 return {
                     errors: [

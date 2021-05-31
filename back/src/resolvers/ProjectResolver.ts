@@ -122,7 +122,6 @@ export class ProjectsResolver {
   async getSingleProjectByTitle(
     @Arg("title", () => String) title: string
   ): Promise<ProjResponse | undefined> {
-    console.log("from project resolver", title);
     const project = await ProjectEntity.findOne({
       where: { title },
       relations: [
@@ -175,25 +174,16 @@ export class ProjectsResolver {
       githubLink,
       websiteLink,
     } = projectData;
-    const {
-      frontEndNames,
-      backEndNames,
-      languagesNames,
-      hostingServiceNames,
-    } = projectData.techProps;
+    const { frontEndNames, backEndNames, languagesNames, hostingServiceNames } =
+      projectData.techProps;
 
-    const {
-      backEnd,
-      frontEnd,
-      languages,
-      hostingServices,
-      error,
-    } = await getTechListForEachProp(
-      frontEndNames,
-      backEndNames,
-      languagesNames,
-      hostingServiceNames
-    );
+    const { backEnd, frontEnd, languages, hostingServices, error } =
+      await getTechListForEachProp(
+        frontEndNames,
+        backEndNames,
+        languagesNames,
+        hostingServiceNames
+      );
 
     if (error)
       return {
@@ -229,12 +219,8 @@ export class ProjectsResolver {
     @Arg("operation") operation: boolean
   ): Promise<ProjResponse> {
     const { projTitle } = input;
-    const {
-      backEndNames,
-      frontEndNames,
-      hostingServiceNames,
-      languagesNames,
-    } = input.techProps;
+    const { backEndNames, frontEndNames, hostingServiceNames, languagesNames } =
+      input.techProps;
 
     const proj = await ProjectEntity.findOne({
       where: { title: projTitle },
@@ -256,18 +242,13 @@ export class ProjectsResolver {
       };
     }
 
-    const {
-      backEnd,
-      frontEnd,
-      languages,
-      hostingServices,
-      error,
-    } = await getTechListForEachProp(
-      frontEndNames,
-      backEndNames,
-      languagesNames,
-      hostingServiceNames
-    );
+    const { backEnd, frontEnd, languages, hostingServices, error } =
+      await getTechListForEachProp(
+        frontEndNames,
+        backEndNames,
+        languagesNames,
+        hostingServiceNames
+      );
     if (error)
       return {
         errors: [

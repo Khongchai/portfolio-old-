@@ -21,7 +21,6 @@ const RunningBorder: React.FC<{ className: string }> = ({
       height="inherit"
       width="inherit"
       className={`${className}`}
-      borderRadius="9px"
       overflow="hidden"
       zIndex="1"
       opacity="0.9"

@@ -111,7 +111,7 @@ export type Mutation = {
   createAdmin: AdminResponse;
   deleteAdmin: AdminDeletionResponse;
   adminLogin: AdminResponse;
-  logout: Scalars['Boolean'];
+  adminLogout: Scalars['Boolean'];
 };
 
 
@@ -238,6 +238,14 @@ export type AdminLoginMutation = (
       & Pick<AdminEntity, 'id' | 'email' | 'password'>
     )> }
   ) }
+);
+
+export type AdminLogoutMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AdminLogoutMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'adminLogout'>
 );
 
 export type AllProjectsNotPaginatedQueryVariables = Exact<{ [key: string]: never; }>;
@@ -381,6 +389,15 @@ export const AdminLoginDocument = gql`
 
 export function useAdminLoginMutation() {
   return Urql.useMutation<AdminLoginMutation, AdminLoginMutationVariables>(AdminLoginDocument);
+};
+export const AdminLogoutDocument = gql`
+    mutation AdminLogout {
+  adminLogout
+}
+    `;
+
+export function useAdminLogoutMutation() {
+  return Urql.useMutation<AdminLogoutMutation, AdminLogoutMutationVariables>(AdminLogoutDocument);
 };
 export const AllProjectsNotPaginatedDocument = gql`
     query AllProjectsNotPaginated {
