@@ -2,17 +2,17 @@ import { Box, Button, Grid } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import React from "react";
-import { CustomFormikInputField } from "../../../components/shared/CustomFormikInputField";
-import { useAdminLoginMutation } from "../../../generated/graphql";
-import { checkAuthAndRedirect } from "../../../utils/auth/checkAuthAndRedirect";
+import { CustomFormikInputField } from "../../components/shared/CustomFormikInputField";
+import { useAdminLoginMutation } from "../../generated/graphql";
+import { checkAuthAndRedirect } from "../../utils/auth/checkAuthAndRedirect";
 
 interface indexProps {}
 
 const Admin: React.FC<indexProps> = ({}) => {
   const [, login] = useAdminLoginMutation();
   const router = useRouter();
-  const targetURL = "/tech/admin/create-project";
-  checkAuthAndRedirect("/tech/admin", targetURL);
+  const targetURL = "/admin/create-project";
+  checkAuthAndRedirect("/admin", targetURL);
 
   return (
     <Grid

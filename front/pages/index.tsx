@@ -1,41 +1,95 @@
-import { Box, Flex, Img } from "@chakra-ui/react";
-import React from "react";
-import NextLink from "next/link";
+import { Flex, Grid } from "@chakra-ui/react";
+import { GetServerSideProps } from "next";
+import React, { useEffect, useState } from "react";
+import Timeline from "../components/timelineComponents/Timeline";
+import TimelineOverview from "../components/timelineComponents/TimelineOverview";
+import {
+  ProjectEntity,
+  useAllProjectsNotPaginatedQuery,
+} from "../generated/graphql";
+import removeDuplicatesFromArray from "../utils/generics/removeDuplicatesFromArray";
+import setFirstHeightToSecondPadding from "../utils/generics/setFirstHeightToSecondPadding";
 
-export default function Home() {
+const Tech: React.FC<{ selection: string | undefined }> = ({ selection }) => {
+  const [selectedProject, setSelectedProject] =
+    useState<ProjectEntity | null>(null);
+  const [{ data }] = useAllProjectsNotPaginatedQuery();
+  const [years, setYears] = useState<number[]>([]);
+
+  //this useeffect gets all the necessary data for timeline events
+  useEffect(() => {
+    if (data) {
+      const allYears = data.allProjectsNotPaginated.map((proj) =>
+        //date format = yyyy-mm-dd
+        {
+          const [yearStart] = proj.startDate.split("-");
+          return parseInt(yearStart);
+        }
+      );
+      const allYearsNoDuplicates = removeDuplicatesFromArray(allYears).sort();
+      //add an extra year at the end and the beginning just for looks
+      setYears([
+        allYearsNoDuplicates[0] - 1,
+        ...allYearsNoDuplicates,
+        allYearsNoDuplicates[allYearsNoDuplicates.length - 1] + 1,
+      ]);
+    }
+  }, [data]);
+
+  /* Set timeline size */
+  useEffect(() => {
+    const timelinePage = document.getElementById("tech-timeline");
+    const navbar = document.getElementById("navbar");
+    if (timelinePage && navbar) {
+      setFirstHeightToSecondPadding(navbar, timelinePage, 2);
+    }
+  }, []);
+
   return (
     <Flex
-      flexDir={["column", null, "row"]}
-      w={"100%"}
-      h={["auto", null, "100vh"]}
+      id="tech-timeline"
+      overflowX="hidden"
+      flexDir="column"
+      height={["auto", null, null, "100vh"]}
     >
-      <ImgContainer href="/music" bgColor="mainGrey" src="/logos/FL.png" />
-      <ImgContainer href="/tech" bgColor="white" src="/logos/VS.png" />
+      <TimelineOverview
+        selection={selection}
+        selectedProject={selectedProject}
+        setSelectedProject={setSelectedProject as any}
+        defaultSelection={data?.allProjectsNotPaginated[0]}
+      />
+      <Grid
+        cursor="grab"
+        onMouseDown={(e: any) => {
+          e.target.style.cursor = "grabbing";
+        }}
+        onMouseUp={(e: any) => {
+          e.target.style.cursor = "grab";
+        }}
+        minWidth="1200px"
+        minHeight={["300px", null, "320px"]}
+        id="timeline-container"
+        flex="0.40"
+      >
+        <Timeline
+          selectedProject={selectedProject}
+          setSelectedProject={setSelectedProject}
+          years={years}
+          data={data}
+        />
+      </Grid>
     </Flex>
   );
-}
+};
 
-const ImgContainer: React.FC<{
-  bgColor: string;
-  src: string;
-  href: string;
-}> = ({ bgColor, src, href }) => {
-  return (
-    <Box
-      bgColor={bgColor}
-      boxSizing={"border-box"}
-      p={["1em 0 1em 0", null, "0"]}
-      flex="1"
-      d="grid"
-      placeItems="center"
-    >
-      <NextLink href={href}>
-        <Img
-          _hover={{ cursor: "pointer" }}
-          h={["70%", null, "auto"]}
-          src={src}
-        />
-      </NextLink>
-    </Box>
-  );
+export default Tech;
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const parsedQuery = context.query;
+  const { selection } = parsedQuery;
+  return {
+    props: {
+      selection: selection || null,
+    },
+  };
 };

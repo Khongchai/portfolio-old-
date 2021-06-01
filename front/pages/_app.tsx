@@ -20,7 +20,7 @@ function MyApp({ Component, pageProps }: any) {
     <AllContextProvider>
       <Provider value={client}>
         <ChakraProvider theme={theme}>
-          {router().pathname === "/" ? null : <Navbar />}
+          <Navbar />
           <Global styles={fonts} />
           <Component {...pageProps} />
         </ChakraProvider>

@@ -5,6 +5,7 @@ import { readFromParamOrStorage } from "../../../utils/generics/setAndGetCurrent
 import { updateQueryParamOnChange } from "../../../utils/generics/setAndGetCurrentSelection/updateQueryParamOnChange";
 import HighlightList from "./highlightList";
 import AllProjects from "./AllProjects";
+import { homeURL } from "../../../constants/homeUrl";
 
 interface ListProps {
   data: ProjectsQuery | undefined;
@@ -26,7 +27,7 @@ const List: React.FC<ListProps> = ({
   paginateBackward,
 }) => {
   readFromParamOrStorage(setDetails, selection);
-  updateQueryParamOnChange(details?.title, "/tech/filter");
+  updateQueryParamOnChange(details?.title, homeURL + "filter");
 
   return (
     <Grid

@@ -13,9 +13,8 @@ export function readFromParamOrStorage(
   fallbackValue?: ProjectEntity
 ) {
   const [runOnceAlready, setRunOnceAlready] = useState<boolean>(false);
-  const [singleFetchParam, setSingleFetchParam] = useState<string | undefined>(
-    undefined
-  );
+  const [singleFetchParam, setSingleFetchParam] =
+    useState<string | undefined>(undefined);
   const [{ data: singleProject, fetching }] = useGetSingleProjectByTitleQuery({
     variables: { title: singleFetchParam } as any,
   });

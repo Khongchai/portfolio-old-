@@ -1,12 +1,12 @@
 import { Flex } from "@chakra-ui/react";
 import { GetServerSideProps } from "next";
 import React, { useContext, useEffect, useState } from "react";
-import InfoDisplay from "../../components/filterComponents/InfoDisplay/index";
-import List from "../../components/filterComponents/List";
-import { SearchAndFindWrapper } from "../../components/filterComponents/SearchAndFilterBoxes";
-import { ProjectEntity, useProjectsQuery } from "../../generated/graphql";
-import { AddExtraElemContext } from "../../globalContexts/extraNavbarElem";
-import setPadding from "../../utils/generics/setFirstHeightToSecondPadding";
+import InfoDisplay from "../components/filterComponents/InfoDisplay/index";
+import List from "../components/filterComponents/List";
+import { SearchAndFindWrapper } from "../components/filterComponents/SearchAndFilterBoxes";
+import { ProjectEntity, useProjectsQuery } from "../generated/graphql";
+import { AddExtraElemContext } from "../globalContexts/extraNavbarElem";
+import setPadding from "../utils/generics/setFirstHeightToSecondPadding";
 
 export const Filter: React.FC<{ selection: string | undefined }> = ({
   selection,

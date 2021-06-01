@@ -22,7 +22,6 @@ take care of the setSCrollPositionTOYearX. Right now it's moving without taking 
 current position of the moved elements. Can cause offset in a really big screen. Change it so that it
 really moves the elements to the actual postiion OR move it to the translateX position where the user begins grabbing. <<< If there is a throttling, this won't be necessary; user won't be able to scroll very far anyway.
 
+Remove link to music page and make timeline the landing page.
 
-Music page
-
-- Decide on monolithic or microservice
+Music portfolio will now be a completely different website.

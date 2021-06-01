@@ -17,7 +17,7 @@ import {
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { AdminAuthButton } from "../../elements/AdminAuthButton";
 import { AdminLoginContext } from "../../globalContexts/adminLoginContext";
 import { ExtraElemContext } from "../../globalContexts/extraNavbarElem";

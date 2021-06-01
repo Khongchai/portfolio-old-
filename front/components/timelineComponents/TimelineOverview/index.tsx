@@ -1,6 +1,6 @@
 import { Box, Flex, Stack, Text } from "@chakra-ui/react";
-import { Maybe } from "graphql/jsutils/Maybe";
 import React, { useEffect, useState } from "react";
+import { homeURL } from "../../../constants/homeUrl";
 import { ProjectEntity } from "../../../generated/graphql";
 import { TechDetails } from "../../../types/TechDetails";
 import { readFromParamOrStorage } from "../../../utils/generics/setAndGetCurrentSelection/readFromParamOrStorageAndSet";
@@ -18,7 +18,7 @@ const TimelineOverview: React.FC<{
   selection: string | undefined;
 }> = ({ selectedProject, setSelectedProject, selection, defaultSelection }) => {
   readFromParamOrStorage(setSelectedProject, selection, defaultSelection);
-  updateQueryParamOnChange(selectedProject?.title, "/tech");
+  updateQueryParamOnChange(selectedProject?.title, homeURL);
   const [showTech, setShowTech] = useState(false);
 
   return (
