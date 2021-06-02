@@ -25,3 +25,5 @@ really moves the elements to the actual postiion OR move it to the translateX po
 Remove link to music page and make timeline the landing page.
 
 Music portfolio will now be a completely different website.
+
+Work on admin page's ui and all the internal data.

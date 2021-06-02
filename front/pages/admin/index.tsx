@@ -11,8 +11,8 @@ interface indexProps {}
 const Admin: React.FC<indexProps> = ({}) => {
   const [, login] = useAdminLoginMutation();
   const router = useRouter();
-  const targetURL = "/admin/create-project";
-  checkAuthAndRedirect("/admin", targetURL);
+  const targetURL = "admin/manage-project";
+  checkAuthAndRedirect("admin", targetURL);
 
   return (
     <Grid
@@ -21,7 +21,12 @@ const Admin: React.FC<indexProps> = ({}) => {
       placeItems="center"
       className="form-container"
     >
-      <Box width="400px" height="400px" className="form" padding="1rem">
+      <Box
+        height="400px"
+        width="min(400px, 80%)"
+        className="form"
+        padding="1rem"
+      >
         <Formik
           initialValues={{ email: "", password: "" }}
           onSubmit={async (values, { setStatus }) => {
