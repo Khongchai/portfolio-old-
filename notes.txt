@@ -27,3 +27,6 @@ Remove link to music page and make timeline the landing page.
 Music portfolio will now be a completely different website.
 
 Work on admin page's ui and all the internal data.
+
+Make a see all button to let the user see all projects in filter page.
+This see all component, reuse it in the admin page.

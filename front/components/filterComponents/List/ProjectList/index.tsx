@@ -1,6 +1,7 @@
 import { Flex, Grid, Heading, Text } from "@chakra-ui/react";
 import React from "react";
 import { ProjectEntity } from "../../../../generated/graphql";
+import { setAsSelected } from "../../../../utils/animations/filter/setAsSelected";
 import { setToLocalStorageAndSelectedState } from "../../../../utils/generics/setAndGetCurrentSelection/setToLocalStorageAndSelectedState";
 import { TinyImg } from "./TinyImg";
 
@@ -27,7 +28,7 @@ export const ProjectList: React.FC<IndexProps> = ({
     <Flex
       gridColumn="left-padding-end / right-padding-end"
       bg="linear-gradient(102.77deg, #423E55 -2.52%, rgba(74, 70, 94, 0.691587) 38.75%, rgba(92, 88, 113, 0) 100%, rgba(68, 64, 86, 0.627352) 100%), #636073;"
-      className="projects-views"
+      className={`projects-views`}
       boxShadow="0px 8px 20px rgba(0, 0, 0, 0.1)"
       borderRadius="22px"
       flexDir="column"
@@ -82,7 +83,7 @@ export const ProjectList: React.FC<IndexProps> = ({
                 },
               }}
             >
-              <TinyImg tinyImgLink={proj.tinyImgLink} />
+              <TinyImg tinyImgLink={proj.tinyImgLink} projTitle={proj.title} />
               <Heading size="md" flex="0.1">
                 {proj.title}
               </Heading>

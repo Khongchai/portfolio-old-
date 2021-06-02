@@ -1,11 +1,12 @@
 import { Grid } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect } from "react";
 import { ProjectEntity, ProjectsQuery } from "../../../generated/graphql";
 import { readFromParamOrStorage } from "../../../utils/generics/setAndGetCurrentSelection/readFromParamOrStorageAndSet";
 import { updateQueryParamOnChange } from "../../../utils/generics/setAndGetCurrentSelection/updateQueryParamOnChange";
 import HighlightList from "./highlightList";
 import AllProjects from "./AllProjects";
 import { homeURL } from "../../../constants/homeUrl";
+import { setAsSelected } from "../../../utils/animations/filter/setAsSelected";
 
 interface ListProps {
   data: ProjectsQuery | undefined;
@@ -28,6 +29,14 @@ const List: React.FC<ListProps> = ({
 }) => {
   readFromParamOrStorage(setDetails, selection);
   updateQueryParamOnChange(details?.title, homeURL + "filter");
+  useEffect(() => {
+    if (selection) {
+      setAsSelected(selection);
+    }
+    /**
+     * For highlighting the selection on page enter and when duplicates are found in highlihgts and projects sections
+     */
+  }, [selection]);
 
   return (
     <Grid

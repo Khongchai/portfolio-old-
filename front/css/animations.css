@@ -83,3 +83,7 @@
   width: var(--border-size);
   animation: expand-then-shrink-bottom 1s;
 }
+
+.filter-selected {
+  border: 1.5px solid #fa9d55;
+}

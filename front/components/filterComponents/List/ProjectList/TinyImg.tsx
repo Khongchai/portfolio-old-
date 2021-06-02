@@ -8,9 +8,10 @@ import {
 
 interface TinyImgProps {
   tinyImgLink: Maybe<string> | null;
+  projTitle: string;
 }
 
-export const TinyImg: React.FC<TinyImgProps> = ({ tinyImgLink }) => {
+export const TinyImg: React.FC<TinyImgProps> = ({ tinyImgLink, projTitle }) => {
   const sideLength = "170px";
 
   return (
@@ -26,6 +27,7 @@ export const TinyImg: React.FC<TinyImgProps> = ({ tinyImgLink }) => {
         backgroundPosition="center"
         backgroundRepeat="none"
         backgroundSize="cover"
+        className={projTitle + "tiny-img"}
         position="relative"
       >
         <RunningBordersLR>
