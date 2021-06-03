@@ -29,3 +29,5 @@ insert into technology_entity (title) values ('TypeGraphQL');
 insert into technology_entity (title) values ('GraphQL'); 
 insert into technology_entity (title) values ('SQL');
 insert into technology_entity (title) values ('Google Play');
+insert into technology_entity (title) values ('Three.js');
+insert into technology_entity (title) values ('Go');

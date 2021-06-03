@@ -1,4 +1,4 @@
-import { Heading, Text } from "@chakra-ui/react";
+import { Box, Heading, Text } from "@chakra-ui/react";
 import React from "react";
 import { ProjectEntity } from "../../generated/graphql";
 
@@ -14,7 +14,7 @@ export const ProjectDetails: React.FC<{
         &nbsp; to &nbsp;
         <i>{details.endDate ? details.endDate : "present"}</i>
       </Text>
-      <Text
+      <Box
         pr="0.5em"
         marginBottom={mb ? mb : ""}
         overflowY="auto"
@@ -34,10 +34,13 @@ export const ProjectDetails: React.FC<{
             border: "3px solid transparent",
           },
         }}
-      >
-        {details?.description}
-      </Text>
+        dangerouslySetInnerHTML={createHTML(details.description)}
+      />
     </>
   );
 };
 //black 0px 2px 4px
+
+function createHTML(text: string) {
+  return { __html: text };
+}

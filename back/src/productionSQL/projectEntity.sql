@@ -108,3 +108,19 @@
            ((select id from technology_entity where title in ('TypeScript')), (select id from project_entity where title = 'Portfolio')), 
            ((select id from technology_entity where title in ('SQL')), (select id from project_entity where title = 'Portfolio')); 
 
+
+         insert into project_entity (title, description, "shortDescription", "githubLink", "startDate", "isHighlight") 
+            values ('TripleAGloves ', 'A portfolio website for a glove company in Thailand. The site was built using mainly Gatsby and Threejs, hosted on Github Pages.', 
+            'Portfolio Web', 
+            'https://khongchai.github.io/TripleAGloves/', 
+            '2021-03-20', 'false');
+            
+            insert into technology_entity_front_end_in_project_entity ("technologyEntityId", "projectEntityId") values 
+              ((select id from technology_entity where title='Gatsby'), (select id from project_entity where title = 'TripleAGloves')),
+              ((select id from technology_entity where title='React'), (select id from project_entity where title = 'TripleAGloves')),
+              ((select id from technology_entity where title='Three.js'), (select id from project_entity where title = 'TripleAGloves')),
+              ((select id from technology_entity where title='styled-components'), (select id from project_entity where title = 'TripleAGloves'));
+           insert into technology_entity_hosting_project_entity ("technologyEntityId", "projectEntityId") values ((select id from technology_entity where title in ('GitHub Pages')),(select id from project_entity where title = 'TripleAGloves'));
+           insert into technology_entity_language_of_project_entity ("technologyEntityId", "projectEntityId") values  
+           ((select id from technology_entity where title = 'Javascript'), (select id from project_entity where title = 'TripleAGloves')), 
+           ((select id from technology_entity where title = 'TypeScript'), (select id from project_entity where title = 'TripleAGloves')); 
