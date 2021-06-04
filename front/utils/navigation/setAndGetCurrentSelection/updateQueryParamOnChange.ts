@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import setQueryParam from "../setQueryParam";
+import setQueryParam from "../../generics/setQueryParam";
 
 export function updateQueryParamOnChange(
   projTitle: string | undefined,

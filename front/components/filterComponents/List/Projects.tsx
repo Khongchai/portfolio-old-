@@ -9,14 +9,21 @@ interface AllProjectsProps {
   paginateForward: () => void;
   paginateBackward: () => void;
   searchFetching: boolean;
+  showAllProjectsState: {
+    showAllProjects: boolean;
+    setShowAllProjects: React.Dispatch<React.SetStateAction<boolean>>;
+  };
+  zIndex: number;
 }
 
-export const AllProjects: React.FC<AllProjectsProps> = ({
+const Projects: React.FC<AllProjectsProps> = ({
   searchFetching,
   data,
   setDetails,
   paginateForward,
   paginateBackward,
+  showAllProjectsState,
+  zIndex,
 }) => {
   const PaginationChevrons = (
     <>
@@ -37,11 +44,14 @@ export const AllProjects: React.FC<AllProjectsProps> = ({
       fetching={searchFetching}
       gridRow={"Bottom"}
       extension={PaginationChevrons}
+      enableSeeAllButton={true}
+      showAllProjectsState={showAllProjectsState}
+      zIndex={zIndex}
     />
   );
 };
 
-export default AllProjects;
+export default Projects;
 
 const PaginateForward: React.FC<{ paginateForward: () => void }> = ({
   paginateForward,

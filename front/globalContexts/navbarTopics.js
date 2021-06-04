@@ -5,15 +5,15 @@ import { homeURL } from "../constants/homeUrl";
 //to get type, just import navbarTopics
 //Any page with a prefix {groupName}: {pageName} will be put into a dropdown
 export const navbarTopics = {
-  home: {
-    url: homeURL,
-    pageName: "Home: Timeline",
+  Home: { url: homeURL, pageName: "Home" },
+  timeline: {
+    url: homeURL + "timeline",
+    pageName: "Projects: Timeline",
   },
   filter: {
     url: homeURL + "filter",
-    pageName: "Home: Filter",
+    pageName: "Projects: Filter",
   },
-  about: { url: homeURL + "about", pageName: "Bio" },
 };
 
 //Two context, each for different purposes.

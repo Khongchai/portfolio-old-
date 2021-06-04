@@ -1,8 +1,8 @@
-import { Flex, Grid, Heading, Text } from "@chakra-ui/react";
+import { Box, Flex, Grid, Heading, Text } from "@chakra-ui/react";
 import React from "react";
 import { ProjectEntity } from "../../../../generated/graphql";
-import { setAsSelected } from "../../../../utils/animations/filter/setAsSelected";
-import { setToLocalStorageAndSelectedState } from "../../../../utils/generics/setAndGetCurrentSelection/setToLocalStorageAndSelectedState";
+import { setToLocalStorageAndSelectedState } from "../../../../utils/navigation/setAndGetCurrentSelection/setToLocalStorageAndSelectedState";
+import { ProjectItem } from "./ProjectItem";
 import { TinyImg } from "./TinyImg";
 
 interface IndexProps {
@@ -14,6 +14,12 @@ interface IndexProps {
   fetching: boolean;
   gridRow: "Top" | "Bottom";
   extension?: any;
+  enableSeeAllButton?: boolean;
+  showAllProjectsState?: {
+    showAllProjects: boolean;
+    setShowAllProjects: React.Dispatch<React.SetStateAction<boolean>>;
+  };
+  zIndex: number;
 }
 
 export const ProjectList: React.FC<IndexProps> = ({
@@ -23,6 +29,9 @@ export const ProjectList: React.FC<IndexProps> = ({
   fetching,
   gridRow,
   extension,
+  enableSeeAllButton,
+  showAllProjectsState,
+  zIndex,
 }) => {
   return (
     <Flex
@@ -34,13 +43,40 @@ export const ProjectList: React.FC<IndexProps> = ({
       flexDir="column"
       pos="relative"
       overflow="auto"
-      gridRow={gridRow === "Top" ? "1" : "3"}
+      zIndex={zIndex}
+      // When user clicks on Show All, set the height of the element
+      //that show all projects to full, hiding in the process the element
+      //that shows highlights.
+      gridRow={
+        showAllProjectsState?.showAllProjects
+          ? "1 / -1"
+          : gridRow === "Top"
+          ? "1"
+          : "3"
+      }
     >
-      <Flex placeItems="center">
+      <Flex>
         <Heading fontSize="1.5rem" mb={2}>
           {sectionTitle}
         </Heading>
+        {enableSeeAllButton ? (
+          <Text
+            cursor="pointer"
+            ml="auto"
+            _hover={{ color: "mainOrange", transition: ".2s" }}
+            onClick={() => {
+              if (showAllProjectsState) {
+                const { showAllProjects, setShowAllProjects } =
+                  showAllProjectsState;
+                setShowAllProjects(!showAllProjects);
+              }
+            }}
+          >
+            {showAllProjectsState?.showAllProjects ? "Show less" : "Show All"}
+          </Text>
+        ) : null}
       </Flex>
+
       <Flex
         overflowX="scroll"
         className="projects-containers"
@@ -58,37 +94,17 @@ export const ProjectList: React.FC<IndexProps> = ({
           },
         }}
       >
-        {fetching ? (
+        {fetching && !projects ? (
           <Grid w="100%" h="100%" placeItems="center">
             Loading...
           </Grid>
         ) : (
           projects?.map((proj) => (
-            <Flex
-              cursor="pointer"
-              key={proj.id}
-              minW="220px"
-              minH="220px"
-              pb={2}
-              onClick={() => {
-                const project = proj as ProjectEntity;
-                setToLocalStorageAndSelectedState(project, setStateFunction);
-              }}
-              className={`project-container projects ${proj.title}`}
-              flexDir="column"
-              placeItems="center"
-              css={{
-                "* + *": {
-                  marginTop: "0.5em",
-                },
-              }}
-            >
-              <TinyImg tinyImgLink={proj.tinyImgLink} projTitle={proj.title} />
-              <Heading size="md" flex="0.1">
-                {proj.title}
-              </Heading>
-              <Text flex="0.1">{proj.shortDescription}</Text>
-            </Flex>
+            <ProjectItem
+              proj={proj}
+              setStateFunction={setStateFunction}
+              showAllProjects={showAllProjectsState?.showAllProjects}
+            />
           ))
         )}
       </Flex>

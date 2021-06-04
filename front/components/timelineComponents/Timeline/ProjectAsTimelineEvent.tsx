@@ -2,7 +2,7 @@ import { Box, Flex, Text } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { ProjectEntity } from "../../../generated/graphql";
 import { GridRowPos } from "../../../types/GridRowPos";
-import { setToLocalStorageAndSelectedState } from "../../../utils/generics/setAndGetCurrentSelection/setToLocalStorageAndSelectedState";
+import { setToLocalStorageAndSelectedState } from "../../../utils/navigation/setAndGetCurrentSelection/setToLocalStorageAndSelectedState";
 import { getGridColumnLength } from "../../../utils/timeline/getGridColumnLength";
 import { getGridRow } from "../../../utils/timeline/getGridRow";
 import {

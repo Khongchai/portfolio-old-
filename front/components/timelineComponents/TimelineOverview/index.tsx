@@ -1,10 +1,10 @@
-import { Box, Flex, Stack, Text } from "@chakra-ui/react";
+import { Box, Flex, FlexProps, Stack, Text } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { homeURL } from "../../../constants/homeUrl";
 import { ProjectEntity } from "../../../generated/graphql";
 import { TechDetails } from "../../../types/TechDetails";
-import { readFromParamOrStorage } from "../../../utils/generics/setAndGetCurrentSelection/readFromParamOrStorageAndSet";
-import { updateQueryParamOnChange } from "../../../utils/generics/setAndGetCurrentSelection/updateQueryParamOnChange";
+import { readFromParamOrStorage } from "../../../utils/navigation/setAndGetCurrentSelection/readFromParamOrStorageAndSet";
+import { updateQueryParamOnChange } from "../../../utils/navigation/setAndGetCurrentSelection/updateQueryParamOnChange";
 import { getCloudinaryResponsiveUrl } from "../../../utils/timeline/getCloudinaryResponsiveUrl";
 import { ProjectDescription } from "../../shared/ProjectDescription";
 import { ExpandedContent } from "../../shared/TechnologiesDetails";
@@ -17,8 +17,11 @@ const TimelineOverview: React.FC<{
   >;
   selection: string | undefined;
 }> = ({ selectedProject, setSelectedProject, selection, defaultSelection }) => {
+  const router = useRouter();
+  const currentURL = router.pathname;
+
   readFromParamOrStorage(setSelectedProject, selection, defaultSelection);
-  updateQueryParamOnChange(selectedProject?.title, homeURL);
+  updateQueryParamOnChange(selectedProject?.title, currentURL);
   const [showTech, setShowTech] = useState(false);
 
   return (
@@ -168,7 +171,7 @@ const ProjectImage: React.FC<{ imgLink: string }> = ({ imgLink }) => {
       backgroundImage={`url(${responsiveImageUrl})`}
       backgroundRepeat="no-repeat"
       backgroundSize="cover"
-      backgroundPosition="center"
+      backgroundPosition="left"
       boxShadow="dark-lg"
       className="fadein"
     />

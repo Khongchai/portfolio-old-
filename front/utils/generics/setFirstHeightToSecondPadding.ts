@@ -1,3 +1,4 @@
+//Was ist der Zweck dieser Funktion?!
 export default function setFirstHeightToSecondPadding(
   from: HTMLElement,
   to: HTMLElement,

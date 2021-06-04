@@ -43,18 +43,20 @@ export const Navbar: React.FC<{}> = () => {
   return (
     <Flex
       id="navbar"
-      position="absolute"
+      position="relative"
       top="0"
-      p={["2.3em 3em 1.3em 3em", null, "1.3em 3em 1.3em 3em"]}
+      p={["2.3em 3em 1.3em 3em", null, "3.3em 3em 3.3em 3em"]}
       width={["100%"]}
     >
+      {pages.pagesWithNoDropdowns.map((page) => (
+        <LinkButton key={page.pageName} page={page} />
+      ))}
       {pagesWithDropDowns.map((pageWithDropDown, i) => (
         <>
           <Menu key={i}>
             <MenuButton
               fontWeight="normal"
               p="0 6em 0 1em"
-              borderRight="solid white 1px"
               width="fit-content"
               display={["none", null, null, "block"]}
               _hover={{ cursor: "pointer", color: "mainOrange" }}
@@ -77,10 +79,6 @@ export const Navbar: React.FC<{}> = () => {
             </MenuList>
           </Menu>
         </>
-      ))}
-
-      {pages.pagesWithNoDropdowns.map((page) => (
-        <LinkButton key={page.pageName} page={page} />
       ))}
 
       <AdminAuthButton adminLoginState={adminLoginState} />
@@ -165,6 +163,10 @@ const HamburgerMenu: React.FC<{}> = ({}) => {
             css={{ "> *": { marginBottom: "2em" } }}
             color="white"
           >
+            {pages.pagesWithNoDropdowns.map((page) => (
+              <LinkButtonMobile key={page.pageName} page={page} />
+            ))}
+
             {pagesWithDropDowns.map((pageWithDropDown, i) => (
               <Menu key={i}>
                 <MenuButton
@@ -194,9 +196,6 @@ const HamburgerMenu: React.FC<{}> = ({}) => {
               </Menu>
             ))}
 
-            {pages.pagesWithNoDropdowns.map((page) => (
-              <LinkButtonMobile key={page.pageName} page={page} />
-            ))}
             <Box borderTop="1px solid" color="mainGrey" mt={10} />
             {ExtraNavbarElems?.mobile ? ExtraNavbarElems.mobile : null}
           </DrawerBody>

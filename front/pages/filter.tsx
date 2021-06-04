@@ -6,7 +6,7 @@ import List from "../components/filterComponents/List";
 import { SearchAndFindWrapper } from "../components/filterComponents/SearchAndFilterBoxes";
 import { ProjectEntity, useProjectsQuery } from "../generated/graphql";
 import { AddExtraElemContext } from "../globalContexts/extraNavbarElem";
-import setPadding from "../utils/generics/setFirstHeightToSecondPadding";
+import { getNavbarHeight } from "../utils/navbar/getNavbarHeight";
 
 export const Filter: React.FC<{ selection: string | undefined }> = ({
   selection,
@@ -32,16 +32,10 @@ export const Filter: React.FC<{ selection: string | undefined }> = ({
   });
 
   const updateTopics = useContext(AddExtraElemContext);
+  const [showAllProjects, setShowAllProjects] = useState(false);
   let [{ data, fetching }] = useProjectsQuery({ variables: queryVariables });
-  const [details, setDetails] = useState<ProjectEntity | undefined>(undefined);
 
-  useEffect(() => {
-    const filterPage = document.getElementById("filter-page");
-    const navbar = document.getElementById("navbar");
-    if (filterPage && navbar) {
-      setPadding(navbar, filterPage, 2);
-    }
-  }, []);
+  const [details, setDetails] = useState<ProjectEntity | undefined>(undefined);
 
   useEffect(() => {
     updateTopics({
@@ -92,7 +86,7 @@ export const Filter: React.FC<{ selection: string | undefined }> = ({
       id="filter-page"
       flexDir={["column", "column", "column", "column", "row", "row"]}
       w={"100%"}
-      h={["auto", null, "max(100vh, 900px)"]}
+      h={["auto", null, `max(calc(100vh - ${getNavbarHeight()}), 800px)`]}
       pb="1.5rem"
       className="filter-page-container"
     >
@@ -100,11 +94,14 @@ export const Filter: React.FC<{ selection: string | undefined }> = ({
       <List
         searchFetching={fetching}
         data={data}
-        details={details}
         selection={selection}
-        setDetails={setDetails}
+        detailsState={{ setDetails: setDetails, details: details }}
         paginateForward={paginateForward}
         paginateBackward={paginateBackward}
+        showAllProjectsState={{
+          showAllProjects: showAllProjects,
+          setShowAllProjects: setShowAllProjects,
+        }}
       />
     </Flex>
   );
