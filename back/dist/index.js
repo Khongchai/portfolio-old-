@@ -37,7 +37,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         migrations: [path_1.default.join(__dirname, "/migrations/*")],
         logging: false,
         synchronize: true,
-        migrationsRun: true,
+        migrationsRun: false,
         entities: [ProjectEntity_1.ProjectEntity, TechnologyEntity_1.TechnologyEntity, AdminEntity_1.AdminEntity],
     });
     const app = express_1.default();

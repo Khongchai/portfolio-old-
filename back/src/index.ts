@@ -24,7 +24,7 @@ const main = async () => {
     migrations: [path.join(__dirname, "/migrations/*")],
     logging: false,
     synchronize: true,
-    migrationsRun: true,
+    migrationsRun: false,
     entities: [ProjectEntity, TechnologyEntity, AdminEntity],
   });
 
