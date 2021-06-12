@@ -134,13 +134,13 @@ function slowDownUntil0(hasDragged: boolean) {
      * Lower value = longer decay duration
      */
     decay: 0.0305,
-    instantReduction: 2,
+    instantReduction: 1.2,
   };
   const timeDifference = Date.now() - timeStart;
   const preventZeroDivision = 1;
   let result =
     initialVelocity /
-    (deceleration.decay * (timeDifference ^ deceleration.instantReduction) +
+    (deceleration.decay * timeDifference ** deceleration.instantReduction +
       preventZeroDivision);
 
   //TODO, if result is 20% of initialVAlue, just stop

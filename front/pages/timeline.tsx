@@ -8,7 +8,6 @@ import {
   useAllProjectsNotPaginatedQuery,
 } from "../generated/graphql";
 import removeDuplicatesFromArray from "../utils/generics/removeDuplicatesFromArray";
-import setFirstHeightToSecondPadding from "../utils/generics/setFirstHeightToSecondPadding";
 import { getNavbarHeight } from "../utils/navbar/getNavbarHeight";
 
 const Tech: React.FC<{ selection: string | undefined }> = ({ selection }) => {
@@ -16,6 +15,7 @@ const Tech: React.FC<{ selection: string | undefined }> = ({ selection }) => {
     useState<ProjectEntity | null>(null);
   const [{ data }] = useAllProjectsNotPaginatedQuery();
   const [years, setYears] = useState<number[]>([]);
+  const [navbarHeight, setNavbarHeight] = useState("");
 
   //this useeffect gets all the necessary data for timeline events
   useEffect(() => {
@@ -39,11 +39,7 @@ const Tech: React.FC<{ selection: string | undefined }> = ({ selection }) => {
 
   /* Set timeline size */
   useEffect(() => {
-    const timelinePage = document.getElementById("tech-timeline");
-    const navbar = document.getElementById("navbar");
-    if (timelinePage && navbar) {
-      //setFirstHeightToSecondPadding(navbar, timelinePage, 2);
-    }
+    setNavbarHeight(getNavbarHeight());
   }, []);
 
   return (
@@ -51,7 +47,7 @@ const Tech: React.FC<{ selection: string | undefined }> = ({ selection }) => {
       id="tech-timeline"
       overflowX="hidden"
       flexDir="column"
-      height={["auto", null, null, `calc(100vh - ${getNavbarHeight()})`]}
+      height={["auto", null, null, `calc(100vh - ${navbarHeight})`]}
     >
       <TimelineOverview
         selection={selection}
