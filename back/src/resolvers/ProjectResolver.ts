@@ -42,6 +42,9 @@ class PaginatedProjectsInput {
 
   @Field({ nullable: true })
   field?: "Title" | "Technology";
+
+  @Field({ nullable: true })
+  getAll?: boolean;
 }
 
 @Resolver()
@@ -50,10 +53,23 @@ export class ProjectsResolver {
   async projects(
     @Arg("input") input: PaginatedProjectsInput
   ): Promise<PaginatedProjects> {
-    const { limit, skip, order, search, sortBy, field } = input;
+    const { limit, skip, order, search, sortBy, field, getAll } = input;
+
+    if (getAll) {
+      const allProjects = await ProjectEntity.find({
+        relations: [
+          "frontEndTechnologies",
+          "backEndTechnologies",
+          "languages",
+          "hostingServices",
+        ],
+      });
+      return { projects: allProjects, isFirstQuery: true, isLastQuery: true };
+    }
 
     const realLimit = Math.min(5, limit);
     const realLimitPlusOne = realLimit + 1;
+
     const searchLowerCase = search ? `%${search.toLowerCase()}%` : "%";
 
     let returnedEntity: any;

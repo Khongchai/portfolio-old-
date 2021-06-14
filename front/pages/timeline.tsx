@@ -45,7 +45,7 @@ const Tech: React.FC<{ selection: string | undefined }> = ({ selection }) => {
   return (
     <Flex
       id="tech-timeline"
-      overflowX="hidden"
+      overflow="hidden"
       flexDir="column"
       height={["auto", null, null, `calc(100vh - ${navbarHeight})`]}
     >

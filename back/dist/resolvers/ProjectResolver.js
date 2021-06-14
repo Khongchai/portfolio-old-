@@ -58,13 +58,28 @@ __decorate([
     type_graphql_1.Field({ nullable: true }),
     __metadata("design:type", String)
 ], PaginatedProjectsInput.prototype, "field", void 0);
+__decorate([
+    type_graphql_1.Field({ nullable: true }),
+    __metadata("design:type", Boolean)
+], PaginatedProjectsInput.prototype, "getAll", void 0);
 PaginatedProjectsInput = __decorate([
     type_graphql_1.InputType()
 ], PaginatedProjectsInput);
 let ProjectsResolver = class ProjectsResolver {
     projects(input) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { limit, skip, order, search, sortBy, field } = input;
+            const { limit, skip, order, search, sortBy, field, getAll } = input;
+            if (getAll) {
+                const allProjects = yield ProjectEntity_1.ProjectEntity.find({
+                    relations: [
+                        "frontEndTechnologies",
+                        "backEndTechnologies",
+                        "languages",
+                        "hostingServices",
+                    ],
+                });
+                return { projects: allProjects, isFirstQuery: true, isLastQuery: true };
+            }
             const realLimit = Math.min(5, limit);
             const realLimitPlusOne = realLimit + 1;
             const searchLowerCase = search ? `%${search.toLowerCase()}%` : "%";

@@ -4,8 +4,13 @@ import React, { useContext, useEffect, useState } from "react";
 import InfoDisplay from "../components/filterComponents/InfoDisplay/index";
 import List from "../components/filterComponents/List";
 import { SearchAndFindWrapper } from "../components/filterComponents/SearchAndFilterBoxes";
-import { ProjectEntity, useProjectsQuery } from "../generated/graphql";
+import {
+  ProjectEntity,
+  useAllProjectsNotPaginatedQuery,
+  useProjectsQuery,
+} from "../generated/graphql";
 import { AddExtraElemContext } from "../globalContexts/extraNavbarElem";
+import { setAsSelected } from "../utils/animations/filter/setAsSelected";
 import { getNavbarHeight } from "../utils/navbar/getNavbarHeight";
 
 export const Filter: React.FC<{ selection: string | undefined }> = ({
@@ -33,9 +38,18 @@ export const Filter: React.FC<{ selection: string | undefined }> = ({
 
   const updateTopics = useContext(AddExtraElemContext);
   const [showAllProjects, setShowAllProjects] = useState(false);
-  let [{ data, fetching }] = useProjectsQuery({ variables: queryVariables });
+  let [{ data, fetching }] = useProjectsQuery({
+    variables: { ...queryVariables, getAll: showAllProjects },
+  });
 
   const [details, setDetails] = useState<ProjectEntity | undefined>(undefined);
+
+  //Re-highlights projects everytime user switches from show all to show less
+  useEffect(() => {
+    if (details) {
+      setAsSelected(details.title);
+    }
+  }, [showAllProjects, fetching]);
 
   useEffect(() => {
     updateTopics({
@@ -81,12 +95,17 @@ export const Filter: React.FC<{ selection: string | undefined }> = ({
     });
   }
 
+  const [navbarHeight, setNavbarHeight] = useState("");
+  useEffect(() => {
+    setNavbarHeight(getNavbarHeight());
+  }, []);
+
   return (
     <Flex
       id="filter-page"
       flexDir={["column", "column", "column", "column", "row", "row"]}
       w={"100%"}
-      h={["auto", null, `max(calc(100vh - ${getNavbarHeight()}), 800px)`]}
+      h={["auto", null, `max(calc(100vh - ${navbarHeight}), 800px)`]}
       pb="1.5rem"
       className="filter-page-container"
     >

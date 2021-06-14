@@ -26,9 +26,8 @@ const TimelineOverview: React.FC<{
 
   return (
     <Flex
-      flex="0.60"
       height="min(100%, 500px)"
-      bgColor="#444057"
+      bgColor="#171717"
       id="info-container"
       placeItems={["flex-start", null, null, "center"]}
       p="0 10% 20px 10%"
@@ -64,9 +63,8 @@ const PictureSection: React.FC<{
       id="technologies-container"
       transition="width .3s"
       width="100%"
-      overflow-y="scroll"
-      max-height="100%"
-      overflow-x={showTech ? "scroll" : "auto"}
+      height={showTech ? "80%" : "auto"}
+      overflow={showTech ? "scroll" : "unset"}
       css={{
         "::-webkit-scrollbar": {
           width: "0.5rem",
@@ -76,7 +74,7 @@ const PictureSection: React.FC<{
           display: "none",
         },
         "::-webkit-scrollbar-thumb": {
-          backgroundColor: "#545161",
+          backgroundColor: "#818181",
           border: "3px solid transparent",
         },
       }}
@@ -124,8 +122,9 @@ const DescriptionSection: React.FC<{
     <Stack
       as={Flex}
       flex="0.50"
-      spacing="2em"
+      spacing="1em"
       p="1rem 0"
+      pt="3rem"
       textShadow="black 0px 2px 5px"
       ml={[0, null, null, 5]}
     >
@@ -192,6 +191,7 @@ const Technologies: React.FC<{ techDetails: TechDetails }> = ({
       bgColor="grey2"
       padding={4}
       borderRadius="5px"
+      id="technologies-list"
       css={{
         "::-webkit-scrollbar": {
           width: "0.5rem",

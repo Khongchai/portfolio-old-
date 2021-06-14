@@ -1,25 +1,17 @@
-import { Context } from "../types";
 import {
   Arg,
   Ctx,
-  Field,
   Mutation,
-  ObjectType,
   Query,
   Resolver,
   UseMiddleware,
 } from "type-graphql";
+import { getManager } from "typeorm";
 import { TechnologyEntity } from "../entities/TechnologyEntity";
+import { TechAsSeparateFields } from "../inputAndObjectTypes/TechnologyResolver";
 import { isAuth } from "../middleware/isAuth";
-
-@ObjectType()
-export class ErrorField {
-  @Field()
-  error?: string;
-
-  @Field({ nullable: true })
-  description?: string;
-}
+import { Context } from "../types";
+import { getTechnologiesBasedOnRoles } from "../utils/getTechnologiesBasedOnRoles";
 
 @Resolver()
 export class TechnologyResolver {
@@ -31,11 +23,58 @@ export class TechnologyResolver {
     return technologies;
   }
 
+  /**
+   * This gets all technologies without categorization
+   */
+  @Query(() => [TechnologyEntity])
+  async getOnlyLanguages(): Promise<TechnologyEntity[]> {
+    const languages = await TechnologyEntity.find({
+      relations: ["languageOf"],
+    });
+    return languages;
+  }
+
+  /**
+   * Find out what something is by referring to their relation tables.
+   * This way, we know that "Python" is a backend language and that "heroku"
+   * is not a language but a hosting service
+   *
+   * Doing this infers the role of each tech from their usage, rather than explicit description.
+   * This also takes into account stuff that are not used in projects as well (excluding stuff that is being learned, but not used).
+   *
+   */
+  @Query(() => TechAsSeparateFields)
+  async getTechnologiesAssignedToRole(): Promise<{
+    front: TechnologyEntity[];
+    back: TechnologyEntity[];
+    lang: TechnologyEntity[];
+    hosting: TechnologyEntity[];
+  }> {
+    const entityManager = getManager();
+
+    const languages = await getTechnologiesBasedOnRoles(
+      "language",
+      entityManager
+    );
+    const frontends = await getTechnologiesBasedOnRoles("front", entityManager);
+    const backends = await getTechnologiesBasedOnRoles("back", entityManager);
+    const hostingServices = await getTechnologiesBasedOnRoles(
+      "hosting",
+      entityManager
+    );
+
+    return {
+      front: frontends,
+      back: backends,
+      lang: languages,
+      hosting: hostingServices,
+    };
+  }
+
   @Mutation(() => TechnologyEntity, { nullable: true })
   @UseMiddleware(isAuth)
   async createTechnology(
-    @Arg("title") title: string,
-    @Arg("projectName", () => [String], { nullable: true }) projName?: string[]
+    @Arg("title") title: string
   ): Promise<TechnologyEntity | null> {
     const tech = await TechnologyEntity.create({
       title: title,

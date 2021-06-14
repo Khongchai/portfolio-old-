@@ -9,7 +9,8 @@ const GithubLink: React.FC<{ githubLink: string }> = ({ githubLink }) => {
         opacity="0.7"
         href={githubLink}
         isExternal={true}
-        filter="invert(1), drop-shadow(0px 4px 7px rgba(0, 0, 0, 0.25));"
+        filter="invert(1)"
+        id="github-link"
       >
         <Img w="1.7rem" h="1.7rem" src="/logos/github.png" opacity="0.4" />
       </Link>

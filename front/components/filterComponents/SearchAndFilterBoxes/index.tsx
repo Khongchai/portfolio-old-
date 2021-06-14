@@ -116,7 +116,7 @@ const SearchAndFindDesktop: React.FC<setFunctions> = ({
           setField(e.target.value as any);
         }}
         border="none"
-        bgColor="#636073"
+        bgColor="black3"
         color="grey3"
         w="fit-content"
       >
@@ -130,7 +130,7 @@ const SearchAndFindDesktop: React.FC<setFunctions> = ({
         }}
         width={"10em"}
         border="none"
-        bgColor="#636073"
+        bgColor="black3"
       />
 
       {/* Determines the order in which the search queries gets returned. */}
@@ -139,7 +139,7 @@ const SearchAndFindDesktop: React.FC<setFunctions> = ({
           setSort(e.target.value as any);
         }}
         border="none"
-        bgColor="#636073"
+        bgColor="black3"
         color="grey3"
         w="fit-content"
       >
@@ -153,7 +153,7 @@ const SearchAndFindDesktop: React.FC<setFunctions> = ({
         color="grey3"
         w="fit-content"
         border="none"
-        bgColor="#636073"
+        bgColor="black3"
       >
         <option value="ASC">ASC</option>
         <option value="DESC">DESC</option>

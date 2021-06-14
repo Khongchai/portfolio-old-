@@ -21,24 +21,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TechnologyResolver = exports.ErrorField = void 0;
+exports.TechnologyResolver = void 0;
 const type_graphql_1 = require("type-graphql");
+const typeorm_1 = require("typeorm");
 const TechnologyEntity_1 = require("../entities/TechnologyEntity");
+const TechnologyResolver_1 = require("../inputAndObjectTypes/TechnologyResolver");
 const isAuth_1 = require("../middleware/isAuth");
-let ErrorField = class ErrorField {
-};
-__decorate([
-    type_graphql_1.Field(),
-    __metadata("design:type", String)
-], ErrorField.prototype, "error", void 0);
-__decorate([
-    type_graphql_1.Field({ nullable: true }),
-    __metadata("design:type", String)
-], ErrorField.prototype, "description", void 0);
-ErrorField = __decorate([
-    type_graphql_1.ObjectType()
-], ErrorField);
-exports.ErrorField = ErrorField;
+const getTechnologiesBasedOnRoles_1 = require("../utils/getTechnologiesBasedOnRoles");
 let TechnologyResolver = class TechnologyResolver {
     technologies() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -48,7 +37,30 @@ let TechnologyResolver = class TechnologyResolver {
             return technologies;
         });
     }
-    createTechnology(title, projName) {
+    getOnlyLanguages() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const languages = yield TechnologyEntity_1.TechnologyEntity.find({
+                relations: ["languageOf"],
+            });
+            return languages;
+        });
+    }
+    getTechnologiesAssignedToRole() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const entityManager = typeorm_1.getManager();
+            const languages = yield getTechnologiesBasedOnRoles_1.getTechnologiesBasedOnRoles("language", entityManager);
+            const frontends = yield getTechnologiesBasedOnRoles_1.getTechnologiesBasedOnRoles("front", entityManager);
+            const backends = yield getTechnologiesBasedOnRoles_1.getTechnologiesBasedOnRoles("back", entityManager);
+            const hostingServices = yield getTechnologiesBasedOnRoles_1.getTechnologiesBasedOnRoles("hosting", entityManager);
+            return {
+                front: frontends,
+                back: backends,
+                lang: languages,
+                hosting: hostingServices,
+            };
+        });
+    }
+    createTechnology(title) {
         return __awaiter(this, void 0, void 0, function* () {
             const tech = yield TechnologyEntity_1.TechnologyEntity.create({
                 title: title,
@@ -90,12 +102,23 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], TechnologyResolver.prototype, "technologies", null);
 __decorate([
+    type_graphql_1.Query(() => [TechnologyEntity_1.TechnologyEntity]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], TechnologyResolver.prototype, "getOnlyLanguages", null);
+__decorate([
+    type_graphql_1.Query(() => TechnologyResolver_1.TechAsSeparateFields),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], TechnologyResolver.prototype, "getTechnologiesAssignedToRole", null);
+__decorate([
     type_graphql_1.Mutation(() => TechnologyEntity_1.TechnologyEntity, { nullable: true }),
     type_graphql_1.UseMiddleware(isAuth_1.isAuth),
     __param(0, type_graphql_1.Arg("title")),
-    __param(1, type_graphql_1.Arg("projectName", () => [String], { nullable: true })),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Array]),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], TechnologyResolver.prototype, "createTechnology", null);
 __decorate([

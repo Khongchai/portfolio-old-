@@ -1,9 +1,11 @@
-import { Box, Flex, Grid, Heading, Text } from "@chakra-ui/react";
-import React from "react";
-import { ProjectEntity } from "../../../../generated/graphql";
-import { setToLocalStorageAndSelectedState } from "../../../../utils/navigation/setAndGetCurrentSelection/setToLocalStorageAndSelectedState";
+import { Flex, Grid, Heading, Text } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import {
+  AllProjectsNotPaginatedQuery,
+  ProjectEntity,
+  useAllProjectsNotPaginatedQuery,
+} from "../../../../generated/graphql";
 import { ProjectItem } from "./ProjectItem";
-import { TinyImg } from "./TinyImg";
 
 interface IndexProps {
   projects: ProjectEntity[] | undefined;
@@ -36,7 +38,8 @@ export const ProjectList: React.FC<IndexProps> = ({
   return (
     <Flex
       gridColumn="left-padding-end / right-padding-end"
-      bg="linear-gradient(102.77deg, #423E55 -2.52%, rgba(74, 70, 94, 0.691587) 38.75%, rgba(92, 88, 113, 0) 100%, rgba(68, 64, 86, 0.627352) 100%), #636073;"
+      // bg="linear-gradient(102.77deg, #423E55 -2.52%, rgba(74, 70, 94, 0.691587) 38.75%, rgba(92, 88, 113, 0) 100%, rgba(68, 64, 86, 0.627352) 100%), #636073;"
+      bg="black2"
       className={`projects-views`}
       boxShadow="0px 8px 20px rgba(0, 0, 0, 0.1)"
       borderRadius="22px"
@@ -78,7 +81,8 @@ export const ProjectList: React.FC<IndexProps> = ({
       </Flex>
 
       <Flex
-        overflowX="scroll"
+        overflowX={showAllProjectsState?.showAllProjects ? "unset" : "scroll"}
+        flexWrap={showAllProjectsState?.showAllProjects ? "wrap" : "nowrap"}
         className="projects-containers"
         width="100%"
         h="100%"
@@ -88,7 +92,7 @@ export const ProjectList: React.FC<IndexProps> = ({
             height: "10px",
           },
           "::-webkit-scrollbar-thumb": {
-            background: "#423F56",
+            background: "#727272",
             opacity: "0.4",
             borderRadius: "10px",
           },

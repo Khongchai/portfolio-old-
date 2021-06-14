@@ -91,7 +91,7 @@ const ProjectAsTimelineEvent: React.FC<{
         id={projIdAsString}
         transition={`background-color ${transitionTime}, width ${transitionTime}`}
         className="project-event"
-        bgColor="#858294"
+        bgColor="black3"
         onMouseOver={() => {
           setProjectAndIndicatorFocusColor(projIdAsString);
           revealTitleIfWidthLessThanTitle(projIdAsString);

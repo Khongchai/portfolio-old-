@@ -5,6 +5,7 @@ query Projects(
   $order: String
   $search: String
   $field: String
+  $getAll: Boolean
 ) {
   projects(
     input: {
@@ -14,6 +15,7 @@ query Projects(
       order: $order
       search: $search
       field: $field
+      getAll: $getAll
     }
   ) {
     projects {

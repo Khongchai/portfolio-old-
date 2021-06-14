@@ -1,9 +1,7 @@
-import { Grid, Heading, Stack, Text } from "@chakra-ui/react";
+import { Grid, Heading, Stack } from "@chakra-ui/react";
 import React from "react";
 import { ProjectEntity } from "../../../generated/graphql";
-import Links from "../../shared/Links";
 import { ProjectDescription } from "../../shared/ProjectDescription";
-import { ProjectDetails } from "../../shared/ProjectDetails";
 import ExpandButton from "./technologyExpandButton";
 
 const InfoDisplay: React.FC<{

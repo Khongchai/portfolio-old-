@@ -1,4 +1,5 @@
-import { Box, Grid } from "@chakra-ui/react";
+import { AbsoluteCenter, Box, Grid } from "@chakra-ui/react";
+import { withTheme } from "@emotion/react";
 import React, { useEffect, useRef, useState } from "react";
 import {
   AllProjectsNotPaginatedQuery,
@@ -80,7 +81,12 @@ export const Timeline: React.FC<timelineProps> = ({
         gridTemplateRows="[timeline-top] 0.78fr [timeline-bottom] 0.22fr [timeline-padding-bottom]"
       >
         <Grid
-          borderBottom="1px solid black"
+          borderBottom="1px solid"
+          css={{
+            borderImageSlice: "1",
+            borderImageSource:
+              "linear-gradient(270deg, #000000 0%, #858294 2.72%, #858294 49.76%, #858294 95.06%, #000000 97.07%);",
+          }}
           id="events-container"
           gridRow="timeline-top / timeline-bottom"
           flexDir="row"

@@ -64,7 +64,7 @@ export const Navbar: React.FC<{}> = () => {
               {pageWithDropDown[0].pageName.split(":")[0]}
             </MenuButton>
             <MenuList
-              bgColor="mainGrey"
+              bgColor="black2"
               onClick={(e: any) => {
                 router.push(e.target.value);
               }}
@@ -180,7 +180,7 @@ const HamburgerMenu: React.FC<{}> = ({}) => {
                 <MenuList
                   className="menu-list-mobile"
                   p="2px 0 0 auto"
-                  bgColor="mainGrey"
+                  bgColor="black2"
                   onClick={(e: any) => {
                     router.push(e.target.value);
                   }}

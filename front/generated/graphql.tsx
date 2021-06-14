@@ -21,6 +21,8 @@ export type Query = {
   getSingleProjectByTitle: ProjResponse;
   getHighlightedProjects: Array<ProjectEntity>;
   technologies: Array<TechnologyEntity>;
+  getOnlyLanguages: Array<TechnologyEntity>;
+  getTechnologiesAssignedToRole: TechAsSeparateFields;
   showAdmins: Array<AdminEntity>;
   me: Scalars['Boolean'];
 };
@@ -78,6 +80,7 @@ export type PaginatedProjectsInput = {
   order?: Maybe<Scalars['String']>;
   sortBy?: Maybe<Scalars['String']>;
   field?: Maybe<Scalars['String']>;
+  getAll?: Maybe<Scalars['Boolean']>;
 };
 
 export type ProjResponse = {
@@ -89,6 +92,14 @@ export type ProjResponse = {
 export type ErrorField = {
   __typename?: 'ErrorField';
   message: Scalars['String'];
+};
+
+export type TechAsSeparateFields = {
+  __typename?: 'TechAsSeparateFields';
+  front?: Maybe<Array<TechnologyEntity>>;
+  back?: Maybe<Array<TechnologyEntity>>;
+  lang?: Maybe<Array<TechnologyEntity>>;
+  hosting?: Maybe<Array<TechnologyEntity>>;
 };
 
 export type AdminEntity = {
@@ -138,7 +149,6 @@ export type MutationDeleteProjectArgs = {
 
 
 export type MutationCreateTechnologyArgs = {
-  projectName?: Maybe<Array<Scalars['String']>>;
   title: Scalars['String'];
 };
 
@@ -259,6 +269,40 @@ export type AllProjectsNotPaginatedQuery = (
   )> }
 );
 
+export type GetOnlyLanguagesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetOnlyLanguagesQuery = (
+  { __typename?: 'Query' }
+  & { getOnlyLanguages: Array<(
+    { __typename?: 'TechnologyEntity' }
+    & Pick<TechnologyEntity, 'title'>
+  )> }
+);
+
+export type GetTechnologiesAssignedToRoleQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetTechnologiesAssignedToRoleQuery = (
+  { __typename?: 'Query' }
+  & { getTechnologiesAssignedToRole: (
+    { __typename?: 'TechAsSeparateFields' }
+    & { front?: Maybe<Array<(
+      { __typename?: 'TechnologyEntity' }
+      & Pick<TechnologyEntity, 'title'>
+    )>>, back?: Maybe<Array<(
+      { __typename?: 'TechnologyEntity' }
+      & Pick<TechnologyEntity, 'title'>
+    )>>, hosting?: Maybe<Array<(
+      { __typename?: 'TechnologyEntity' }
+      & Pick<TechnologyEntity, 'title'>
+    )>>, lang?: Maybe<Array<(
+      { __typename?: 'TechnologyEntity' }
+      & Pick<TechnologyEntity, 'title'>
+    )>> }
+  ) }
+);
+
 export type GetHighlightedProjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -285,6 +329,7 @@ export type ProjectsQueryVariables = Exact<{
   order?: Maybe<Scalars['String']>;
   search?: Maybe<Scalars['String']>;
   field?: Maybe<Scalars['String']>;
+  getAll?: Maybe<Scalars['Boolean']>;
 }>;
 
 
@@ -410,6 +455,39 @@ export const AllProjectsNotPaginatedDocument = gql`
 export function useAllProjectsNotPaginatedQuery(options: Omit<Urql.UseQueryArgs<AllProjectsNotPaginatedQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<AllProjectsNotPaginatedQuery>({ query: AllProjectsNotPaginatedDocument, ...options });
 };
+export const GetOnlyLanguagesDocument = gql`
+    query GetOnlyLanguages {
+  getOnlyLanguages {
+    title
+  }
+}
+    `;
+
+export function useGetOnlyLanguagesQuery(options: Omit<Urql.UseQueryArgs<GetOnlyLanguagesQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GetOnlyLanguagesQuery>({ query: GetOnlyLanguagesDocument, ...options });
+};
+export const GetTechnologiesAssignedToRoleDocument = gql`
+    query GetTechnologiesAssignedToRole {
+  getTechnologiesAssignedToRole {
+    front {
+      title
+    }
+    back {
+      title
+    }
+    hosting {
+      title
+    }
+    lang {
+      title
+    }
+  }
+}
+    `;
+
+export function useGetTechnologiesAssignedToRoleQuery(options: Omit<Urql.UseQueryArgs<GetTechnologiesAssignedToRoleQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GetTechnologiesAssignedToRoleQuery>({ query: GetTechnologiesAssignedToRoleDocument, ...options });
+};
 export const GetHighlightedProjectsDocument = gql`
     query GetHighlightedProjects {
   getHighlightedProjects {
@@ -431,9 +509,9 @@ export function useMeQuery(options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'q
   return Urql.useQuery<MeQuery>({ query: MeDocument, ...options });
 };
 export const ProjectsDocument = gql`
-    query Projects($skip: Int!, $limit: Int!, $sortBy: String, $order: String, $search: String, $field: String) {
+    query Projects($skip: Int!, $limit: Int!, $sortBy: String, $order: String, $search: String, $field: String, $getAll: Boolean) {
   projects(
-    input: {skip: $skip, limit: $limit, sortBy: $sortBy, order: $order, search: $search, field: $field}
+    input: {skip: $skip, limit: $limit, sortBy: $sortBy, order: $order, search: $search, field: $field, getAll: $getAll}
   ) {
     projects {
       ...ProjectFields

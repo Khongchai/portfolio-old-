@@ -1,9 +1,5 @@
 backend stuff ------------------------------------------------------------------
 
-Shared components ------------------------------------------------------------------------
-
-
-Filter page-----------------------------------------------------------------------------------------
 
 write function that retrieves the dominant color of an image
 
@@ -22,13 +18,29 @@ take care of the setSCrollPositionTOYearX. Right now it's moving without taking 
 current position of the moved elements. Can cause offset in a really big screen. Change it so that it
 really moves the elements to the actual postiion OR move it to the translateX position where the user begins grabbing. <<< If there is a throttling, this won't be necessary; user won't be able to scroll very far anyway.
 
-Remove link to music page and make timeline the landing page.
-
-Music portfolio will now be a completely different website.
-
 Work on admin page's ui and all the internal data.
 
 Make a see all button to let the user see all projects in filter page.
 Add see all component, reuse it in the admin page.
 
 Use the new production sql, with this new one added, you'll be able to test your pagination as well.
+
+Keep the container size in the filter page when search and nothing shows up
+
+Algorithm for show all:
+    1. Create a get rest function in backend, this function will fetch the rest of the project based on the pagination position. 
+       This will ensure that we request for only what we need and that when show all is disabled, we still have the pagination position.
+
+    2. Update the graphql schema in frontend
+    3. etc etc
+
+get a new screenshot of tripleAGlove with proper ratio
+
+Make a reusable function for expanding the show all project
+
+For bio page, create a simple starfield where everything just floats up, also calculate when to generate the next starfield.
+When mouseenter, move the camera a bit
+
+separate tech I know into frontend, backend, and hosting services, way easier to read and see what's what.
+
+Apply the new query to the home page, type already generated.

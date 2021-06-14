@@ -19,7 +19,8 @@ export const ProjectDetails: React.FC<{
         marginBottom={mb ? mb : ""}
         overflowY="auto"
         textAlign="justify"
-        maxHeight="200px"
+        height="170px"
+        maxHeight="170px"
         style={{ textIndent: "1.4em" }}
         css={{
           "::-webkit-scrollbar": {
