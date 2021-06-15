@@ -1,5 +1,0 @@
-query GetOnlyLanguages {
-  getOnlyLanguages {
-    title
-  }
-}

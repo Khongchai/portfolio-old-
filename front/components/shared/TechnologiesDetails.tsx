@@ -1,6 +1,5 @@
-import { Box, Flex, Img, Stack, Text } from "@chakra-ui/react";
+import { Stack, Text } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { TechnologyEntity } from "../../generated/graphql";
 import { TechDetails } from "../../types/TechDetails";
 import useHoverComponent from "../../utils/hooks/useHoverComponent";
 import { InfoCard, TechLogo } from "./TechnologiesLogo";
@@ -65,7 +64,7 @@ export const ExpandedContent: React.FC<{
   expansionStat,
   hideTopDescription,
 }) => {
-  const [hoverComponentName, setHoverComponentName] =
+  const [hoveredComponentName, setHoverComponentName] =
     useState<string | undefined>();
   const [forceUpdate, setForceUpdate] = useState(false);
   useEffect(() => {
@@ -73,11 +72,13 @@ export const ExpandedContent: React.FC<{
   }, [backEnd, hostingServices, languages, frontEnd]);
 
   //setHoverComponent
-  useHoverComponent(hoverComponentName);
+  useHoverComponent(hoveredComponentName);
 
   return (
     <>
-      {hoverComponentName ? <InfoCard>{hoverComponentName}</InfoCard> : null}
+      {hoveredComponentName ? (
+        <InfoCard hoveredComponentName={hoveredComponentName} />
+      ) : null}
       {hideTopDescription ? (
         ""
       ) : (

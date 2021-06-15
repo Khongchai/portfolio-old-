@@ -37,14 +37,6 @@ let TechnologyResolver = class TechnologyResolver {
             return technologies;
         });
     }
-    getOnlyLanguages() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const languages = yield TechnologyEntity_1.TechnologyEntity.find({
-                relations: ["languageOf"],
-            });
-            return languages;
-        });
-    }
     getTechnologiesAssignedToRole() {
         return __awaiter(this, void 0, void 0, function* () {
             const entityManager = typeorm_1.getManager();
@@ -101,12 +93,6 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], TechnologyResolver.prototype, "technologies", null);
-__decorate([
-    type_graphql_1.Query(() => [TechnologyEntity_1.TechnologyEntity]),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-], TechnologyResolver.prototype, "getOnlyLanguages", null);
 __decorate([
     type_graphql_1.Query(() => TechnologyResolver_1.TechAsSeparateFields),
     __metadata("design:type", Function),

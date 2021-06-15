@@ -51,7 +51,7 @@ export const TechLogo: React.FC<{
         w="100%"
         align="center"
       >
-        {tech?.map((tech) => {
+        {tech?.map((tech, i) => {
           const nameOriginal = tech.title;
           const name = nameOriginal.toLowerCase();
           const nameNoSpace = name.replace(/[\s\.]+/g, "");
@@ -86,7 +86,8 @@ export const TechLogo: React.FC<{
                 key={nameOriginal}
                 h={["27px", null, "29px", "32px", "40px"]}
                 src={src}
-                id={nameOriginal}
+                // Index is to prevent naming conflicts for the hovered names (sometimes the name would show up at another component instead of the one hovered because they have the same id)
+                id={`${nameOriginal}#${i}`}
                 transition=".2s"
               />
             </Box>
@@ -95,7 +96,7 @@ export const TechLogo: React.FC<{
           return img;
         })}
         {textsAsLogos.map((text) => (
-          <Text padding="4px" margin="4px">
+          <Text key={text} padding="4px" margin="4px">
             {text}
           </Text>
         ))}
@@ -104,7 +105,9 @@ export const TechLogo: React.FC<{
   );
 };
 
-export const InfoCard: React.FC = ({ children }) => {
+export const InfoCard: React.FC<{ hoveredComponentName: string }> = ({
+  hoveredComponentName,
+}) => {
   return (
     <Box
       zIndex="100"
@@ -120,7 +123,8 @@ export const InfoCard: React.FC = ({ children }) => {
       color="mainOrange"
       fontWeight="bold"
     >
-      {children}
+      {/* Remove the unique mark # from the hoveredComponent */}
+      {hoveredComponentName.split("#")[0]}
     </Box>
   );
 };

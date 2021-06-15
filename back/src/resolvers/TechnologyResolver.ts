@@ -15,23 +15,15 @@ import { getTechnologiesBasedOnRoles } from "../utils/getTechnologiesBasedOnRole
 
 @Resolver()
 export class TechnologyResolver {
+  /**
+   * This gets all technologies without categorization
+   */
   @Query(() => [TechnologyEntity])
   async technologies(): Promise<TechnologyEntity[]> {
     const technologies = await TechnologyEntity.find({
       relations: ["frontEndIn", "backEndIn", "languageOf", "hosting"],
     });
     return technologies;
-  }
-
-  /**
-   * This gets all technologies without categorization
-   */
-  @Query(() => [TechnologyEntity])
-  async getOnlyLanguages(): Promise<TechnologyEntity[]> {
-    const languages = await TechnologyEntity.find({
-      relations: ["languageOf"],
-    });
-    return languages;
   }
 
   /**

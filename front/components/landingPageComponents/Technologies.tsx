@@ -1,24 +1,13 @@
-import {
-  Box,
-  Flex,
-  Grid,
-  Heading,
-  Stack,
-  Img,
-  Text,
-  Link,
-} from "@chakra-ui/react";
+import { Box, Flex, Grid, Heading, Img, Stack, Text } from "@chakra-ui/react";
+import Image from "next/image";
 import React, { useState } from "react";
+import { ButtonLink } from "../../elements/ButtonLink";
 import {
   TechnologyEntity,
-  useGetOnlyLanguagesQuery,
   useGetTechnologiesAssignedToRoleQuery,
-  useTechnologiesQuery,
 } from "../../generated/graphql";
 import useHoverComponent from "../../utils/hooks/useHoverComponent";
 import { InfoCard, TechLogo } from "../shared/TechnologiesLogo";
-import Image from "next/image";
-import { ButtonLink } from "../../elements/ButtonLink";
 
 interface TechnologiesProps {}
 
@@ -27,9 +16,9 @@ export const Technologies: React.FC<TechnologiesProps> = ({}) => {
     useGetTechnologiesAssignedToRoleQuery();
   const languages = technologiesData?.getTechnologiesAssignedToRole.lang;
 
-  const [hoverComponentName, setHoverComponentName] =
+  const [hoveredComponentName, setHoverComponentName] =
     useState<string | undefined>(undefined);
-  useHoverComponent(hoverComponentName);
+  useHoverComponent(hoveredComponentName);
 
   return (
     <Stack
@@ -42,7 +31,9 @@ export const Technologies: React.FC<TechnologiesProps> = ({}) => {
     >
       <Box css={{ "> *": { marginBottom: "3rem" } }} id="tech">
         {/* Cannot use the lobotomized owl selector because the InfoCard is added dynamically as first child */}
-        {hoverComponentName ? <InfoCard>{hoverComponentName}</InfoCard> : null}
+        {hoveredComponentName ? (
+          <InfoCard hoveredComponentName={hoveredComponentName} />
+        ) : null}
         <TechSection
           title="Frontend Tech I know"
           technologies={
