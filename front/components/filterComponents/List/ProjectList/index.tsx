@@ -60,7 +60,9 @@ export const ProjectList: React.FC<IndexProps> = ({
     >
       <Flex>
         <Heading fontSize="1.5rem" mb={2}>
-          {sectionTitle}
+          {showAllProjectsState?.showAllProjects
+            ? "All Projects"
+            : sectionTitle}
         </Heading>
         {enableSeeAllButton ? (
           <Text

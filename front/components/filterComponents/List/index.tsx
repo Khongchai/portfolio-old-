@@ -36,7 +36,6 @@ const List: React.FC<ListProps> = ({
   const router = useRouter();
   const currentURL = router.pathname;
   const { setDetails, details } = detailsState;
-  const { showAllProjects } = showAllProjectsState;
 
   readFromParamOrStorage(setDetails, selection);
   updateQueryParamOnChange(details?.title, currentURL);

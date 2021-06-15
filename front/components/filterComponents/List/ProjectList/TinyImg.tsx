@@ -22,7 +22,7 @@ export const TinyImg: React.FC<TinyImgProps> = ({ tinyImgLink, projTitle }) => {
         width={sideLength}
         height={sideLength}
         margin={2}
-        bgColor="mainGrey"
+        bgColor="black"
         backgroundImage={tinyImgLink ? `url(${tinyImgLink})` : ""}
         backgroundPosition="center"
         backgroundRepeat="none"

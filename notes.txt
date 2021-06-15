@@ -44,3 +44,8 @@ When mouseenter, move the camera a bit
 separate tech I know into frontend, backend, and hosting services, way easier to read and see what's what.
 
 Apply the new query to the home page, type already generated.
+
+Before doing this, add the banner first => banner is good cus you get to practice shader
+
+//For getting brighter or changing color on raycasted, change from particles to something else and don't use too many.
+//this will also allow you to do bloom pass selective for the glow thing

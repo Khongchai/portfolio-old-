@@ -47,6 +47,7 @@ export const Navbar: React.FC<{}> = () => {
       top="0"
       p={["2.3em 3em 1.3em 3em", null, "3.3em 3em 3.3em 3em"]}
       width={["100%"]}
+      zIndex="100"
     >
       {pages.pagesWithNoDropdowns.map((page) => (
         <LinkButton key={page.pageName} page={page} />

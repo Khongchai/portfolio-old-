@@ -11,6 +11,8 @@ export const Biography: React.FC<biographyProps> = ({}) => {
       id="biography"
       gridColumn="main-content-start / main-content-end "
       p="2rem"
+      z-index="1"
+      position="relative"
     >
       <Heading color="mainOrange" as="h2">
         Hi, I'm Khong

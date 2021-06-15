@@ -20,6 +20,7 @@ const InfoDisplay: React.FC<{
       flex="1"
       id="info-display-container"
       mb="3em"
+      zIndex="2"
     >
       {!details ? (
         <Heading gridColumn="left-padding-end / right-padding-end">
