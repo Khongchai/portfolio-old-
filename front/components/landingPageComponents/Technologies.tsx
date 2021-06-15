@@ -12,6 +12,7 @@ import React, { useState } from "react";
 import {
   TechnologyEntity,
   useGetOnlyLanguagesQuery,
+  useGetTechnologiesAssignedToRoleQuery,
   useTechnologiesQuery,
 } from "../../generated/graphql";
 import useHoverComponent from "../../utils/hooks/useHoverComponent";
@@ -22,10 +23,9 @@ import { ButtonLink } from "../../elements/ButtonLink";
 interface TechnologiesProps {}
 
 export const Technologies: React.FC<TechnologiesProps> = ({}) => {
-  const [{ fetching: allTechFetching, data: allTechData }] =
-    useTechnologiesQuery();
-  const [{ fetching: languagesFetching, data: languagesData }] =
-    useGetOnlyLanguagesQuery();
+  const [{ fetching: fetchingTechnologies, data: technologiesData }] =
+    useGetTechnologiesAssignedToRoleQuery();
+  const languages = technologiesData?.getTechnologiesAssignedToRole.lang;
 
   const [hoverComponentName, setHoverComponentName] =
     useState<string | undefined>(undefined);
@@ -40,38 +40,56 @@ export const Technologies: React.FC<TechnologiesProps> = ({}) => {
       spacing="3rem"
       textAlign="center"
     >
-      <Box id="tech">
+      <Box css={{ "> *": { marginBottom: "3rem" } }} id="tech">
+        {/* Cannot use the lobotomized owl selector because the InfoCard is added dynamically as first child */}
         {hoverComponentName ? <InfoCard>{hoverComponentName}</InfoCard> : null}
         <TechSection
-          title="Tech I Know"
+          title="Frontend Tech I know"
           technologies={
-            allTechData?.technologies as TechnologyEntity[] | undefined
+            technologiesData?.getTechnologiesAssignedToRole
+              .front as TechnologyEntity[]
           }
-          fetching={allTechFetching}
+          fetching={fetchingTechnologies}
           setHoverComponentName={setHoverComponentName}
         />
-      </Box>
-      <Box id="languages">
+
+        <TechSection
+          title="Backend Tech I Know"
+          technologies={
+            technologiesData?.getTechnologiesAssignedToRole
+              .back as TechnologyEntity[]
+          }
+          fetching={fetchingTechnologies}
+          setHoverComponentName={setHoverComponentName}
+        />
+        <TechSection
+          title="Hosting Services I use"
+          technologies={
+            technologiesData?.getTechnologiesAssignedToRole
+              .hosting as TechnologyEntity[]
+          }
+          fetching={fetchingTechnologies}
+          setHoverComponentName={setHoverComponentName}
+        />
         <TechSection
           title="Lingo I Know"
-          technologies={
-            languagesData?.getOnlyLanguages as TechnologyEntity[] | undefined
-          }
-          fetching={languagesFetching}
+          technologies={languages as TechnologyEntity[] | undefined}
+          fetching={fetchingTechnologies}
           setHoverComponentName={setHoverComponentName}
         />
+        <Box textAlign="left" margin="0.5rem !important">
+          <span>
+            <small>If it matters: </small>
+          </span>
+          <span>
+            <Flag path="/spokenLanguages/th.png" fallbackText="Thai Flag" />
+            <Flag path="/spokenLanguages/en.png" fallbackText="English Flag" />
+            <Flag path="/spokenLanguages/de.png" fallbackText="German Flag" />
+            <Flag path="/spokenLanguages/ru.png" fallbackText="Russian Flag" />
+          </span>
+        </Box>
       </Box>
-      <Box textAlign="left" margin="1rem !important">
-        <span>
-          <small>If it matters: </small>
-        </span>
-        <span>
-          <Flag path="/spokenLanguages/th.png" fallbackText="Thai Flag" />
-          <Flag path="/spokenLanguages/en.png" fallbackText="English Flag" />
-          <Flag path="/spokenLanguages/de.png" fallbackText="German Flag" />
-          <Flag path="/spokenLanguages/ru.png" fallbackText="Russian Flag" />
-        </span>
-      </Box>
+
       <Box id="other">
         <Heading as="h2" mb="2rem">
           Other Applications
@@ -92,11 +110,11 @@ export const Technologies: React.FC<TechnologiesProps> = ({}) => {
         </Flex>
       </Box>
       <Text
-        mt="3rem"
-        p="5rem"
+        p={["0.45rem", "2rem", "3rem", "4rem", "5rem"]}
+        fontSize={["14px", null, "16px"]}
         bgColor="orangeWhiteForBackground"
         borderRadius="1rem"
-        lineHeight="3.5rem"
+        lineHeight={["2.4rem", null, "3.5rem"]}
       >
         You can view my past works in two formats, one focuses on the
         <ButtonLink text="Chronological Order" link="/timeline" />, while the
@@ -116,8 +134,8 @@ const TechSection: React.FC<{
   >;
 }> = ({ title, technologies, fetching, setHoverComponentName }) => {
   return (
-    <>
-      <Heading as="h2" mb="2rem">
+    <Grid id="tech-section">
+      <Heading as="h2" mb="1.75rem">
         {title}
       </Heading>
       <Grid
@@ -132,10 +150,11 @@ const TechSection: React.FC<{
             setHoverComponentName={setHoverComponentName}
             tech={technologies as TechnologyEntity[]}
             noBorder={true}
+            noSpace={true}
           />
         ) : null}
       </Grid>
-    </>
+    </Grid>
   );
 };
 

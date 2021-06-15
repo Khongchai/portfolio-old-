@@ -11,7 +11,15 @@ export const TechLogo: React.FC<{
   //This forces the component to rerun setTextsAsLogos
   forceUpdate?: boolean;
   noBorder?: boolean;
-}> = ({ tech, desc, setHoverComponentName, forceUpdate, noBorder }) => {
+  noSpace?: boolean;
+}> = ({
+  tech,
+  desc,
+  setHoverComponentName,
+  forceUpdate,
+  noBorder,
+  noSpace,
+}) => {
   //If no technologies provided, return nothing for this field
   if (!tech || tech.length === 0) {
     return <></>;
@@ -30,8 +38,8 @@ export const TechLogo: React.FC<{
   return (
     <Flex
       flex="auto"
-      mb="1rem"
-      pb="1rem"
+      pb={noSpace ? "" : "1rem"}
+      mb={noSpace ? "" : "1rem"}
       align="center"
       borderBottom={noBorder ? "" : "1px groove #cfcae2"}
     >

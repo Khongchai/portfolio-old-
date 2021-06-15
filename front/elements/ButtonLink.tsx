@@ -20,8 +20,8 @@ export const ButtonLink: React.FC<{
         href={link}
         filter={link ? "" : "grayscale(100%)"}
         pointerEvents={link ? "auto" : "none"}
-        marginLeft="8px"
-        marginRight="8px"
+        margin={["0 4px 0 4px", null, "0 8px 0 8px"]}
+        fontSize={["14px", null, "16px"]}
       >
         {link ? text : "Website not deployed"}
       </Button>
