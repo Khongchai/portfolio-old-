@@ -4,7 +4,6 @@ query Projects(
   $sortBy: String
   $order: String
   $search: String
-  $field: String
   $getAll: Boolean
 ) {
   projects(
@@ -14,7 +13,6 @@ query Projects(
       sortBy: $sortBy
       order: $order
       search: $search
-      field: $field
       getAll: $getAll
     }
   ) {

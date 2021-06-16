@@ -22,12 +22,10 @@ export const Filter: React.FC<{ selection: string | undefined }> = ({
     sortBy: "Title" | "Date" | undefined;
     order: "ASC" | "DESC" | undefined;
     //"Projects" = search by projects, "Technologies" = search by Technologies used
-    field: "Title" | "Technology" | undefined;
   }>({
     search: undefined,
     sortBy: "Date",
     order: "ASC",
-    field: "Title",
   });
 
   const [queryVariables, setQueryVariables] = useState({

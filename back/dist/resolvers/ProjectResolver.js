@@ -56,10 +56,6 @@ __decorate([
 ], PaginatedProjectsInput.prototype, "sortBy", void 0);
 __decorate([
     type_graphql_1.Field({ nullable: true }),
-    __metadata("design:type", String)
-], PaginatedProjectsInput.prototype, "field", void 0);
-__decorate([
-    type_graphql_1.Field({ nullable: true }),
     __metadata("design:type", Boolean)
 ], PaginatedProjectsInput.prototype, "getAll", void 0);
 PaginatedProjectsInput = __decorate([
@@ -68,7 +64,7 @@ PaginatedProjectsInput = __decorate([
 let ProjectsResolver = class ProjectsResolver {
     projects(input) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { limit, skip, order, search, sortBy, field, getAll } = input;
+            const { limit, skip, order, search, sortBy, getAll } = input;
             if (getAll) {
                 const allProjects = yield ProjectEntity_1.ProjectEntity.find({
                     relations: [
@@ -94,16 +90,9 @@ let ProjectsResolver = class ProjectsResolver {
                 .leftJoinAndSelect("project.hostingServices", "hostingServices")
                 .take(realLimitPlusOne)
                 .skip(skip);
-            if (!field || field !== "Technology") {
-                returnedEntity = returnedEntity.where("LOWER(project.title) like :searchLowerCase", {
-                    searchLowerCase,
-                });
-            }
-            else {
-                returnedEntity = returnedEntity.where("LOWER(backEndTechnologies.title) like :searchLowerCase OR LOWER(frontEndTechnologies.title) like :searchLowerCase OR LOWER(languages.title) like :searchLowerCase OR LOWER(hostingServices.title) like :searchLowerCase", {
-                    searchLowerCase,
-                });
-            }
+            returnedEntity = returnedEntity.where("LOWER(backEndTechnologies.title) like :searchLowerCase OR LOWER(frontEndTechnologies.title) like :searchLowerCase OR LOWER(languages.title) like :searchLowerCase OR LOWER(hostingServices.title) like :searchLowerCase OR LOWER(project.title) like :searchLowerCase", {
+                searchLowerCase,
+            });
             if (sortBy === "Date") {
                 returnedEntity.orderBy("project.startDate", order);
             }

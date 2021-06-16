@@ -41,9 +41,6 @@ class PaginatedProjectsInput {
   sortBy?: "Title" | "Date";
 
   @Field({ nullable: true })
-  field?: "Title" | "Technology";
-
-  @Field({ nullable: true })
   getAll?: boolean;
 }
 
@@ -53,7 +50,7 @@ export class ProjectsResolver {
   async projects(
     @Arg("input") input: PaginatedProjectsInput
   ): Promise<PaginatedProjects> {
-    const { limit, skip, order, search, sortBy, field, getAll } = input;
+    const { limit, skip, order, search, sortBy, getAll } = input;
 
     if (getAll) {
       const allProjects = await ProjectEntity.find({
@@ -83,21 +80,14 @@ export class ProjectsResolver {
       .leftJoinAndSelect("project.hostingServices", "hostingServices")
       .take(realLimitPlusOne)
       .skip(skip);
-    if (!field || field !== "Technology") {
-      returnedEntity = returnedEntity.where(
-        "LOWER(project.title) like :searchLowerCase",
-        {
-          searchLowerCase,
-        }
-      );
-    } else {
-      returnedEntity = returnedEntity.where(
-        "LOWER(backEndTechnologies.title) like :searchLowerCase OR LOWER(frontEndTechnologies.title) like :searchLowerCase OR LOWER(languages.title) like :searchLowerCase OR LOWER(hostingServices.title) like :searchLowerCase",
-        {
-          searchLowerCase,
-        }
-      );
-    }
+
+    returnedEntity = returnedEntity.where(
+      "LOWER(backEndTechnologies.title) like :searchLowerCase OR LOWER(frontEndTechnologies.title) like :searchLowerCase OR LOWER(languages.title) like :searchLowerCase OR LOWER(hostingServices.title) like :searchLowerCase OR LOWER(project.title) like :searchLowerCase",
+      {
+        searchLowerCase,
+      }
+    );
+
     if (sortBy === "Date") {
       returnedEntity.orderBy("project.startDate", order);
     } else {
