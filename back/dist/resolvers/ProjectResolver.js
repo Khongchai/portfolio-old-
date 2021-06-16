@@ -64,20 +64,18 @@ PaginatedProjectsInput = __decorate([
 let ProjectsResolver = class ProjectsResolver {
     projects(input) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { limit, skip, order, search, sortBy, getAll } = input;
+            let { limit, skip, order, search, sortBy, getAll } = input;
+            let realLimit = 0;
+            let realLimitPlusOne = 0;
             if (getAll) {
-                const allProjects = yield ProjectEntity_1.ProjectEntity.find({
-                    relations: [
-                        "frontEndTechnologies",
-                        "backEndTechnologies",
-                        "languages",
-                        "hostingServices",
-                    ],
-                });
-                return { projects: allProjects, isFirstQuery: true, isLastQuery: true };
+                skip = 0;
+                realLimit = 99999;
+                realLimitPlusOne = 99999;
             }
-            const realLimit = Math.min(5, limit);
-            const realLimitPlusOne = realLimit + 1;
+            else {
+                realLimit = Math.min(5, limit);
+                realLimitPlusOne = realLimit + 1;
+            }
             const searchLowerCase = search ? `%${search.toLowerCase()}%` : "%";
             let returnedEntity;
             returnedEntity = typeorm_1.getConnection()
@@ -90,7 +88,12 @@ let ProjectsResolver = class ProjectsResolver {
                 .leftJoinAndSelect("project.hostingServices", "hostingServices")
                 .take(realLimitPlusOne)
                 .skip(skip);
-            returnedEntity = returnedEntity.where("LOWER(backEndTechnologies.title) like :searchLowerCase OR LOWER(frontEndTechnologies.title) like :searchLowerCase OR LOWER(languages.title) like :searchLowerCase OR LOWER(hostingServices.title) like :searchLowerCase OR LOWER(project.title) like :searchLowerCase", {
+            returnedEntity = returnedEntity.where(`LOWER(backEndTechnologies.title) like :searchLowerCase OR 
+      LOWER(frontEndTechnologies.title) like :searchLowerCase OR 
+      LOWER(languages.title) like :searchLowerCase OR 
+      LOWER(hostingServices.title) like :searchLowerCase OR 
+      LOWER(project.title) like :searchLowerCase OR
+      LOWER(project.shortDescription) like :searchLowerCase`, {
                 searchLowerCase,
             });
             if (sortBy === "Date") {

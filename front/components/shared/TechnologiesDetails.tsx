@@ -82,7 +82,9 @@ export const ExpandedContent: React.FC<{
       {hideTopDescription ? (
         ""
       ) : (
-        <Text pb={3}>Technologies used in this project.</Text>
+        <Text pb={3} fontSize="clamp(14px, 1vw, 1rem)">
+          Technologies used in this project
+        </Text>
       )}
       {expansionStat === "expanded" ? (
         <>

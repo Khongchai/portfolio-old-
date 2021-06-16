@@ -50,23 +50,21 @@ export class ProjectsResolver {
   async projects(
     @Arg("input") input: PaginatedProjectsInput
   ): Promise<PaginatedProjects> {
-    const { limit, skip, order, search, sortBy, getAll } = input;
+    let { limit, skip, order, search, sortBy, getAll } = input;
+    let realLimit = 0;
+    let realLimitPlusOne = 0;
 
     if (getAll) {
-      const allProjects = await ProjectEntity.find({
-        relations: [
-          "frontEndTechnologies",
-          "backEndTechnologies",
-          "languages",
-          "hostingServices",
-        ],
-      });
-      return { projects: allProjects, isFirstQuery: true, isLastQuery: true };
+      //Skip = 0 sets isFirst to true
+      //realLimit = 99999 fetches all proj
+      //RealLimitPlusOne = 99999 gets all sets isLast to true
+      skip = 0;
+      realLimit = 99999;
+      realLimitPlusOne = 99999;
+    } else {
+      realLimit = Math.min(5, limit);
+      realLimitPlusOne = realLimit + 1;
     }
-
-    const realLimit = Math.min(5, limit);
-    const realLimitPlusOne = realLimit + 1;
-
     const searchLowerCase = search ? `%${search.toLowerCase()}%` : "%";
 
     let returnedEntity: any;
@@ -82,7 +80,12 @@ export class ProjectsResolver {
       .skip(skip);
 
     returnedEntity = returnedEntity.where(
-      "LOWER(backEndTechnologies.title) like :searchLowerCase OR LOWER(frontEndTechnologies.title) like :searchLowerCase OR LOWER(languages.title) like :searchLowerCase OR LOWER(hostingServices.title) like :searchLowerCase OR LOWER(project.title) like :searchLowerCase",
+      `LOWER(backEndTechnologies.title) like :searchLowerCase OR 
+      LOWER(frontEndTechnologies.title) like :searchLowerCase OR 
+      LOWER(languages.title) like :searchLowerCase OR 
+      LOWER(hostingServices.title) like :searchLowerCase OR 
+      LOWER(project.title) like :searchLowerCase OR
+      LOWER(project.shortDescription) like :searchLowerCase`,
       {
         searchLowerCase,
       }
