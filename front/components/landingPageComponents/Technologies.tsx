@@ -1,4 +1,4 @@
-import { Box, Flex, Grid, Heading, Img, Stack, Text } from "@chakra-ui/react";
+import { Box, Flex, Heading, Img, Stack, Text } from "@chakra-ui/react";
 import Image from "next/image";
 import React, { useState } from "react";
 import { ButtonLink } from "../../elements/ButtonLink";
@@ -7,7 +7,8 @@ import {
   useGetTechnologiesAssignedToRoleQuery,
 } from "../../generated/graphql";
 import useHoverComponent from "../../utils/hooks/useHoverComponent";
-import { InfoCard, TechLogo } from "../shared/TechnologiesLogo";
+import { InfoCard } from "../shared/TechnologiesLogo";
+import { TechSection } from "./TechSection";
 
 interface TechnologiesProps {}
 
@@ -70,7 +71,7 @@ export const Technologies: React.FC<TechnologiesProps> = ({}) => {
         />
         <Box textAlign="left" margin="0.5rem !important">
           <span>
-            <small>If it matters: </small>
+            <small>If it matters, I also speak: </small>
           </span>
           <span>
             <Flag path="/spokenLanguages/th.png" fallbackText="Thai Flag" />
@@ -82,7 +83,7 @@ export const Technologies: React.FC<TechnologiesProps> = ({}) => {
       </Box>
 
       <Box id="other">
-        <Heading as="h2" mb="2rem">
+        <Heading as="h2" mb="2em">
           Other Applications
         </Heading>
         <Flex justifyContent="space-evenly" width="100%">
@@ -103,7 +104,7 @@ export const Technologies: React.FC<TechnologiesProps> = ({}) => {
       <Text
         p={["0.45rem", "2rem", "3rem", "4rem", "5rem"]}
         fontSize={["14px", null, "16px"]}
-        bgColor="orangeWhiteForBackground"
+        bgColor="backgroundOnBlack"
         borderRadius="1rem"
         lineHeight={["2.4rem", null, "3.5rem"]}
       >
@@ -113,39 +114,6 @@ export const Technologies: React.FC<TechnologiesProps> = ({}) => {
         <ButtonLink text="Accessibility" link="/filter" />.
       </Text>
     </Stack>
-  );
-};
-
-const TechSection: React.FC<{
-  title: string;
-  technologies?: TechnologyEntity[];
-  fetching: boolean;
-  setHoverComponentName: React.Dispatch<
-    React.SetStateAction<string | undefined>
-  >;
-}> = ({ title, technologies, fetching, setHoverComponentName }) => {
-  return (
-    <Grid id="tech-section">
-      <Heading as="h2" mb="1.75rem">
-        {title}
-      </Heading>
-      <Grid
-        id="tech-container"
-        padding="1rem"
-        bgColor="orangeWhiteForBackground"
-        borderRadius="1rem"
-        placeItems="center"
-      >
-        {!fetching && technologies ? (
-          <TechLogo
-            setHoverComponentName={setHoverComponentName}
-            tech={technologies as TechnologyEntity[]}
-            noBorder={true}
-            noSpace={true}
-          />
-        ) : null}
-      </Grid>
-    </Grid>
   );
 };
 

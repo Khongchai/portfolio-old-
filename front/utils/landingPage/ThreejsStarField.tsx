@@ -1,35 +1,26 @@
 import * as THREE from "three";
 
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
+import { ThreejsPrototype } from "./ThreejsPrototype";
 
 /**
- * Why class? You can pass the state between React and Threejs on the go with class, but not with functions.
- * Also, classes can do everything functions can, while functions can't do everything classes can.
+ * Starfield + delayed camera-cursor track + auto pan and tilt when idle.
  */
-export class ThreeJSInstance {
-  protected canvas: HTMLCanvasElement;
+export class ThreejsStarField extends ThreejsPrototype {
+  protected particlesMesh: THREE.Material;
+  protected particlesGeometry: THREE.BufferGeometry;
+  protected particles: THREE.Points;
+  protected composer: EffectComposer;
+  protected disableCursorTrack?: boolean;
   protected mouse: {
     current: { x: number; y: number };
     prev: { x: number; y: number };
     difference: { x: number; y: number };
     autorotate: boolean;
   };
-  protected particlesMesh: THREE.PointsMaterial;
-  protected scene: THREE.Scene;
-  protected camera: THREE.PerspectiveCamera;
-  protected sizes: { width: number; height: number };
-  protected renderer: THREE.WebGLRenderer;
-  protected particlesGeometry: THREE.BufferGeometry;
-  protected particles: THREE.Points;
-  protected composer: EffectComposer;
-  protected disableCursorTrack?: boolean;
 
   constructor(canvas: HTMLCanvasElement, disableCursorTrack?: boolean) {
-    this.scene = new THREE.Scene();
-
-    this.sizes = { height: window.innerHeight, width: window.innerWidth };
-
-    this.canvas = canvas;
+    super(canvas);
 
     this.disableCursorTrack = disableCursorTrack ? true : false;
 
@@ -44,22 +35,6 @@ export class ThreeJSInstance {
       size: 0.01,
       sizeAttenuation: true,
     });
-
-    this.camera = new THREE.PerspectiveCamera(
-      75,
-      this.sizes.width / this.sizes.height,
-      0.1,
-      100
-    );
-    this.camera.position.x = 0;
-    this.camera.position.y = 0;
-    this.camera.position.z = 2;
-
-    this.renderer = new THREE.WebGLRenderer({
-      canvas: this.canvas,
-    });
-    this.renderer.setSize(this.sizes.width, this.sizes.height);
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
     this.particlesGeometry = new THREE.BufferGeometry();
     const count = 2000;
@@ -87,44 +62,31 @@ export class ThreeJSInstance {
 
     //Add stuff to scene
     this.scene.add(this.particles);
-    this.scene.add(this.camera);
   }
 
   //Move all this.scene.add to above
-  main() {
-    window.addEventListener("resize", () => {
-      // Update sizes
-      this.sizes.width = window.innerWidth;
-      this.sizes.height = window.innerHeight;
-
-      // Update camera
-      this.camera.aspect = this.sizes.width / this.sizes.height;
-      this.camera.updateProjectionMatrix();
-
-      // Update renderer
-      this.renderer.setSize(this.sizes.width, this.sizes.height);
-      this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    });
-
+  extraEventListenersBeforeAnimLoop() {
     var timeout: any;
-    this.canvas.addEventListener("mousemove", (e) => {
-      if (!this.disableCursorTrack) {
-        this.mouse.autorotate = false;
+    if (this.canvas.parentElement) {
+      this.canvas.parentElement.addEventListener("mousemove", (e) => {
+        if (!this.disableCursorTrack) {
+          this.mouse.autorotate = false;
 
-        clearTimeout(timeout);
-        timeout = setTimeout(() => {
-          this.mouse.autorotate = true;
-        }, 2500);
+          clearTimeout(timeout);
+          timeout = setTimeout(() => {
+            this.mouse.autorotate = true;
+          }, 2500);
 
-        this.mouse.current.x = (e.clientX / window.innerWidth) * 2 - 1;
-        this.mouse.current.y = -(e.clientY / window.innerHeight) * 2 + 1;
-      }
-    });
+          this.mouse.current.x = (e.clientX / window.innerWidth) * 2 - 1;
+          this.mouse.current.y = -(e.clientY / window.innerHeight) * 2 + 1;
+        }
+      });
+    }
+  }
 
-    const clock = new THREE.Clock();
-
+  initAnimationLoop() {
     const tick = () => {
-      const elapsedTime = clock.getElapsedTime();
+      const elapsedTime = this.clock.getElapsedTime();
 
       this.composer.render();
 
@@ -137,7 +99,6 @@ export class ThreeJSInstance {
       // Call tick again on the next frame
       window.requestAnimationFrame(tick);
     };
-
     tick();
   }
 

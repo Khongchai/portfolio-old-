@@ -11,7 +11,7 @@ import {
 } from "../generated/graphql";
 import { AddExtraElemContext } from "../globalContexts/extraNavbarElem";
 import { setAsSelected } from "../utils/animations/filter/setAsSelected";
-import { ThreeJSInstance } from "../utils/landingPage/initThreeJS";
+import { ThreejsStarField } from "../utils/landingPage/ThreejsStarField";
 import { getNavbarHeight } from "../utils/navbar/getNavbarHeight";
 
 export const Filter: React.FC<{ selection: string | undefined }> = ({
@@ -99,8 +99,8 @@ export const Filter: React.FC<{ selection: string | undefined }> = ({
     setNavbarHeight(getNavbarHeight());
     const canvas = document.querySelector("canvas.webgl") as HTMLCanvasElement;
     if (canvas && typeof window !== "undefined" && window) {
-      const threejs = new ThreeJSInstance(canvas, true);
-      threejs.main();
+      const threejs = new ThreejsStarField(canvas, true);
+      threejs.action();
     }
   }, []);
 

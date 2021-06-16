@@ -8,7 +8,7 @@ const colors = {
   mainBlack: "#000000",
   black2: "#151515",
   black3: "#2C2B2B",
-  orangeWhiteForBackground: "#c2bdb1",
+  backgroundOnBlack: "#1b1b1b",
 };
 
 const fonts = {

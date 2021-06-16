@@ -21,6 +21,7 @@ const InfoDisplay: React.FC<{
       id="info-display-container"
       mb="3em"
       zIndex="2"
+      mt={["4rem", null, null, "0"]}
     >
       {!details ? (
         <Heading gridColumn="left-padding-end / right-padding-end">

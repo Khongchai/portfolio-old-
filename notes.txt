@@ -38,14 +38,19 @@ get a new screenshot of tripleAGlove with proper ratio
 
 Make a reusable function for expanding the show all project
 
-For bio page, create a simple starfield where everything just floats up, also calculate when to generate the next starfield.
-When mouseenter, move the camera a bit
-
-separate tech I know into frontend, backend, and hosting services, way easier to read and see what's what.
-
-Apply the new query to the home page, type already generated.
 
 Before doing this, add the banner first => banner is good cus you get to practice shader
 
+
 //For getting brighter or changing color on raycasted, change from particles to something else and don't use too many.
 //this will also allow you to do bloom pass selective for the glow thing
+
+//after this, ready to work on shader!
+remove eventlistener when you exit the page: keep track of all eventlisteners and remove in useEffect
+
+//To solve the image too small problem, write a library in c that detects whether an image is too dark 
+
+
+
+
+

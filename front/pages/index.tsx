@@ -2,7 +2,8 @@ import { Box, Stack } from "@chakra-ui/react";
 import React, { useEffect, useRef, useState } from "react";
 import { Biography } from "../components/landingPageComponents/biography";
 import { Technologies } from "../components/landingPageComponents/Technologies";
-import { ThreeJSInstance } from "../utils/landingPage/initThreeJS";
+import { ThreejsBanner } from "../utils/landingPage/ThreejsBanner";
+import { ThreejsStarField } from "../utils/landingPage/ThreejsStarField";
 import { getNavbarHeight } from "../utils/navbar/getNavbarHeight";
 
 export default function HomePage() {
@@ -10,10 +11,25 @@ export default function HomePage() {
   const threejsCanvas = useRef(null);
   useEffect(() => {
     setNavbarheight(getNavbarHeight());
-    const canvas = document.querySelector("canvas.webgl") as HTMLCanvasElement;
-    if (canvas && typeof window !== "undefined" && window) {
-      const threejs = new ThreeJSInstance(canvas);
-      threejs.main();
+    const starfieldCanvas = document.querySelector("canvas.webgl-starfield") as
+      | HTMLCanvasElement
+      | undefined;
+    const bannerCanvas = document.querySelector("canvas.webgl-banner") as
+      | HTMLCanvasElement
+      | undefined;
+    if (
+      starfieldCanvas &&
+      bannerCanvas &&
+      typeof window !== "undefined" &&
+      window
+    ) {
+      const starfield = new ThreejsStarField(starfieldCanvas);
+      starfield.action();
+      const banner = new ThreejsBanner(
+        bannerCanvas,
+        bannerCanvas.parentElement!
+      );
+      banner.action();
     }
   }, []);
 
@@ -37,16 +53,31 @@ export default function HomePage() {
       {/* Might need to turn off threejs for mobile so that users can scroll down */}
       <Box
         id="welcome-section"
-        gridRow="1"
         h={`calc(100vh - ${navbarHeight})`}
+        gridRow="1"
         gridColumn="left-screen / right-screen"
+        position="relative"
         ref={threejsCanvas}
       >
         <canvas
-          className="webgl"
+          className="webgl-starfield"
           style={{ width: "100%", height: "100%" }}
-        ></canvas>
-        {/* <Box className="banner"></Box> */}
+        />
+        <Box
+          top="50%"
+          left="50%"
+          transform="translate(-50%, -50%)"
+          pos="absolute"
+          width={`${1108 * 0.9}px`}
+          height={`${603 * 0.9}px`}
+        >
+          <canvas
+            className="webgl-banner"
+            //add border to debug
+            // style={{ width: "100%", height: "100%", border: "1px solid blue" }}
+            style={{ width: "100%", height: "100%" }}
+          />
+        </Box>
       </Box>
       <Biography />
       <Technologies />
