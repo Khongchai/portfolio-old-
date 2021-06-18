@@ -2,7 +2,7 @@ import { Box, Stack } from "@chakra-ui/react";
 import React, { useEffect, useRef, useState } from "react";
 import { Biography } from "../components/landingPageComponents/biography";
 import { Technologies } from "../components/landingPageComponents/Technologies";
-import { ThreejsBanner } from "../utils/landingPage/ThreejsBanner";
+import { ThreejsBanner } from "../utils/landingPage/Banner/ThreejsBanner";
 import { ThreejsStarField } from "../utils/landingPage/ThreejsStarField";
 import { getNavbarHeight } from "../utils/navbar/getNavbarHeight";
 
@@ -17,20 +17,26 @@ export default function HomePage() {
     const bannerCanvas = document.querySelector("canvas.webgl-banner") as
       | HTMLCanvasElement
       | undefined;
+    let starfield: ThreejsStarField | undefined;
+    let banner: ThreejsBanner | undefined;
     if (
       starfieldCanvas &&
       bannerCanvas &&
       typeof window !== "undefined" &&
       window
     ) {
-      const starfield = new ThreejsStarField(starfieldCanvas);
+      starfield = new ThreejsStarField(starfieldCanvas);
       starfield.action();
-      const banner = new ThreejsBanner(
-        bannerCanvas,
-        bannerCanvas.parentElement!
-      );
+      banner = new ThreejsBanner(bannerCanvas, bannerCanvas.parentElement!);
       banner.action();
     }
+
+    return () => {
+      if (starfield && banner) {
+        starfield.removeEventListeners();
+        banner.removeEventListeners();
+      }
+    };
   }, []);
 
   return (

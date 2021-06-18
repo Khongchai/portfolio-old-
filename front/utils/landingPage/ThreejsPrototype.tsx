@@ -2,8 +2,11 @@ import * as THREE from "three";
 
 /**
  * Why class? You can pass states between React(or whatever) and Threejs on the go with class, but not with functions.
- * If you don't need the class, use this as a boilerplate.
  *
+ * Storing some variables on the heap with var is essentially turning the entire file into one huge class instance.
+ * This is just, IN MY OPINION, cleaner.
+ *
+ * If you don't need the class, use this as a boilerplate.
  *
  *  **TL;DR**:
  *    1. Extend this.
@@ -34,6 +37,7 @@ export abstract class ThreejsPrototype {
   protected sizes: { width: number; height: number };
   protected renderer: THREE.WebGLRenderer;
   protected clock: THREE.Clock;
+  protected windowEventListenerFunctions = [() => {}];
 
   //Stuff you might want to overwrite
   protected mesh: THREE.Mesh;
@@ -83,8 +87,6 @@ export abstract class ThreejsPrototype {
 
     this.scene.add(this.camera);
 
-    this.monitorResize();
-
     //Stuff you might overwrite (also not yet added to scene)
     this.material = new THREE.MeshStandardMaterial();
     this.geometry = new THREE.PlaneGeometry(1, 1);
@@ -92,10 +94,8 @@ export abstract class ThreejsPrototype {
 
     this.light = new THREE.PointLight("white", 1);
     this.light.position.z = 2;
-  }
 
-  private monitorResize() {
-    window.addEventListener("resize", () => {
+    this.windowEventListenerFunctions[0] = () => {
       // Update sizes
       if (!this.newContainer) {
         this.sizes.width = window.innerWidth;
@@ -112,7 +112,13 @@ export abstract class ThreejsPrototype {
       // Update renderer
       this.renderer.setSize(this.sizes.width, this.sizes.height);
       this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    });
+    };
+
+    this.monitorResize();
+  }
+
+  monitorResize() {
+    window.addEventListener("resize", this.windowEventListenerFunctions[0]);
   }
 
   /**Alaways put extra action here for cleanliness and readability! */
@@ -131,6 +137,19 @@ export abstract class ThreejsPrototype {
       window.requestAnimationFrame(tick);
     };
     tick();
+  }
+
+  removeEventListeners() {
+    for (
+      let i = 0, length = this.windowEventListenerFunctions.length;
+      i < length;
+      i++
+    ) {
+      window.removeEventListener(
+        "resize",
+        this.windowEventListenerFunctions[i]
+      );
+    }
   }
 
   /**Call this when everything is finished */

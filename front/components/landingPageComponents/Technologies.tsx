@@ -110,8 +110,8 @@ export const Technologies: React.FC<TechnologiesProps> = ({}) => {
       >
         You can view my past works in two formats, one focuses on the
         <ButtonLink text="Chronological Order" link="/timeline" />, while the
-        other focuses on
-        <ButtonLink text="Accessibility" link="/filter" />.
+        other focuses on the
+        <ButtonLink text="Content" link="/filter" />.
       </Text>
     </Stack>
   );

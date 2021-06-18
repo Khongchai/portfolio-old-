@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -34,9 +30,8 @@
     "components/Navbar/Navbar.tsx",
     "globalContexts/navbarTopics.js",
     "tests/getAllPosts.test.js",
-    "utils/landingPage/initThreeJS.js"
+    "utils/landingPage/initThreeJS.js",
+    "utils/landingPage/Banner/*.glsl"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }
