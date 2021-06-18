@@ -8,7 +8,7 @@ const colors = {
   mainBlack: "#000000",
   black2: "#151515",
   black3: "#2C2B2B",
-  backgroundOnBlack: "#1b1b1b",
+  backgroundOnBlack: "#bfb4a8",
 };
 
 const fonts = {
@@ -26,6 +26,7 @@ const theme = extendTheme({
         background: "black",
         color: "white",
         overflowX: "hidden",
+        scrollBehavior: "smooth",
       },
     },
   },

@@ -28,7 +28,8 @@ const ExpandButton: React.FC<TechDetails> = (techDetails) => {
       arrow!.style.top = "0";
       techContainerContainer!.style.top = "0px";
       techContainer!.style.height = "3.3rem";
-      techContainer!.style.background = "grey3";
+      techContainer!.style.background = "#171717";
+      techContainer!.style.color = "#FA9D55";
       projDescSection!.style.opacity = "1";
     }
     //expanded
@@ -36,7 +37,8 @@ const ExpandButton: React.FC<TechDetails> = (techDetails) => {
       arrow!.style.transform = " rotate(180deg)";
       //set the top side of techContainer to "desiredTopPosition"
       techContainer!.style.height = desiredTopPosition;
-      techContainer!.style.background = "#171717";
+      techContainer!.style.background = "#bfb4a8";
+      techContainer!.style.color = "white";
       arrow!.style.top = `-${desiredTopPosition}`;
       projDescSection!.style.opacity = "0.09";
     }

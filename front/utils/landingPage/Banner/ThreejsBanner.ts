@@ -6,6 +6,7 @@ import fragmentShader from "./fragment.glsl";
 export class ThreejsBanner extends ThreejsPrototype {
   private bannerImage: THREE.Texture;
   private orbitControls: any;
+  private mouse: { x: number; y: number };
 
   constructor(canvas: HTMLCanvasElement, newContainer: HTMLElement) {
     super(canvas, newContainer);
@@ -20,11 +21,14 @@ export class ThreejsBanner extends ThreejsPrototype {
     const textureLoader = new THREE.TextureLoader();
     this.bannerImage = textureLoader.load("khongBanner.png");
 
+    this.mouse = { x: 0, y: 0 };
+
     const ratioDivider = 225;
     this.geometry = new THREE.PlaneGeometry(
       1180 / ratioDivider,
       603 / ratioDivider,
-      500
+      100,
+      100
     );
     this.material = new THREE.RawShaderMaterial({
       vertexShader,
@@ -36,6 +40,16 @@ export class ThreejsBanner extends ThreejsPrototype {
     this.mesh = new THREE.Mesh(this.geometry, this.material);
 
     this.scene.add(this.mesh, this.light);
+  }
+
+  extraEventListenersBeforeAnimLoop() {
+    if (this.canvas.parentElement) {
+      this.canvas.parentElement.addEventListener("mousemove", (e) => {
+        const rect = this.canvas.getBoundingClientRect();
+        this.mouse.x = (e.clientX - rect.left) / this.canvas.offsetWidth;
+        this.mouse.y = (e.clientY - rect.top) / this.canvas.offsetHeight;
+      });
+    }
   }
 
   protected initAnimationLoop() {

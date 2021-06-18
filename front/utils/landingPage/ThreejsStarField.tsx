@@ -18,6 +18,7 @@ export class ThreejsStarField extends ThreejsPrototype {
     difference: { x: number; y: number };
     autorotate: boolean;
   };
+  protected raycaster: THREE.Raycaster;
 
   constructor(canvas: HTMLCanvasElement, disableCursorTrack?: boolean) {
     super(canvas);
@@ -31,20 +32,40 @@ export class ThreejsStarField extends ThreejsPrototype {
       autorotate: true,
     };
 
+    const textureLoader = new THREE.TextureLoader();
+    const texture = textureLoader.load("/graphics/particle.png");
     this.particlesMesh = new THREE.PointsMaterial({
-      size: 0.01,
+      size: 0.15,
       sizeAttenuation: true,
+      map: texture,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+      vertexColors: true,
+      transparent: true,
     });
 
-    this.particlesGeometry = new THREE.BufferGeometry();
     const count = 2000;
+    const spread = 40;
+    this.particlesGeometry = new THREE.BufferGeometry();
     const positions = new Float32Array(count * 3);
+    const colorPositions = new Float32Array(count * 3);
     for (let i = 0; i < count * 3; i++) {
-      positions[i] = (Math.random() - 0.5) * 60;
+      positions[i] = (Math.random() - 0.5) * spread;
+      if (i % 3 == 0) {
+        colorPositions[i] = 1;
+      } else if (i % 4 == 0) {
+        colorPositions[i] = 0.5;
+      } else {
+        colorPositions[i] = 0.7;
+      }
     }
     this.particlesGeometry.setAttribute(
       "position",
       new THREE.BufferAttribute(positions, 3)
+    );
+    this.particlesGeometry.setAttribute(
+      "color",
+      new THREE.BufferAttribute(colorPositions, 3)
     );
 
     this.particles = new THREE.Points(
@@ -52,12 +73,12 @@ export class ThreejsStarField extends ThreejsPrototype {
       this.particlesMesh
     );
 
+    this.raycaster = new THREE.Raycaster();
+
     let EffectComposer = require("three/examples/jsm/postprocessing/EffectComposer");
     let RenderPass = require("three/examples/jsm/postprocessing/RenderPass");
-    let BloomPass = require("three/examples/jsm/postprocessing/BloomPass");
     this.composer = new EffectComposer.EffectComposer(this.renderer);
     const renderPass = new RenderPass.RenderPass(this.scene, this.camera);
-    const bloomPass = new BloomPass.BloomPass(1, 25, 4, 256);
     this.composer.addPass(renderPass);
 
     //Add stuff to scene
@@ -76,17 +97,39 @@ export class ThreejsStarField extends ThreejsPrototype {
           timeout = setTimeout(() => {
             this.mouse.autorotate = true;
           }, 2500);
-
-          this.mouse.current.x = (e.clientX / window.innerWidth) * 2 - 1;
-          this.mouse.current.y = -(e.clientY / window.innerHeight) * 2 + 1;
         }
+        this.mouse.current.x = (e.clientX / this.canvas.offsetWidth) * 2 - 1;
+        this.mouse.current.y = -(e.clientY / this.canvas.offsetHeight) * 2 + 1;
       });
     }
   }
 
   initAnimationLoop() {
+    // const colors = this.particlesGeometry.attributes.color;
     const tick = () => {
       const elapsedTime = this.clock.getElapsedTime();
+
+      const mouse = new THREE.Vector2(
+        this.mouse.current.x,
+        this.mouse.current.y
+      );
+      this.raycaster.setFromCamera(mouse, this.camera);
+      const intersects = this.raycaster.intersectObject(this.particles, false);
+
+      if (intersects.length > 0) {
+        for (let i = 0; i < intersects.length; i++) {
+          if ((intersects[i].distanceToRay as number) < 0.5) {
+            const index = intersects[i].index as number;
+            const colorIndex = index * 3;
+            // TODO, pick randomly whether to tamper with R, G, or B
+            this.particlesGeometry.attributes.color.array[colorIndex] =
+              (5 * intersects[i].distanceToRay) ** 2;
+            this.particlesGeometry.attributes.color.needsUpdate = true;
+          }
+        }
+      }
+
+      this.particles.rotation.y += 0.0011;
 
       this.composer.render();
 
@@ -123,7 +166,6 @@ export class ThreejsStarField extends ThreejsPrototype {
       this.mouse.prev.x += this.mouse.difference.x;
       this.mouse.prev.y += this.mouse.difference.y;
     };
-
     cameraDelay();
   }
 }

@@ -14,10 +14,17 @@ void main()
     vec4 modelPosition = modelMatrix * vec4(position, 1.0);
 
     //Transform
-    float elevation = sin(modelPosition.x * 10.0 + uTime) / 20.0 ;
-    modelPosition.z += elevation;
+    if (modelPosition.x == 0.01)
+    {
 
-    vElevation = modelPosition.z;
+     float elevation = sin(modelPosition.x * 10.0 + uTime) / 10.0 ;
+     modelPosition.z += elevation;
+
+    }
+    // float elevation = sin(modelPosition.x * 10.0 + uTime) / 20.0 ;
+    // modelPosition.z += elevation;
+
+    // vElevation = modelPosition.z;
     
     
     vec4 viewPosition = viewMatrix * modelPosition;

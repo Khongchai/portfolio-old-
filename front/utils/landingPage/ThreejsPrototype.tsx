@@ -117,10 +117,6 @@ export abstract class ThreejsPrototype {
     this.monitorResize();
   }
 
-  monitorResize() {
-    window.addEventListener("resize", this.windowEventListenerFunctions[0]);
-  }
-
   /**Alaways put extra action here for cleanliness and readability! */
   protected extraEventListenersBeforeAnimLoop() {}
 
@@ -139,6 +135,21 @@ export abstract class ThreejsPrototype {
     tick();
   }
 
+  /**
+   * Add window event listeners to this
+   * @param fn () => {}
+   */
+  appendWindowsEventListeners(fn: () => {}) {
+    this.windowEventListenerFunctions.push(fn);
+  }
+
+  monitorResize() {
+    window.addEventListener("resize", this.windowEventListenerFunctions[0]);
+  }
+
+  /*
+  Call this when page changes 
+  */
   removeEventListeners() {
     for (
       let i = 0, length = this.windowEventListenerFunctions.length;
