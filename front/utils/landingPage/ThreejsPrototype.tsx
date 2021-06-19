@@ -44,7 +44,7 @@ export abstract class ThreejsPrototype {
   protected material: THREE.Material;
   protected geometry: THREE.BufferGeometry;
   protected light: THREE.Light;
-  protected newContainer: HTMLElement | undefined;
+  protected newContainer: HTMLElement | undefined | null;
 
   /**
    * All setup should be done inside the constructor
@@ -54,14 +54,21 @@ export abstract class ThreejsPrototype {
     /*
      * if omitted, will use window.innerHeight and window.innerWidth
      */
-    newContainer?: HTMLElement
+    newContainer?: HTMLElement | undefined | null
   ) {
     //Stuff I don't think you will change
     this.scene = new THREE.Scene();
 
-    this.sizes = newContainer
-      ? { height: newContainer.offsetHeight, width: newContainer.offsetWidth }
-      : { height: window.innerHeight, width: window.innerWidth };
+    if (newContainer) {
+      this.sizes = {
+        height: newContainer.offsetHeight,
+        width: newContainer.offsetWidth,
+      };
+      this.newContainer = newContainer;
+    } else {
+      this.sizes = { height: window.innerHeight, width: window.innerWidth };
+    }
+
     this.newContainer = newContainer;
 
     this.canvas = canvas;
@@ -95,24 +102,16 @@ export abstract class ThreejsPrototype {
     this.light = new THREE.PointLight("white", 1);
     this.light.position.z = 2;
 
-    this.windowEventListenerFunctions[0] = () => {
-      // Update sizes
-      if (!this.newContainer) {
-        this.sizes.width = window.innerWidth;
-        this.sizes.height = window.innerHeight;
-      } else {
-        this.sizes.width = this.newContainer.offsetWidth;
-        this.sizes.height = this.newContainer.offsetHeight;
-      }
-
-      // Update camera
-      this.camera.aspect = this.sizes.width / this.sizes.height;
-      this.camera.updateProjectionMatrix();
-
-      // Update renderer
-      this.renderer.setSize(this.sizes.width, this.sizes.height);
-      this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    };
+    // this.windowEventListenerFunctions[0] = () => {
+    //   // Update sizes
+    //   if (!this.newContainer) {
+    //     this.sizes.width = window.innerWidth;
+    //     this.sizes.height = window.innerHeight;
+    //   } else {
+    //     this.sizes.width = this.canvas.offsetWidth;
+    //     this.sizes.height = this.canvas.offsetHeight;
+    //   }
+    // };
 
     this.monitorResize();
   }
@@ -144,7 +143,9 @@ export abstract class ThreejsPrototype {
   }
 
   monitorResize() {
-    window.addEventListener("resize", this.windowEventListenerFunctions[0]);
+    if (this.windowEventListenerFunctions[0]) {
+      window.addEventListener("resize", this.windowEventListenerFunctions[0]);
+    }
   }
 
   /*

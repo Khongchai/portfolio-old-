@@ -8,9 +8,7 @@ interface for the admin page, make it generic so that you can reuse it for other
 Home/timeline page --------------------------------------------------------------------------
 
 
-turn throttle thing into a class
-Look for TODO in manage block move
-reimplement handleEdgeOffset(undefined, true);
+
 
 If you accidentally drag your cursor over one of the events, it fucks up the entire timeline animation
 
@@ -25,42 +23,12 @@ Add see all component, reuse it in the admin page.
 
 Use the new production sql, with this new one added, you'll be able to test your pagination as well.
 
-Keep the container size in the filter page when search and nothing shows up
-
-Algorithm for show all:
-    1. Create a get rest function in backend, this function will fetch the rest of the project based on the pagination position. 
-       This will ensure that we request for only what we need and that when show all is disabled, we still have the pagination position.
-
-    2. Update the graphql schema in frontend
-    3. etc etc
-
-get a new screenshot of tripleAGlove with proper ratio
 
 Make a reusable function for expanding the show all project
 
 
-Before doing this, add the banner first => banner is good cus you get to practice shader
+these and then deploy, after deploy, the ecommerce website with django: 
 
-
-//For getting brighter or changing color on raycasted, change from particles to something else and don't use too many.
-//this will also allow you to do bloom pass selective for the glow thing
-
-//after this, ready to work on shader!
-
-The orange focus thing on mouseover
-
-Raycasting  should still be done
-
-
-Use the distance to ray thing. That number can also be used to attenuate the brightness, I think
-
-
-Now that you have this, apply trails, make them attracted to the ray, anything!
-
-Make the interactedPoints accessed through hash. The hash value is the index. Warning, if you make this
-an array, when you set for example "23", the array immediately becomes length 23. Not good.
-
-
-
-
-
+get a new screenshot of tripleAGlove with proper ratio
+turn throttle thing into a class
+reimplement handleEdgeOffset(undefined, true);

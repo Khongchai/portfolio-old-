@@ -35,7 +35,8 @@ const InfoDisplay: React.FC<{
           height="100%"
           id="project-description-section"
           transition=".3s"
-          background="rgba(0,0,0,0.5)"
+          background="rgba(0,0,0,0.7)"
+          p="1rem"
         >
           <ProjectDescription project={details} />
         </Stack>

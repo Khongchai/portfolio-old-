@@ -20,10 +20,11 @@ export class ThreejsStarField extends ThreejsPrototype {
     autorotate: boolean;
   };
   protected raycaster: THREE.Raycaster;
-  protected interactedPoints = [];
 
   constructor(canvas: HTMLCanvasElement, disableCursorTrack?: boolean) {
     super(canvas);
+
+    this.camera.near = 5;
 
     this.disableCursorTrack = disableCursorTrack ? true : false;
 
@@ -46,13 +47,18 @@ export class ThreejsStarField extends ThreejsPrototype {
       transparent: true,
     });
 
+    //2000
     const count = 2000;
     const spread = 41;
+    const lowestValue = -0.625;
     this.particlesGeometry = new THREE.BufferGeometry();
     const positions = new Float32Array(count * 3);
     const colorPositions = new Float32Array(count * 3);
     for (let i = 0; i < count * 3; i++) {
-      positions[i] = (Math.random() - 0.5) * spread;
+      //prettier-ignore
+      //Generate numbers between lowestValue and Abs(lowestValue) * spread
+      positions[i] = (Math.random() * 1.25 + lowestValue) * spread;
+
       if (i % 3 == 0) {
         colorPositions[i] = 1;
       } else if (i % 4 == 0) {
@@ -82,6 +88,11 @@ export class ThreejsStarField extends ThreejsPrototype {
     this.composer = new EffectComposer.EffectComposer(this.renderer);
     const renderPass = new RenderPass.RenderPass(this.scene, this.camera);
     this.composer.addPass(renderPass);
+
+    const AfterimagePass = require("three/examples/jsm/postprocessing/AfterimagePass");
+    const trailStrength = this.disableCursorTrack ? 0.4 : 0.5;
+    const afterimagePass = new AfterimagePass.AfterimagePass(trailStrength);
+    this.composer.addPass(afterimagePass);
 
     //Add stuff to scene
     this.scene.add(this.particles);
@@ -147,33 +158,18 @@ export class ThreejsStarField extends ThreejsPrototype {
             (this.particlesGeometry as any).attributes.color.array[blue] = 2;
             this.particlesGeometry.attributes.color.needsUpdate = true;
 
-            //change position as cursor gets closer
-            const xPos = attributePosition;
-            const yPos = attributePosition + 1;
-            const zPos = attributePosition + 2;
-            const interactedPoint = {
-              pointCoordinate: {
-                x: (this.particlesGeometry as any).attributes.position.array[
-                  xPos
-                ],
-                y: (this.particlesGeometry as any).attributes.position.array[
-                  yPos
-                ],
-                z: (this.particlesGeometry as any).attributes.position.array[
-                  zPos
-                ],
-              },
-              initVelocity: 0.009,
-            };
+            if (this.disableCursorTrack) {
+              //change position as cursor gets closer
+              const xPos = attributePosition;
+              const yPos = attributePosition + 1;
+              const zPos = attributePosition + 2;
 
-            // (this.particlesGeometry as any).attributes.position.array[yPos] +=
-            //   0.009 * x;
-            // (this.particlesGeometry as any).attributes.position.array[xPos] -=
-            //   0.009 * x;
-            // (this.particlesGeometry as any).attributes.position.array[zPos] -=
-            //   0.009 * x;
+              const change = 0.08 * x;
+              (this.particlesGeometry as any).attributes.position.array[zPos] +=
+                change;
 
-            this.particlesGeometry.attributes.position.needsUpdate = true;
+              this.particlesGeometry.attributes.position.needsUpdate = true;
+            }
           }
         }
       }
