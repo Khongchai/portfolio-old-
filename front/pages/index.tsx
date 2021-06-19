@@ -68,7 +68,7 @@ export default function HomePage() {
           pos="absolute"
           width={`clamp(${1108 * 0.4}px, 100vw, ${1108 * 0.9}px)`}
           height={`clamp(${603 * 0.4}px, 100vh, ${603 * 0.9}px)`}
-          background="black"
+          background="rgba(0,0,0,0.7)"
         >
           <Box
             position="relative"

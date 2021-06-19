@@ -1,6 +1,7 @@
 import * as THREE from "three";
 
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
+import { asXApproachesTOutputApproachesC } from "../math/asXApproachesTOutputApproachesC";
 import { ThreejsPrototype } from "./ThreejsPrototype";
 
 /**
@@ -19,6 +20,7 @@ export class ThreejsStarField extends ThreejsPrototype {
     autorotate: boolean;
   };
   protected raycaster: THREE.Raycaster;
+  protected interactedPoints = [];
 
   constructor(canvas: HTMLCanvasElement, disableCursorTrack?: boolean) {
     super(canvas);
@@ -45,7 +47,7 @@ export class ThreejsStarField extends ThreejsPrototype {
     });
 
     const count = 2000;
-    const spread = 40;
+    const spread = 41;
     this.particlesGeometry = new THREE.BufferGeometry();
     const positions = new Float32Array(count * 3);
     const colorPositions = new Float32Array(count * 3);
@@ -109,27 +111,74 @@ export class ThreejsStarField extends ThreejsPrototype {
     const tick = () => {
       const elapsedTime = this.clock.getElapsedTime();
 
-      const mouse = new THREE.Vector2(
-        this.mouse.current.x,
-        this.mouse.current.y
-      );
+      let mouse;
+      if (this.disableCursorTrack) {
+        mouse = new THREE.Vector2(this.mouse.current.x, this.mouse.current.y);
+      } else {
+        mouse = new THREE.Vector2(this.mouse.prev.x, this.mouse.prev.y);
+      }
       this.raycaster.setFromCamera(mouse, this.camera);
       const intersects = this.raycaster.intersectObject(this.particles, false);
 
       if (intersects.length > 0) {
+        //Threshold is when the points become affected by the raycasting and begin changing color.
+        const threshold = 0.6;
         for (let i = 0; i < intersects.length; i++) {
-          if ((intersects[i].distanceToRay as number) < 0.5) {
+          const x = (intersects[i] as any).distanceToRay;
+          if (x < threshold) {
             const index = intersects[i].index as number;
-            const colorIndex = index * 3;
-            // TODO, pick randomly whether to tamper with R, G, or B
-            this.particlesGeometry.attributes.color.array[colorIndex] =
-              (5 * intersects[i].distanceToRay) ** 2;
+            /**
+             * intersects[i].index do not take into account the fact that
+             *   each vertex is composed of three attributes.
+             */
+            const attributePosition = index * 3;
+
+            //change color as cursor gets closer
+            /**
+             * Current behavior, take away green value as cursor gets closer.
+             * And instant blue hue as cursor enters the bounding area of the dots.
+             *
+             * Final result is a trail of purple dots.
+             */
+            const green = attributePosition + 1;
+            const blue = attributePosition + 2;
+            (this.particlesGeometry as any).attributes.color.array[green] =
+              asXApproachesTOutputApproachesC(x, threshold, 0.5, 2);
+            (this.particlesGeometry as any).attributes.color.array[blue] = 2;
             this.particlesGeometry.attributes.color.needsUpdate = true;
+
+            //change position as cursor gets closer
+            const xPos = attributePosition;
+            const yPos = attributePosition + 1;
+            const zPos = attributePosition + 2;
+            const interactedPoint = {
+              pointCoordinate: {
+                x: (this.particlesGeometry as any).attributes.position.array[
+                  xPos
+                ],
+                y: (this.particlesGeometry as any).attributes.position.array[
+                  yPos
+                ],
+                z: (this.particlesGeometry as any).attributes.position.array[
+                  zPos
+                ],
+              },
+              initVelocity: 0.009,
+            };
+
+            // (this.particlesGeometry as any).attributes.position.array[yPos] +=
+            //   0.009 * x;
+            // (this.particlesGeometry as any).attributes.position.array[xPos] -=
+            //   0.009 * x;
+            // (this.particlesGeometry as any).attributes.position.array[zPos] -=
+            //   0.009 * x;
+
+            this.particlesGeometry.attributes.position.needsUpdate = true;
           }
         }
       }
 
-      this.particles.rotation.y += 0.0011;
+      this.particles.rotation.y += 0.0008;
 
       this.composer.render();
 
@@ -157,7 +206,9 @@ export class ThreejsStarField extends ThreejsPrototype {
         this.mouse.difference.y =
           (this.mouse.current.y - this.mouse.prev.y) * speedDif;
       } else {
-        //Perform inertia
+        //Perform inertia for when autorotate is off.
+        //When auto rotate is off, the camera will follow mouse with a bit of a delay
+        //Like a steady cam, basically
         this.mouse.difference.x =
           (this.mouse.current.x - this.mouse.prev.x) * speedDif;
         this.mouse.difference.y =

@@ -46,9 +46,19 @@ Before doing this, add the banner first => banner is good cus you get to practic
 //this will also allow you to do bloom pass selective for the glow thing
 
 //after this, ready to work on shader!
-remove eventlistener when you exit the page: keep track of all eventlisteners and remove in useEffect
 
-//To solve the image too small problem, write a library in c that detects whether an image is too dark 
+The orange focus thing on mouseover
+
+Raycasting  should still be done
+
+
+Use the distance to ray thing. That number can also be used to attenuate the brightness, I think
+
+
+Now that you have this, apply trails, make them attracted to the ray, anything!
+
+Make the interactedPoints accessed through hash. The hash value is the index. Warning, if you make this
+an array, when you set for example "23", the array immediately becomes length 23. Not good.
 
 
 
