@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, Img, Stack, Text } from "@chakra-ui/react";
+import { Box, Flex, Heading, Img, Stack, Text, Link } from "@chakra-ui/react";
 import Image from "next/image";
 import React, { useState } from "react";
 import { ButtonLink } from "../../elements/ButtonLink";
@@ -102,16 +102,32 @@ export const Technologies: React.FC<TechnologiesProps> = ({}) => {
         </Flex>
       </Box>
       <Text
-        p={["0.45rem", "2rem", "3rem", "4rem", "5rem"]}
+        p={["0.75rem", "2rem", "3rem", "4rem", "5rem"]}
         fontSize={["14px", null, "16px"]}
         bgColor="backgroundOnBlack"
         borderRadius="1rem"
         lineHeight={["2.4rem", null, "3.5rem"]}
+        id="projects"
+        position="relative"
       >
-        You can view my past works in two formats, one focuses on the
-        <ButtonLink text="Chronological Order" link="/timeline" />, while the
-        other focuses on the
-        <ButtonLink text="Content" link="/filter" />.
+        You can view my past works in two formats, one focuses on the{" "}
+        <Link
+          href="/timeline"
+          color="mainBlack"
+          target="_blank"
+          textDecor="underline"
+        >
+          Chornological Order
+        </Link>
+        , while the other focuses on the{" "}
+        <Link
+          href="/filter"
+          color="mainBlack"
+          target="_blank"
+          textDecor="underline"
+        >
+          Content
+        </Link>
       </Text>
     </Stack>
   );

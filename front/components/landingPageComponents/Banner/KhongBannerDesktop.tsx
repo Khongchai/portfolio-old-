@@ -1,7 +1,9 @@
 import { Box, Img, Link, Text } from "@chakra-ui/react";
 import React from "react";
+import { LeftCorner, RightCorner } from "./Corners";
+import { KhongImage } from "./KhongImage";
 
-export const KhongBanner: React.FC = () => {
+export const KhongBannerDesktop: React.FC = () => {
   return (
     <Box
       top="50%"
@@ -11,6 +13,7 @@ export const KhongBanner: React.FC = () => {
       width={`clamp(${1108 * 0.4}px, 100vw, ${1108 * 0.9}px)`}
       height={`clamp(${603 * 0.4}px, 100vh, ${603 * 0.9}px)`}
       background="rgba(0,0,0,0.7)"
+      display={["none", null, null, "block"]}
     >
       <Box
         position="relative"
@@ -29,29 +32,10 @@ export const KhongBanner: React.FC = () => {
           transition=".3s"
           zIndex="-1"
         >
-          <Img
-            alt="author's picture"
-            src="/graphics/khong.png"
-            objectFit="contain"
-          />
+          <KhongImage />
         </Box>
-        <Box
-          display={["none", null, null, "unset"]}
-          pos="absolute"
-          bottom="-24px"
-          left="-24px"
-        >
-          <Img src="/graphics/corner.png" />
-        </Box>
-        <Box
-          pos="absolute"
-          top="-24px"
-          right="-24px"
-          transform="rotate(180deg)"
-          display={["none", null, null, "unset"]}
-        >
-          <Img src="/graphics/corner.png" />
-        </Box>
+        <LeftCorner offset="-24px" />
+        <RightCorner offset="-24px" />
         <Text
           left={["25.14%", null, null, "4.14%"]}
           top={["53.76%", null, null, "5.76%"]}

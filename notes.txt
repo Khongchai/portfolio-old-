@@ -32,3 +32,5 @@ these and then deploy, after deploy, the ecommerce website with django:
 get a new screenshot of tripleAGlove with proper ratio
 turn throttle thing into a class
 reimplement handleEdgeOffset(undefined, true);
+
+Right corner is still being offseted to the top!?

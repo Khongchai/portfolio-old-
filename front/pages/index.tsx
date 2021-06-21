@@ -4,13 +4,18 @@ import { Biography } from "../components/landingPageComponents/biography";
 import { Technologies } from "../components/landingPageComponents/Technologies";
 import { ThreejsStarField } from "../utils/landingPage/ThreejsStarField";
 import { getNavbarHeight } from "../utils/navbar/getNavbarHeight";
-import { KhongBanner } from "../components/landingPageComponents/KhongBanner";
+import { KhongBannerDesktop } from "../components/landingPageComponents/Banner/KhongBannerDesktop";
+import { KhongBannerMobile } from "../components/landingPageComponents/Banner/KhongBannerMobile";
 
 export default function HomePage() {
-  const [navbarHeight, setNavbarheight] = useState("");
+  const [navbarHeight, setNavbarHeight] = useState("");
   const threejsCanvas = useRef(null);
+  const navBarEventListener = function () {
+    setNavbarHeight(getNavbarHeight());
+  };
   useEffect(() => {
-    setNavbarheight(getNavbarHeight());
+    setNavbarHeight(getNavbarHeight());
+    window.addEventListener("resize", navBarEventListener);
     const starfieldCanvas = document.querySelector("canvas.webgl-starfield") as
       | HTMLCanvasElement
       | undefined;
@@ -28,6 +33,7 @@ export default function HomePage() {
         starfield.removeEventListeners();
         // banner.removeEventListeners();
       }
+      window.removeEventListener("resize", navBarEventListener);
     };
   }, []);
 
@@ -42,7 +48,7 @@ export default function HomePage() {
         "[left-screen] 2fr [main-content-start] repeat(12, 0.5fr) [main-content-end] 2fr [right-screen]",
       ]}
       gridRow="auto"
-      spacing="2rem"
+      spacing={["2rem"]}
       paddingBottom="5rem"
       overflow="hidden"
       z-index="-1"
@@ -53,12 +59,7 @@ export default function HomePage() {
         id="welcome-section"
         h={`calc(100vh - ${navbarHeight})`}
         gridRow="1"
-        gridColumn={[
-          "main-content-start / main-content-end",
-          null,
-          null,
-          "left-screen / right-screen",
-        ]}
+        gridColumn={"left-screen / right-screen"}
         position="relative"
         ref={threejsCanvas}
       >
@@ -67,7 +68,8 @@ export default function HomePage() {
           style={{ width: "100%", height: "100%" }}
         />
 
-        <KhongBanner />
+        <KhongBannerDesktop />
+        <KhongBannerMobile />
       </Box>
       <Biography />
       <Technologies />

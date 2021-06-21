@@ -3,7 +3,6 @@ import React from "react";
 
 type orderType = "ASC" | "DESC" | undefined;
 type sortType = "Title" | "Date" | undefined;
-type fieldType = "Title" | "Technology" | undefined;
 
 interface searchQueryParams {
   searchParams: searchParams;

@@ -9,7 +9,12 @@ const InfoDisplay: React.FC<{
 }> = ({ details }) => {
   return (
     <Grid
-      gridTemplateColumns=" 0.7fr [left-padding-end] repeat(4, minmax(auto, 1fr)) [right-padding-end] 0.7fr "
+      gridTemplateColumns={[
+        "0.1fr [left-padding-end] repeat(4, minmax(auto, 1fr)) [right-padding-end] 0.1fr",
+        null,
+        null,
+        "0.7fr [left-padding-end] repeat(4, minmax(auto, 1fr)) [right-padding-end] 0.7fr",
+      ]}
       gridTemplateRows={[
         "1fr 0.2fr  auto",
         null,

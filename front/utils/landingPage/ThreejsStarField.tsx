@@ -151,6 +151,7 @@ export class ThreejsStarField extends ThreejsPrototype {
              *
              * Final result is a trail of purple dots.
              */
+            //Colors
             const green = attributePosition + 1;
             const blue = attributePosition + 2;
             (this.particlesGeometry as any).attributes.color.array[green] =
@@ -158,14 +159,21 @@ export class ThreejsStarField extends ThreejsPrototype {
             (this.particlesGeometry as any).attributes.color.array[blue] = 2;
             this.particlesGeometry.attributes.color.needsUpdate = true;
 
+            //Positions
             if (this.disableCursorTrack) {
               //change position as cursor gets closer
               const xPos = attributePosition;
               const yPos = attributePosition + 1;
               const zPos = attributePosition + 2;
 
+              const vector = new THREE.Vector3(
+                this.mouse.current.x,
+                this.mouse.current.y,
+                0.5
+              );
+
               const change = 0.08 * x;
-              (this.particlesGeometry as any).attributes.position.array[zPos] +=
+              (this.particlesGeometry as any).attributes.position.array[xPos] +=
                 change;
 
               this.particlesGeometry.attributes.position.needsUpdate = true;
