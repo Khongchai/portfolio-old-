@@ -57,7 +57,7 @@ export default function HomePage() {
       {/* Might need to turn off threejs for mobile so that users can scroll down */}
       <Box
         id="welcome-section"
-        h={`calc(100vh - ${navbarHeight})`}
+        h={["fit-content", null, null, `calc(100vh - ${navbarHeight})`]}
         gridRow="1"
         gridColumn={"left-screen / right-screen"}
         position="relative"

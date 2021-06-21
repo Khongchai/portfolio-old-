@@ -102,16 +102,24 @@ export abstract class ThreejsPrototype {
     this.light = new THREE.PointLight("white", 1);
     this.light.position.z = 2;
 
-    // this.windowEventListenerFunctions[0] = () => {
-    //   // Update sizes
-    //   if (!this.newContainer) {
-    //     this.sizes.width = window.innerWidth;
-    //     this.sizes.height = window.innerHeight;
-    //   } else {
-    //     this.sizes.width = this.canvas.offsetWidth;
-    //     this.sizes.height = this.canvas.offsetHeight;
-    //   }
-    // };
+    this.windowEventListenerFunctions[0] = () => {
+      // Update sizes
+      if (!this.newContainer) {
+        this.sizes.width = window.innerWidth;
+        this.sizes.height = window.innerHeight;
+      } else {
+        this.sizes.width = this.newContainer.offsetWidth;
+        this.sizes.height = this.newContainer.offsetHeight;
+      }
+
+      // Update camera
+      this.camera.aspect = this.sizes.width / this.sizes.height;
+      this.camera.updateProjectionMatrix();
+
+      // Update renderer
+      this.renderer.setSize(this.sizes.width, this.sizes.height);
+      this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    };
 
     this.monitorResize();
   }
@@ -136,9 +144,8 @@ export abstract class ThreejsPrototype {
 
   /**
    * Add window event listeners to this
-   * @param fn () => {}
    */
-  appendWindowsEventListeners(fn: () => {}) {
+  appendWindowsEventListenersForRemoval(fn: () => void) {
     this.windowEventListenerFunctions.push(fn);
   }
 

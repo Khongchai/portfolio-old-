@@ -90,9 +90,17 @@ export class ThreejsStarField extends ThreejsPrototype {
     this.composer.addPass(renderPass);
 
     const AfterimagePass = require("three/examples/jsm/postprocessing/AfterimagePass");
-    const trailStrength = this.disableCursorTrack ? 0.4 : 0.5;
+    const trailStrength = this.disableCursorTrack ? 0.6 : 0.5;
     const afterimagePass = new AfterimagePass.AfterimagePass(trailStrength);
     this.composer.addPass(afterimagePass);
+
+    const resizeEffectComposer = () => {
+      this.composer.setSize(this.sizes.width, this.sizes.height);
+      this.composer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    };
+
+    window.addEventListener("resize", resizeEffectComposer);
+    this.appendWindowsEventListenersForRemoval(resizeEffectComposer);
 
     //Add stuff to scene
     this.scene.add(this.particles);

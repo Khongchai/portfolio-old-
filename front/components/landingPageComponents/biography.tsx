@@ -7,11 +7,11 @@ export const Biography: React.FC<biographyProps> = ({}) => {
   return (
     <Stack
       spacing={6}
-      mt="4.5rem !important"
+      mt={["6rem !important", "4.5rem !important"]}
       gridRow="2"
       id="biography"
       gridColumn="main-content-start / main-content-end "
-      p="2rem"
+      p={["1rem", null, "2rem"]}
       z-index="1"
       position="relative"
     >

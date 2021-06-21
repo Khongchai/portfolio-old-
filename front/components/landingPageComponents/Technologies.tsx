@@ -26,7 +26,7 @@ export const Technologies: React.FC<TechnologiesProps> = ({}) => {
       id="technologies"
       gridRow="3"
       gridColumn="main-content-start/ main-content-end"
-      padding="2rem"
+      padding={["1rem", null, "2rem"]}
       spacing="3rem"
       textAlign="center"
     >

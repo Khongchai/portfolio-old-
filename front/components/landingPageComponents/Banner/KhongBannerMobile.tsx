@@ -11,11 +11,11 @@ export const KhongBannerMobile: React.FC<KhongBannerMobileProps> = ({}) => {
     <Flex
       top="50%"
       left="50%"
-      transform="translate(-50%, -50%)"
+      transform="translate(-50%, -47%)"
       pos="absolute"
       width="100%"
       height="100%"
-      background="rgba(0,0,0,0.6)"
+      background={["rgba(0,0,0,0.5)", null, null, "rgba(0,0,0,0.6)"]}
       padding="1rem"
       display={["flex", null, null, "none"]}
       flexDir="column"
