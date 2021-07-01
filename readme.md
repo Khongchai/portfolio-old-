@@ -11,4 +11,5 @@ With all that said, I nontheless have learned a lot doing this project!
 ## The Tech
 
 Front: Nextjs, Threejs, Apollo, GraphQL
+
 Back: Express, Redis, TypeORM, TypeGraphql
