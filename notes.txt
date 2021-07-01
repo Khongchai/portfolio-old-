@@ -34,3 +34,5 @@ turn throttle thing into a class
 reimplement handleEdgeOffset(undefined, true);
 
 Right corner is still being offseted to the top!?
+
+To prod by the end of the  month.
