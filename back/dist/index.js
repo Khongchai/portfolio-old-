@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
 const express_1 = __importDefault(require("express"));
+require("dotenv-safe/config");
 const apollo_server_express_1 = require("apollo-server-express");
 const ProjectResolver_1 = require("./resolvers/ProjectResolver");
 const TechnologyResolver_1 = require("./resolvers/TechnologyResolver");
@@ -29,20 +30,18 @@ const constants_1 = require("./constants");
 const AdminEntity_1 = require("./entities/AdminEntity");
 const AdminResolver_1 = require("./resolvers/AdminResolver");
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
-    const conn = yield typeorm_1.createConnection({
+    yield typeorm_1.createConnection({
         type: "postgres",
-        database: "khong_portfolio",
-        username: "postgres",
-        password: "postgres",
         migrations: [path_1.default.join(__dirname, "/migrations/*")],
         logging: false,
+        url: process.env.DATABASE_URL,
         synchronize: true,
         migrationsRun: false,
         entities: [ProjectEntity_1.ProjectEntity, TechnologyEntity_1.TechnologyEntity, AdminEntity_1.AdminEntity],
     });
     const app = express_1.default();
     const RedisStore = connect_redis_1.default(express_session_1.default);
-    const redisClient = redis_1.default.createClient();
+    const redisClient = redis_1.default.createClient({ url: process.env.REDIS_URL });
     app.use(express_session_1.default({
         name: constants_1.COOKIE_NAME,
         store: new RedisStore({
@@ -55,7 +54,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
             sameSite: "lax",
         },
         saveUninitialized: false,
-        secret: "lskdj)(*$)#@*(kj4lskdj",
+        secret: process.env.SESSION_SECRET,
         resave: false,
     }));
     app.use(cors_1.default({
@@ -73,7 +72,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         app,
         cors: false,
     });
-    const port = process.env.PORT || 4000;
+    const port = process.env.PORT;
     app.listen(port, () => {
         console.log(`Server started on port ${port}`);
     });

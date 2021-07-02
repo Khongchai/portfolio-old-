@@ -1,5 +1,6 @@
 import { buildSchema } from "type-graphql";
 import express from "express";
+import "dotenv-safe/config";
 import { ApolloServer } from "apollo-server-express";
 import { ProjectsResolver } from "./resolvers/ProjectResolver";
 import { TechnologyResolver } from "./resolvers/TechnologyResolver";
@@ -16,13 +17,14 @@ import { AdminEntity } from "./entities/AdminEntity";
 import { AdminResolver } from "./resolvers/AdminResolver";
 
 const main = async () => {
-  const conn = await createConnection({
+  await createConnection({
     type: "postgres",
-    database: "khong_portfolio",
-    username: "postgres",
-    password: "postgres",
+    // database: "khong_portfolio",
+    // username: "postgres",
+    // password: "postgres",
     migrations: [path.join(__dirname, "/migrations/*")],
     logging: false,
+    url: process.env.DATABASE_URL,
     synchronize: true,
     migrationsRun: false,
     entities: [ProjectEntity, TechnologyEntity, AdminEntity],
@@ -30,7 +32,7 @@ const main = async () => {
 
   const app = express();
   const RedisStore = connectRedis(session);
-  const redisClient = redis.createClient();
+  const redisClient = redis.createClient({ url: process.env.REDIS_URL });
 
   app.use(
     session({
@@ -45,8 +47,7 @@ const main = async () => {
         sameSite: "lax",
       },
       saveUninitialized: false,
-      //TODO: before production, cahnge to process.env
-      secret: "lskdj)(*$)#@*(kj4lskdj",
+      secret: process.env.SESSION_SECRET,
       resave: false,
     })
   );
@@ -69,7 +70,7 @@ const main = async () => {
     cors: false,
   });
 
-  const port = process.env.PORT || 4000;
+  const port = process.env.PORT;
   app.listen(port, () => {
     console.log(`Server started on port ${port}`);
   });
