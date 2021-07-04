@@ -30,16 +30,18 @@ const constants_1 = require("./constants");
 const AdminEntity_1 = require("./entities/AdminEntity");
 const AdminResolver_1 = require("./resolvers/AdminResolver");
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
-    yield typeorm_1.createConnection({
+    const conn = yield typeorm_1.createConnection({
         type: "postgres",
         migrations: [path_1.default.join(__dirname, "/migrations/*")],
-        logging: false,
+        logging: true,
         url: process.env.DATABASE_URL,
-        synchronize: true,
+        synchronize: false,
         migrationsRun: false,
         entities: [ProjectEntity_1.ProjectEntity, TechnologyEntity_1.TechnologyEntity, AdminEntity_1.AdminEntity],
     });
+    yield conn.runMigrations();
     const app = express_1.default();
+    app.set("proxy", 1);
     const RedisStore = connect_redis_1.default(express_session_1.default);
     const redisClient = redis_1.default.createClient({ url: process.env.REDIS_URL });
     app.use(express_session_1.default({
@@ -58,7 +60,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         resave: false,
     }));
     app.use(cors_1.default({
-        origin: "http://localhost:3000",
+        origin: process.env.CORS_ORIGIN,
         credentials: true,
     }));
     const apolloServer = new apollo_server_express_1.ApolloServer({

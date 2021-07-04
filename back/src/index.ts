@@ -17,20 +17,22 @@ import { AdminEntity } from "./entities/AdminEntity";
 import { AdminResolver } from "./resolvers/AdminResolver";
 
 const main = async () => {
-  await createConnection({
+  const conn = await createConnection({
     type: "postgres",
     // database: "khong_portfolio",
     // username: "postgres",
     // password: "postgres",
     migrations: [path.join(__dirname, "/migrations/*")],
-    logging: false,
+    logging: true,
     url: process.env.DATABASE_URL,
-    synchronize: true,
+    synchronize: false,
     migrationsRun: false,
     entities: [ProjectEntity, TechnologyEntity, AdminEntity],
   });
+  await conn.runMigrations();
 
   const app = express();
+  app.set("proxy", 1);
   const RedisStore = connectRedis(session);
   const redisClient = redis.createClient({ url: process.env.REDIS_URL });
 
@@ -53,7 +55,7 @@ const main = async () => {
   );
   app.use(
     cors({
-      origin: "http://localhost:3000",
+      origin: process.env.CORS_ORIGIN,
       credentials: true,
     })
   );
