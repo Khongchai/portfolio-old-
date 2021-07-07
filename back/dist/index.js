@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
 const express_1 = __importDefault(require("express"));
-require("dotenv-safe/config");
+const dotenv_1 = __importDefault(require("dotenv"));
 const apollo_server_express_1 = require("apollo-server-express");
 const ProjectResolver_1 = require("./resolvers/ProjectResolver");
 const TechnologyResolver_1 = require("./resolvers/TechnologyResolver");
@@ -29,17 +29,17 @@ const path_1 = __importDefault(require("path"));
 const constants_1 = require("./constants");
 const AdminEntity_1 = require("./entities/AdminEntity");
 const AdminResolver_1 = require("./resolvers/AdminResolver");
+dotenv_1.default.config();
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     const conn = yield typeorm_1.createConnection({
         type: "postgres",
         migrations: [path_1.default.join(__dirname, "/migrations/*")],
         logging: true,
         url: process.env.DATABASE_URL,
-        synchronize: false,
+        host: "postgresql",
         migrationsRun: false,
         entities: [ProjectEntity_1.ProjectEntity, TechnologyEntity_1.TechnologyEntity, AdminEntity_1.AdminEntity],
     });
-    yield conn.runMigrations();
     const app = express_1.default();
     app.set("proxy", 1);
     const RedisStore = connect_redis_1.default(express_session_1.default);

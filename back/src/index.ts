@@ -1,6 +1,6 @@
 import { buildSchema } from "type-graphql";
 import express from "express";
-import "dotenv-safe/config";
+import dotenv from "dotenv";
 import { ApolloServer } from "apollo-server-express";
 import { ProjectsResolver } from "./resolvers/ProjectResolver";
 import { TechnologyResolver } from "./resolvers/TechnologyResolver";
@@ -16,6 +16,7 @@ import { COOKIE_NAME, IN_PRODUCTION } from "./constants";
 import { AdminEntity } from "./entities/AdminEntity";
 import { AdminResolver } from "./resolvers/AdminResolver";
 
+dotenv.config();
 const main = async () => {
   const conn = await createConnection({
     type: "postgres",
@@ -25,11 +26,13 @@ const main = async () => {
     migrations: [path.join(__dirname, "/migrations/*")],
     logging: true,
     url: process.env.DATABASE_URL,
-    synchronize: false,
+    host: "postgresql",
+    // synchronize: false,
     migrationsRun: false,
     entities: [ProjectEntity, TechnologyEntity, AdminEntity],
   });
-  await conn.runMigrations();
+
+  // await conn.runMigrations();
 
   const app = express();
   app.set("proxy", 1);
