@@ -1,4 +1,4 @@
-import { Grid, Heading } from "@chakra-ui/react";
+import { Grid, Heading, Text } from "@chakra-ui/react";
 import React from "react";
 import { TechnologyEntity } from "../../generated/graphql";
 import { TechLogo } from "../shared/TechnologiesLogo";
@@ -30,7 +30,12 @@ export const TechSection: React.FC<{
             noBorder={true}
             noSpace={true}
           />
-        ) : null}
+        ) : (
+          <div className="lds-ripple">
+            <div></div>
+            <div></div>
+          </div>
+        )}
       </Grid>
     </Grid>
   );

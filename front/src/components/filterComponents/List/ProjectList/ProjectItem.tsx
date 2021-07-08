@@ -1,5 +1,5 @@
 import { Flex, Heading, Text } from "@chakra-ui/react";
-import React, { useEffect } from "react";
+import React from "react";
 import { ProjectEntity } from "../../../../generated/graphql";
 import { setToLocalStorageAndSelectedState } from "../../../../utils/navigation/setAndGetCurrentSelection/setToLocalStorageAndSelectedState";
 import { TinyImg } from "./TinyImg";

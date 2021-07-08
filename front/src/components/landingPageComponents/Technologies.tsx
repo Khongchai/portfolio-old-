@@ -1,7 +1,6 @@
-import { Box, Flex, Heading, Img, Stack, Text, Link } from "@chakra-ui/react";
+import { Box, Flex, Heading, Img, Link, Stack, Text } from "@chakra-ui/react";
 import Image from "next/image";
 import React, { useState } from "react";
-import { ButtonLink } from "../../elements/ButtonLink";
 import {
   TechnologyEntity,
   useGetTechnologiesAssignedToRoleQuery,
@@ -17,8 +16,9 @@ export const Technologies: React.FC<TechnologiesProps> = ({}) => {
     useGetTechnologiesAssignedToRoleQuery();
   const languages = technologiesData?.getTechnologiesAssignedToRole.lang;
 
-  const [hoveredComponentName, setHoverComponentName] =
-    useState<string | undefined>(undefined);
+  const [hoveredComponentName, setHoverComponentName] = useState<
+    string | undefined
+  >(undefined);
   useHoverComponent(hoveredComponentName);
 
   return (

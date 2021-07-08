@@ -4,11 +4,7 @@ import React, { useContext, useEffect, useState } from "react";
 import InfoDisplay from "../components/filterComponents/InfoDisplay/index";
 import List from "../components/filterComponents/List";
 import { SearchAndFindWrapper } from "../components/filterComponents/SearchAndFilterBoxes";
-import {
-  ProjectEntity,
-  useAllProjectsNotPaginatedQuery,
-  useProjectsQuery,
-} from "../generated/graphql";
+import { ProjectEntity, useProjectsQuery } from "../generated/graphql";
 import { AddExtraElemContext } from "../globalContexts/extraNavbarElem";
 import { setAsSelected } from "../utils/animations/filter/setAsSelected";
 import { ThreejsStarField } from "../utils/landingPage/ThreejsStarField";
