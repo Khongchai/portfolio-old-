@@ -1,5 +1,4 @@
-import { AbsoluteCenter, Box, Grid } from "@chakra-ui/react";
-import { withTheme } from "@emotion/react";
+import { Box, Grid } from "@chakra-ui/react";
 import React, { useEffect, useRef, useState } from "react";
 import {
   AllProjectsNotPaginatedQuery,

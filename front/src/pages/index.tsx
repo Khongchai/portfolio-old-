@@ -1,4 +1,4 @@
-import { Box, Stack, Img } from "@chakra-ui/react";
+import { Box, Stack } from "@chakra-ui/react";
 import React, { useEffect, useRef, useState } from "react";
 import { Biography } from "../components/landingPageComponents/biography";
 import { Technologies } from "../components/landingPageComponents/Technologies";

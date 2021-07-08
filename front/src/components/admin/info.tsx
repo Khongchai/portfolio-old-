@@ -1,4 +1,4 @@
-import { Flex, Box, Img } from "@chakra-ui/react";
+import { Box, Img } from "@chakra-ui/react";
 import React from "react";
 
 interface infoProps {}

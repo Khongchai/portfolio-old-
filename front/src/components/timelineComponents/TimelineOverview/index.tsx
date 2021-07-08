@@ -1,4 +1,4 @@
-import { Box, Flex, FlexProps, Stack, Text } from "@chakra-ui/react";
+import { Box, Flex, Stack, Text } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { ProjectEntity } from "../../../generated/graphql";

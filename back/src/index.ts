@@ -26,14 +26,20 @@ const main = async () => {
     migrations: [path.join(__dirname, "/migrations/*")],
     logging: true,
     url: process.env.DATABASE_URL,
+    ssl: true,
+    extra: {
+      ssl: { rejectUnauthorized: false },
+    },
     host: "postgresql",
     // synchronize: false,
     migrationsRun: false,
     entities: [ProjectEntity, TechnologyEntity, AdminEntity],
   });
-  console.log(process.env);
 
-  // await conn.runMigrations();
+  if (process.env.NODE_ENV === "production") {
+    //Run when there's an update to the database
+    await conn.runMigrations();
+  }
 
   const app = express();
   // app.set("proxy", 1);

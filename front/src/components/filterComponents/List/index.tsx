@@ -1,5 +1,5 @@
 import { Grid } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { ProjectEntity, ProjectsQuery } from "../../../generated/graphql";
 import { readFromParamOrStorage } from "../../../utils/navigation/setAndGetCurrentSelection/readFromParamOrStorageAndSet";
 import { updateQueryParamOnChange } from "../../../utils/navigation/setAndGetCurrentSelection/updateQueryParamOnChange";

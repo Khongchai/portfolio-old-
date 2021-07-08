@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Heading, Link, Stack } from "@chakra-ui/react";
+import { Box, Flex, Heading, Stack } from "@chakra-ui/react";
 import React from "react";
 import { ButtonLinkII } from "../../../elements/ButtonLinkII";
 import { LeftCorner, RightCorner } from "./Corners";

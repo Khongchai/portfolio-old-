@@ -5,7 +5,7 @@ import { useAllProjectsNotPaginatedQuery } from "../../generated/graphql";
 interface AdminAllProjectListProps {}
 
 export const AdminAllProjectList: React.FC<AdminAllProjectListProps> = ({}) => {
-  const [{ data, fetching }] = useAllProjectsNotPaginatedQuery();
+  const [{ data }] = useAllProjectsNotPaginatedQuery();
 
   return (
     <Flex width="100%" height="auto" min-height="300px" flexWrap="wrap">
@@ -23,7 +23,6 @@ export const AdminAllProjectList: React.FC<AdminAllProjectListProps> = ({}) => {
 
 const ProjectSelect: React.FC<{ title: string; url?: string }> = ({
   title,
-  url,
 }) => {
   return (
     <Box width="200px" height="200px" margin="auto">

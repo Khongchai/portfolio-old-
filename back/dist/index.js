@@ -39,11 +39,17 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         migrations: [path_1.default.join(__dirname, "/migrations/*")],
         logging: true,
         url: process.env.DATABASE_URL,
+        ssl: true,
+        extra: {
+            ssl: { rejectUnauthorized: false },
+        },
         host: "postgresql",
         migrationsRun: false,
         entities: [ProjectEntity_1.ProjectEntity, TechnologyEntity_1.TechnologyEntity, AdminEntity_1.AdminEntity],
     });
-    console.log(process.env);
+    if (process.env.NODE_ENV === "production") {
+        yield conn.runMigrations();
+    }
     const app = express_1.default();
     const RedisStore = connect_redis_1.default(express_session_1.default);
     const redisClient = redis_1.default.createClient({ url: process.env.REDIS_URL });

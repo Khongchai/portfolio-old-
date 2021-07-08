@@ -1,10 +1,6 @@
 import { Flex, Grid, Heading, Text } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
-import {
-  AllProjectsNotPaginatedQuery,
-  ProjectEntity,
-  useAllProjectsNotPaginatedQuery,
-} from "../../../../generated/graphql";
+import React from "react";
+import { ProjectEntity } from "../../../../generated/graphql";
 import { ProjectItem } from "./ProjectItem";
 
 interface IndexProps {
