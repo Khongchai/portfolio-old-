@@ -20,9 +20,9 @@ dotenv.config();
 const main = async () => {
   const conn = await createConnection({
     type: "postgres",
-    // database: "khong_portfolio",
-    // username: "postgres",
-    // password: "postgres",
+    database: "khong_portfolio",
+    username: "postgres",
+    password: "postgres",
     migrations: [path.join(__dirname, "/migrations/*")],
     logging: true,
     url: process.env.DATABASE_URL,
@@ -31,11 +31,12 @@ const main = async () => {
     migrationsRun: false,
     entities: [ProjectEntity, TechnologyEntity, AdminEntity],
   });
+  console.log(process.env);
 
   // await conn.runMigrations();
 
   const app = express();
-  app.set("proxy", 1);
+  // app.set("proxy", 1);
   const RedisStore = connectRedis(session);
   const redisClient = redis.createClient({ url: process.env.REDIS_URL });
 
@@ -75,7 +76,8 @@ const main = async () => {
     cors: false,
   });
 
-  const port = process.env.PORT;
+  // const port = process.env.PORT;
+  const port = process.env.PORT || 4000;
   app.listen(port, () => {
     console.log(`Server started on port ${port}`);
   });

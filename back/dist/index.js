@@ -33,6 +33,9 @@ dotenv_1.default.config();
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     const conn = yield typeorm_1.createConnection({
         type: "postgres",
+        database: "khong_portfolio",
+        username: "postgres",
+        password: "postgres",
         migrations: [path_1.default.join(__dirname, "/migrations/*")],
         logging: true,
         url: process.env.DATABASE_URL,
@@ -40,8 +43,8 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         migrationsRun: false,
         entities: [ProjectEntity_1.ProjectEntity, TechnologyEntity_1.TechnologyEntity, AdminEntity_1.AdminEntity],
     });
+    console.log(process.env);
     const app = express_1.default();
-    app.set("proxy", 1);
     const RedisStore = connect_redis_1.default(express_session_1.default);
     const redisClient = redis_1.default.createClient({ url: process.env.REDIS_URL });
     app.use(express_session_1.default({
@@ -74,7 +77,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         app,
         cors: false,
     });
-    const port = process.env.PORT;
+    const port = process.env.PORT || 4000;
     app.listen(port, () => {
         console.log(`Server started on port ${port}`);
     });
